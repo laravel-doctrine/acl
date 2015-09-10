@@ -1,2 +1,2 @@
-# acl
+# ACL
 ACL for Laravel Doctrine
