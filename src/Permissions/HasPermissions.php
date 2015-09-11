@@ -3,19 +3,19 @@
 namespace LaravelDoctrine\ACL\Permissions;
 
 use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
-use LaravelDoctrine\ACL\Contracts\HasRoles;
-use LaravelDoctrine\ACL\Contracts\Permission;
+use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesHasRoles;
+use LaravelDoctrine\ACL\Contracts\Permission as PermissionContract;
 
 trait HasPermissions
 {
     /**
-     * @param Permission|string $name
+     * @param PermissionContract|string $name
      *
      * @return bool
      */
     public function hasPermissionTo($name)
     {
-        if ($this instanceof HasRoles) {
+        if ($this instanceof HasRolesHasRoles) {
             foreach ($this->getRoles() as $role) {
                 if ($role->hasPermissionTo($name)) {
                     return true;
@@ -35,12 +35,12 @@ trait HasPermissions
     }
 
     /**
-     * @param Permission|string $permission
+     * @param PermissionContract|string $permission
      *
      * @return string
      */
     protected function getPermissionName($permission)
     {
-        return $permission instanceof Permission ? $permission->getName() : $permission;
+        return $permission instanceof PermissionContract ? $permission->getName() : $permission;
     }
 }

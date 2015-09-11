@@ -9,11 +9,9 @@ return [
         'entity' => App\Role::class
     ],
     'permissions'   => [
-        'driver' => 'config',
+        'driver' => 'doctrine',
         'entity' => LaravelDoctrine\ACL\Permissions\Permission::class,
-        'list'   => [
-            'create.posts'
-        ]
+        'list'   => []
     ]
 
 ];
