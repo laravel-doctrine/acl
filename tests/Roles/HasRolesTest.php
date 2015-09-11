@@ -1,0 +1,127 @@
+<?php
+
+use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
+use LaravelDoctrine\ACL\Contracts\Role;
+use LaravelDoctrine\ACL\Permissions\HasPermissions;
+use LaravelDoctrine\ACL\Roles\HasRoles;
+
+class HasRolesTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * @var UserMock2
+     */
+    protected $user;
+
+    /**
+     * @var RoleMock2
+     */
+    protected $admin;
+
+    protected function setUp()
+    {
+        $this->user  = new UserMock2;
+        $this->admin = new RoleMock2('admin');
+    }
+
+    public function test_doesnt_have_role_when_no_roles_assigned()
+    {
+        $this->assertFalse($this->user->hasRole($this->admin));
+    }
+
+    public function test_doesnt_have_role_by_name_when_no_roles_assigned()
+    {
+        $this->assertFalse($this->user->hasRoleByName('admin'));
+    }
+
+    public function test_doesnt_have_role_when_when_other_role_assigned()
+    {
+        $this->user->setRoles([
+            new RoleMock2('user')
+        ]);
+        $this->assertFalse($this->user->hasRole($this->admin));
+    }
+
+    public function test_doesnt_have_role_by_name_when_when_other_role_assigned()
+    {
+        $this->user->setRoles([
+            new RoleMock2('user')
+        ]);
+        $this->assertFalse($this->user->hasRoleByName('admin'));
+    }
+
+    public function test_has_role_when_when_role_assigned()
+    {
+        $this->user->setRoles([
+            $this->admin
+        ]);
+        $this->assertTrue($this->user->hasRole($this->admin));
+    }
+
+    public function test_has_role_by_name_when_when_role_assigned()
+    {
+        $this->user->setRoles([
+            $this->admin
+        ]);
+        $this->assertTrue($this->user->hasRoleByName('admin'));
+    }
+}
+
+class UserMock2 implements HasRolesContract
+{
+    use HasRoles;
+
+    protected $roles = [];
+
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param array $roles
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+    }
+}
+
+class RoleMock2 implements Role
+{
+    use HasPermissions;
+
+    protected $permissions = [];
+
+    protected $roles = [];
+
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @param $name
+     */
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getPermissions()
+    {
+        return $this->permissions;
+    }
+
+    public function setPermissions($permissions)
+    {
+        $this->permissions = $permissions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+}

@@ -25,8 +25,10 @@ trait HasPermissions
 
         if ($this instanceof HasRolesHasRoles) {
             foreach ($this->getRoles() as $role) {
-                if ($role->hasPermissionTo($name)) {
-                    return true;
+                if ($role instanceof HasPermissionsContract) {
+                    if ($role->hasPermissionTo($name)) {
+                        return true;
+                    }
                 }
             }
         }

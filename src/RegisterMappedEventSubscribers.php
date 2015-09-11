@@ -25,7 +25,7 @@ class RegisterMappedEventSubscribers implements DoctrineExtender
     ];
 
     /**
-     * @var
+     * @var Container
      */
     protected $container;
 
