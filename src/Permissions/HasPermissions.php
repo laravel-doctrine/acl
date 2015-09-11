@@ -15,17 +15,17 @@ trait HasPermissions
      */
     public function hasPermissionTo($name)
     {
-        if ($this instanceof HasRolesHasRoles) {
-            foreach ($this->getRoles() as $role) {
-                if ($role->hasPermissionTo($name)) {
+        if ($this instanceof HasPermissionsContract) {
+            foreach ($this->getPermissions() as $permission) {
+                if ($this->getPermissionName($permission) === $name) {
                     return true;
                 }
             }
         }
 
-        if ($this instanceof HasPermissionsContract) {
-            foreach ($this->getPermissions() as $permission) {
-                if ($this->getPermissionName($permission) === $name) {
+        if ($this instanceof HasRolesHasRoles) {
+            foreach ($this->getRoles() as $role) {
+                if ($role->hasPermissionTo($name)) {
                     return true;
                 }
             }
