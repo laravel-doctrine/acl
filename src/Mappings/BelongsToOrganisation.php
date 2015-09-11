@@ -3,17 +3,18 @@
 namespace LaravelDoctrine\ACL\Mappings;
 
 use Doctrine\Common\Annotations\Annotation;
+use Illuminate\Contracts\Config\Repository;
 
 /**
  * @Annotation
  * @Target("PROPERTY")
  */
-final class BelongsToOrganisation extends Annotation
+final class BelongsToOrganisation extends Annotation implements ConfigAnnotation
 {
     /**
      * @var string
      */
-    public $targetEntity = 'Organisation';
+    public $targetEntity;
 
     /**
      * @var string
@@ -43,4 +44,14 @@ final class BelongsToOrganisation extends Annotation
      * @var string
      */
     public $indexBy;
+
+    /**
+     * @param Repository $config
+     *
+     * @return mixed
+     */
+    public function getTargetEntity(Repository $config)
+    {
+        return $this->targetEntity ?: $config->get('acl.organisations.entity', 'Organisation');
+    }
 }

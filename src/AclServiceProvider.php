@@ -36,6 +36,12 @@ class AclServiceProvider extends ServiceProvider
      */
     public function boot(DoctrineManager $manager)
     {
+        if (!$this->isLumen()) {
+            $this->publishes([
+                $this->getConfigPath() => config_path('acl.php'),
+            ], 'config');
+        }
+
         $manager->extendAll(function (Configuration $configuration, Connection $connection, EventManager $evm) {
             foreach ($this->subscribers as $subscriber) {
                 $evm->addEventSubscriber(
@@ -51,10 +57,37 @@ class AclServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->mergeConfig();
+        $this->registerAnnotations();
+    }
+
+    /**
+     * Merge config
+     */
+    protected function mergeConfig()
+    {
+        $this->mergeConfigFrom(
+            $this->getConfigPath(), 'acl'
+        );
+    }
+
+    /**
+     * Register annotations
+     */
+    protected function registerAnnotations()
+    {
         AnnotationRegistry::registerLoader([
             new AnnotationLoader,
             'loadClass'
         ]);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getConfigPath()
+    {
+        return __DIR__ . '/../config/acl.php';
     }
 
     /**
@@ -67,5 +100,13 @@ class AclServiceProvider extends ServiceProvider
             'registry',
             Gate::class
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isLumen()
+    {
+        return !function_exists('config_path');
     }
 }
