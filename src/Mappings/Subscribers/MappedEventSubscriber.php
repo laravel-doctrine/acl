@@ -7,6 +7,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Illuminate\Contracts\Config\Repository;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -18,11 +19,18 @@ abstract class MappedEventSubscriber implements EventSubscriber
     protected $reader;
 
     /**
-     * @param Reader|null $reader
+     * @var Repository
      */
-    public function __construct(Reader $reader = null)
+    protected $config;
+
+    /**
+     * @param Reader|null $reader
+     * @param Repository  $config
+     */
+    public function __construct(Reader $reader = null, Repository $config)
     {
         $this->reader = $reader;
+        $this->config = $config;
     }
 
     /**
@@ -49,7 +57,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
         foreach ($metadata->getReflectionClass()->getProperties() as $property) {
             if ($annotation = $this->findMapping($property)) {
                 $builder = $this->getBuilder();
-                $builder = new $builder();
+                $builder = new $builder($this->config);
                 $builder->build($metadata, $property, $annotation);
             }
         }

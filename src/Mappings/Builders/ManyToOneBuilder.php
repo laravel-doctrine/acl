@@ -3,13 +3,13 @@
 namespace LaravelDoctrine\ACL\Mappings\Builders;
 
 use Doctrine\Common\Annotations\Annotation;
+use Doctrine\ORM\Mapping\Builder\AssociationBuilder;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
-use Doctrine\ORM\Mapping\Builder\ManyToManyAssociationBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Illuminate\Contracts\Config\Repository;
 use ReflectionProperty;
 
-class ManyToManyBuilder implements Builder
+class ManyToOneBuilder implements Builder
 {
     /**
      * @var Repository
@@ -31,21 +31,17 @@ class ManyToManyBuilder implements Builder
      */
     public function build(ClassMetadata $metadata, ReflectionProperty $property, Annotation $annotation)
     {
-        $builder = new ManyToManyAssociationBuilder(
+        $builder =  new AssociationBuilder(
             new ClassMetadataBuilder($metadata),
             [
                 'fieldName'    => $property->getName(),
                 'targetEntity' => $annotation->targetEntity
             ],
-            ClassMetadata::MANY_TO_MANY
+            ClassMetadata::MANY_TO_ONE
         );
 
         if (isset($annotation->inversedBy) && $annotation->inversedBy) {
             $builder->inversedBy($annotation->inversedBy);
-        }
-
-        if (isset($annotation->mappedBy) && $annotation->mappedBy) {
-            $builder->mappedBy($annotation->mappedBy);
         }
 
         $builder->build();

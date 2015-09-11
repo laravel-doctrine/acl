@@ -10,8 +10,7 @@ use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use LaravelDoctrine\ACL\Mappings\AnnotationLoader;
 use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationsSubscriber;
-use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToUsersSubscriber;
-use LaravelDoctrine\ACL\Mappings\Subscribers\HasManyUsersSubscriber;
+use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationSubscriber;
 use LaravelDoctrine\ACL\Mappings\Subscribers\HasRolesSubscriber;
 use LaravelDoctrine\ORM\DoctrineManager;
 
@@ -28,9 +27,8 @@ class AclServiceProvider extends ServiceProvider
      */
     protected $subscribers = [
         BelongsToOrganisationsSubscriber::class,
-        HasManyUsersSubscriber::class,
-        HasRolesSubscriber::class,
-        BelongsToUsersSubscriber::class,
+        BelongsToOrganisationSubscriber::class,
+        HasRolesSubscriber::class
     ];
 
     /**
@@ -40,9 +38,9 @@ class AclServiceProvider extends ServiceProvider
     {
         $manager->extendAll(function (Configuration $configuration, Connection $connection, EventManager $evm) {
             foreach ($this->subscribers as $subscriber) {
-                $evm->addEventSubscriber(new $subscriber(
-                    $configuration->getMetadataDriverImpl()->getReader()
-                ));
+                $evm->addEventSubscriber(
+                    $this->app->make($subscriber, [$configuration->getMetadataDriverImpl()->getReader()])
+                );
             }
         });
     }

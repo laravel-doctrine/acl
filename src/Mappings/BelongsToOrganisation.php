@@ -8,17 +8,17 @@ use Doctrine\Common\Annotations\Annotation;
  * @Annotation
  * @Target("PROPERTY")
  */
-final class HasManyUsers extends Annotation
+final class BelongsToOrganisation extends Annotation
 {
     /**
      * @var string
      */
-    public $targetEntity = 'User';
+    public $targetEntity = 'Organisation';
 
     /**
      * @var string
      */
-    public $mappedBy = 'organisations';
+    public $mappedBy = 'users';
 
     /**
      * @var array<string>
