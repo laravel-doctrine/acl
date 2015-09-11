@@ -2,7 +2,7 @@
 
 namespace LaravelDoctrine\ACL\Contracts;
 
-interface Role
+interface Role extends HasPermissions
 {
     /**
      * @return string

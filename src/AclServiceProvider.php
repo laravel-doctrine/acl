@@ -3,15 +3,11 @@
 namespace LaravelDoctrine\ACL;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\EventManager;
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\Configuration;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
+use LaravelDoctrine\ACL\Contracts\HasPermissions;
 use LaravelDoctrine\ACL\Mappings\AnnotationLoader;
-use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationsSubscriber;
-use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationSubscriber;
-use LaravelDoctrine\ACL\Mappings\Subscribers\HasRolesSubscriber;
+use LaravelDoctrine\ACL\Permissions\PermissionManager;
 use LaravelDoctrine\ORM\DoctrineManager;
 
 class AclServiceProvider extends ServiceProvider
@@ -23,18 +19,11 @@ class AclServiceProvider extends ServiceProvider
     protected $defer = true;
 
     /**
-     * @var array
+     * @param DoctrineManager   $manager
+     * @param Gate              $gate
+     * @param PermissionManager $permissionManager
      */
-    protected $subscribers = [
-        BelongsToOrganisationsSubscriber::class,
-        BelongsToOrganisationSubscriber::class,
-        HasRolesSubscriber::class
-    ];
-
-    /**
-     * @param DoctrineManager $manager
-     */
-    public function boot(DoctrineManager $manager)
+    public function boot(DoctrineManager $manager, Gate $gate, PermissionManager $permissionManager)
     {
         if (!$this->isLumen()) {
             $this->publishes([
@@ -42,13 +31,9 @@ class AclServiceProvider extends ServiceProvider
             ], 'config');
         }
 
-        $manager->extendAll(function (Configuration $configuration, Connection $connection, EventManager $evm) {
-            foreach ($this->subscribers as $subscriber) {
-                $evm->addEventSubscriber(
-                    $this->app->make($subscriber, [$configuration->getMetadataDriverImpl()->getReader()])
-                );
-            }
-        });
+        $manager->extendAll(RegisterMappedEventSubscribers::class);
+
+        $this->definePermissions($gate, $permissionManager);
     }
 
     /**
@@ -62,13 +47,16 @@ class AclServiceProvider extends ServiceProvider
     }
 
     /**
-     * Merge config
+     * @param Gate              $gate
+     * @param PermissionManager $manager
      */
-    protected function mergeConfig()
+    protected function definePermissions(Gate $gate, PermissionManager $manager)
     {
-        $this->mergeConfigFrom(
-            $this->getConfigPath(), 'acl'
-        );
+        foreach ($manager->getAllPermissions() as $permission) {
+            $gate->define($permission, function (HasPermissions $user) use ($permission) {
+                return $user->hasPermissionTo($permission);
+            });
+        }
     }
 
     /**
@@ -80,6 +68,16 @@ class AclServiceProvider extends ServiceProvider
             new AnnotationLoader,
             'loadClass'
         ]);
+    }
+
+    /**
+     * Merge config
+     */
+    protected function mergeConfig()
+    {
+        $this->mergeConfigFrom(
+            $this->getConfigPath(), 'acl'
+        );
     }
 
     /**

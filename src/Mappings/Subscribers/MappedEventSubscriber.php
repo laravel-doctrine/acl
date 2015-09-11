@@ -8,6 +8,7 @@ use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Illuminate\Contracts\Config\Repository;
+use LaravelDoctrine\ACL\Mappings\ConfigAnnotation;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -56,7 +57,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
 
         foreach ($metadata->getReflectionClass()->getProperties() as $property) {
             if ($annotation = $this->findMapping($property)) {
-                $builder = $this->getBuilder();
+                $builder = $this->getBuilder($annotation);
                 $builder = new $builder($this->config);
                 $builder->build($metadata, $property, $annotation);
             }
@@ -99,7 +100,9 @@ abstract class MappedEventSubscriber implements EventSubscriber
     }
 
     /**
+     * @param ConfigAnnotation $annotation
+     *
      * @return string
      */
-    abstract protected function getBuilder();
+    abstract protected function getBuilder(ConfigAnnotation $annotation);
 }

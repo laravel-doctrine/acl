@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations as BelongsToOrganisationsContract;
 use LaravelDoctrine\ACL\Mappings\BelongsToOrganisations;
 use LaravelDoctrine\ACL\Mappings\Builders\ManyToManyBuilder;
+use LaravelDoctrine\ACL\Mappings\ConfigAnnotation;
 
 class BelongsToOrganisationsSubscriber extends MappedEventSubscriber
 {
@@ -28,9 +29,11 @@ class BelongsToOrganisationsSubscriber extends MappedEventSubscriber
     }
 
     /**
+     * @param ConfigAnnotation $annotation
+     *
      * @return string
      */
-    protected function getBuilder()
+    protected function getBuilder(ConfigAnnotation $annotation)
     {
         return ManyToManyBuilder::class;
     }

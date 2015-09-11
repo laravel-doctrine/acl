@@ -5,6 +5,7 @@ namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
 use LaravelDoctrine\ACL\Mappings\Builders\ManyToManyBuilder;
+use LaravelDoctrine\ACL\Mappings\ConfigAnnotation;
 use LaravelDoctrine\ACL\Mappings\HasRoles;
 
 class HasRolesSubscriber extends MappedEventSubscriber
@@ -28,9 +29,11 @@ class HasRolesSubscriber extends MappedEventSubscriber
     }
 
     /**
+     * @param ConfigAnnotation $annotation
+     *
      * @return string
      */
-    protected function getBuilder()
+    protected function getBuilder(ConfigAnnotation $annotation)
     {
         return ManyToManyBuilder::class;
     }
