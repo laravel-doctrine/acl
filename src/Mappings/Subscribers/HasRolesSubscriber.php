@@ -3,11 +3,11 @@
 namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use LaravelDoctrine\ACL\Contracts\Organisation;
+use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
 use LaravelDoctrine\ACL\Mappings\Builders\ManyToManyBuilder;
-use LaravelDoctrine\ACL\Mappings\HasManyUsers;
+use LaravelDoctrine\ACL\Mappings\HasRoles;
 
-class HasManyUsersSubscriber extends MappedEventSubscriber
+class HasRolesSubscriber extends MappedEventSubscriber
 {
     /**
      * @param $metadata
@@ -16,7 +16,7 @@ class HasManyUsersSubscriber extends MappedEventSubscriber
      */
     protected function shouldBeMapped(ClassMetadata $metadata)
     {
-        return !$this->getInstance($metadata) instanceof Organisation;
+        return !$this->getInstance($metadata) instanceof HasRolesContract;
     }
 
     /**
@@ -24,7 +24,7 @@ class HasManyUsersSubscriber extends MappedEventSubscriber
      */
     public function getAnnotationClass()
     {
-        return HasManyUsers::class;
+        return HasRoles::class;
     }
 
     /**

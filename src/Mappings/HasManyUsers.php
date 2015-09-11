@@ -18,7 +18,7 @@ final class HasManyUsers extends Annotation
     /**
      * @var string
      */
-    public $inversedBy = 'organisations';
+    public $mappedBy = 'organisations';
 
     /**
      * @var array<string>

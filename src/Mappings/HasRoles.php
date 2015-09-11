@@ -8,12 +8,12 @@ use Doctrine\Common\Annotations\Annotation;
  * @Annotation
  * @Target("PROPERTY")
  */
-final class BelongsToOrganisations extends Annotation
+final class HasRoles extends Annotation
 {
     /**
      * @var string
      */
-    public $targetEntity = 'Organisation';
+    public $targetEntity = 'Role';
 
     /**
      * @var string
