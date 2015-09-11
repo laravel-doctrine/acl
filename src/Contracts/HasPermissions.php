@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 interface HasPermissions
 {
     /**
-     * @param $permission
+     * @param string $permission
      *
      * @return bool
      */
