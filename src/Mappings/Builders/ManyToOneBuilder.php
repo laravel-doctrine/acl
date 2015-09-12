@@ -31,7 +31,7 @@ class ManyToOneBuilder implements Builder
      */
     public function build(ClassMetadata $metadata, ReflectionProperty $property, ConfigAnnotation $annotation)
     {
-        $builder =  new AssociationBuilder(
+        $builder = new AssociationBuilder(
             new ClassMetadataBuilder($metadata),
             [
                 'fieldName'    => $property->getName(),

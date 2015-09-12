@@ -37,4 +37,9 @@ trait HasRoles
 
         return false;
     }
+
+    /**
+     * @return ArrayCollection|Role[]
+     */
+    abstract public function getRoles();
 }

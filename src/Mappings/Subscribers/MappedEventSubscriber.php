@@ -79,7 +79,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
     /**
      * @param $property
      *
-     * @return HasManyUsers
+     * @return ConfigAnnotation
      */
     protected function findMapping(ReflectionProperty $property)
     {

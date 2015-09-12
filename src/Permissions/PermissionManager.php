@@ -2,8 +2,12 @@
 
 namespace LaravelDoctrine\ACL\Permissions;
 
+use Illuminate\Support\Collection;
 use LaravelDoctrine\ACL\Manager;
 
+/**
+ * @method Collection getAllPermissions()
+ */
 class PermissionManager extends Manager
 {
     /**
