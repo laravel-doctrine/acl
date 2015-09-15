@@ -51,15 +51,17 @@ abstract class MappedEventSubscriber implements EventSubscriber
     {
         $metadata = $eventArgs->getClassMetadata();
 
-        if (!$this->reader || $this->shouldBeMapped($metadata)) {
+        if (!$this->reader) {
             return;
         }
 
-        foreach ($metadata->getReflectionClass()->getProperties() as $property) {
-            if ($annotation = $this->findMapping($property)) {
-                $builder = $this->getBuilder($annotation);
-                $builder = new $builder($this->config);
-                $builder->build($metadata, $property, $annotation);
+        if ($this->isInstantiable($metadata) && $this->shouldBeMapped($metadata)) {
+            foreach ($metadata->getReflectionClass()->getProperties() as $property) {
+                if ($annotation = $this->findMapping($property)) {
+                    $builder = $this->getBuilder($annotation);
+                    $builder = new $builder($this->config);
+                    $builder->build($metadata, $property, $annotation);
+                }
             }
         }
     }
@@ -105,4 +107,24 @@ abstract class MappedEventSubscriber implements EventSubscriber
      * @return string
      */
     abstract protected function getBuilder(ConfigAnnotation $annotation);
+
+    /**
+     * A MappedSuperClass or Abstract class cannot be instantiated
+     *
+     * @param ClassMetadata $metadata
+     *
+     * @return bool
+     */
+    protected function isInstantiable(ClassMetadata $metadata)
+    {
+        if ($metadata->isMappedSuperclass) {
+            return false;
+        }
+
+        if ($metadata->getReflectionClass()->isAbstract()) {
+            return false;
+        }
+
+        return true;
+    }
 }
