@@ -18,7 +18,7 @@ class HasPermissionsSubscriber extends MappedEventSubscriber
      */
     protected function shouldBeMapped(ClassMetadata $metadata)
     {
-        return !$this->getInstance($metadata) instanceof HasPermissionsContract;
+        return $this->getInstance($metadata) instanceof HasPermissionsContract;
     }
 
     /**

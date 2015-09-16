@@ -17,7 +17,7 @@ class BelongsToOrganisationSubscriber extends MappedEventSubscriber
      */
     protected function shouldBeMapped(ClassMetadata $metadata)
     {
-        return !$this->getInstance($metadata) instanceof BelongsToOrganisationContract;
+        return $this->getInstance($metadata) instanceof BelongsToOrganisationContract;
     }
 
     /**
