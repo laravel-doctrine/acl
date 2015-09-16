@@ -1,7 +1,10 @@
 <?php
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Schema\MySqlSchemaManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Collection;
 use LaravelDoctrine\ACL\Permissions\ConfigPermissionDriver;
@@ -50,6 +53,20 @@ class DoctrinePermissionDriverTest extends PHPUnit_Framework_TestCase
         $this->em->shouldReceive('loadAll')->once()->andReturn([
             new Permission('mocked')
         ]);
+
+        $meta        = new ClassMetadata(Permission::class);
+        $meta->table = [
+            'name' => 'permissions'
+        ];
+        $this->em->shouldReceive('getClassMetadata')->once()->andReturn($meta);
+
+        $connection = m::mock(Connection::class);
+        $this->em->shouldReceive('getConnection')->once()->andReturn($connection);
+
+        $schema = m::mock(MySqlSchemaManager::class);
+        $connection->shouldReceive('getSchemaManager')->once()->andReturn($schema);
+
+        $schema->shouldReceive('tablesExist')->with(['permissions'])->andReturn(true);
 
         $permissions = $this->driver->getAllPermissions();
         $this->assertInstanceOf(Collection::class, $permissions);
