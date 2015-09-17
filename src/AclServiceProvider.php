@@ -25,7 +25,7 @@ class AclServiceProvider extends ServiceProvider
      */
     public function boot(DoctrineManager $manager, Gate $gate, PermissionManager $permissionManager)
     {
-        if (! $this->isLumen()) {
+        if (!$this->isLumen()) {
             $this->publishes([
                 $this->getConfigPath() => config_path('acl.php'),
             ], 'config');
@@ -111,6 +111,6 @@ class AclServiceProvider extends ServiceProvider
      */
     protected function isLumen()
     {
-        return ! function_exists('config_path');
+        return !function_exists('config_path');
     }
 }
