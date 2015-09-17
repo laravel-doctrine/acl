@@ -36,10 +36,10 @@ class DoctrinePermissionDriverTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config   = m::mock(Repository::class);
+        $this->config = m::mock(Repository::class);
         $this->registry = m::mock(ManagerRegistry::class);
-        $this->em       = m::mock(EntityManagerInterface::class);
-        $this->driver   = new DoctrinePermissionDriver($this->registry, $this->config);
+        $this->em = m::mock(EntityManagerInterface::class);
+        $this->driver = new DoctrinePermissionDriver($this->registry, $this->config);
     }
 
     public function test_can_get_all_permissions()
@@ -51,12 +51,12 @@ class DoctrinePermissionDriverTest extends PHPUnit_Framework_TestCase
         $this->em->shouldReceive('getUnitOfWork')->once()->andReturn($this->em);
         $this->em->shouldReceive('getEntityPersister')->with(Permission::class)->once()->andReturn($this->em);
         $this->em->shouldReceive('loadAll')->once()->andReturn([
-            new Permission('mocked')
+            new Permission('mocked'),
         ]);
 
-        $meta        = new ClassMetadata(Permission::class);
+        $meta = new ClassMetadata(Permission::class);
         $meta->table = [
-            'name' => 'permissions'
+            'name' => 'permissions',
         ];
         $this->em->shouldReceive('getClassMetadata')->once()->andReturn($meta);
 

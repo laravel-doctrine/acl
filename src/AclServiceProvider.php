@@ -25,7 +25,7 @@ class AclServiceProvider extends ServiceProvider
      */
     public function boot(DoctrineManager $manager, Gate $gate, PermissionManager $permissionManager)
     {
-        if (!$this->isLumen()) {
+        if (! $this->isLumen()) {
             $this->publishes([
                 $this->getConfigPath() => config_path('acl.php'),
             ], 'config');
@@ -35,7 +35,7 @@ class AclServiceProvider extends ServiceProvider
 
         if ($permissionManager->needsDoctrine()) {
             $manager->addPaths([
-                __DIR__ . DIRECTORY_SEPARATOR . 'Permissions'
+                __DIR__.DIRECTORY_SEPARATOR.'Permissions',
             ]);
         }
 
@@ -66,18 +66,18 @@ class AclServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register annotations
+     * Register annotations.
      */
     protected function registerAnnotations()
     {
         AnnotationRegistry::registerLoader([
             new AnnotationLoader,
-            'loadClass'
+            'loadClass',
         ]);
     }
 
     /**
-     * Merge config
+     * Merge config.
      */
     protected function mergeConfig()
     {
@@ -91,7 +91,7 @@ class AclServiceProvider extends ServiceProvider
      */
     protected function getConfigPath()
     {
-        return __DIR__ . '/../config/acl.php';
+        return __DIR__.'/../config/acl.php';
     }
 
     /**
@@ -102,7 +102,7 @@ class AclServiceProvider extends ServiceProvider
         return [
             'auth',
             'registry',
-            Gate::class
+            Gate::class,
         ];
     }
 
@@ -111,6 +111,6 @@ class AclServiceProvider extends ServiceProvider
      */
     protected function isLumen()
     {
-        return !function_exists('config_path');
+        return ! function_exists('config_path');
     }
 }
