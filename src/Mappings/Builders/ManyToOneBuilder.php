@@ -35,7 +35,7 @@ class ManyToOneBuilder implements Builder
             new ClassMetadataBuilder($metadata),
             [
                 'fieldName'    => $property->getName(),
-                'targetEntity' => $annotation->getTargetEntity($this->config)
+                'targetEntity' => $annotation->getTargetEntity($this->config),
             ],
             ClassMetadata::MANY_TO_ONE
         );

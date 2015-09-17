@@ -32,7 +32,7 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
     public function test_doesnt_have_permission_when_no_roles_with_other_permissions()
     {
         $this->user->setPermissions([
-            'create.page'
+            'create.page',
         ]);
 
         $this->assertFalse($this->user->hasPermissionTo('create.post'));
@@ -41,11 +41,11 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
     public function test_doesnt_have_permission_with_roles_and_other_permissions()
     {
         $this->userWithRoles->setRoles([
-            new RoleMock
+            new RoleMock,
         ]);
 
         $this->userWithRoles->setPermissions([
-            'create.page'
+            'create.page',
         ]);
 
         $this->assertFalse($this->userWithRoles->hasPermissionTo('create.post'));
@@ -55,15 +55,15 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
     {
         $role = new RoleMock;
         $role->setPermissions([
-            'create.page'
+            'create.page',
         ]);
 
         $this->userWithRoles->setRoles([
-            $role
+            $role,
         ]);
 
         $this->userWithRoles->setPermissions([
-            'create.page'
+            'create.page',
         ]);
 
         $this->assertFalse($this->userWithRoles->hasPermissionTo('create.post'));
@@ -72,7 +72,7 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
     public function test_user_has_permission_when_no_roles_but_has_the_permission()
     {
         $this->user->setPermissions([
-            'create.post'
+            'create.post',
         ]);
 
         $this->assertTrue($this->user->hasPermissionTo('create.post'));
@@ -81,11 +81,11 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
     public function test_user_has_permission_when_with_roles_but_has_the_permission()
     {
         $this->userWithRoles->setRoles([
-            new RoleMock
+            new RoleMock,
         ]);
 
         $this->userWithRoles->setPermissions([
-            'create.post'
+            'create.post',
         ]);
 
         $this->assertTrue($this->userWithRoles->hasPermissionTo('create.post'));
@@ -95,11 +95,11 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
     {
         $role = new RoleMock;
         $role->setPermissions([
-            'create.post'
+            'create.post',
         ]);
 
         $this->userWithRoles->setRoles([
-            $role
+            $role,
         ]);
 
         $this->assertTrue($this->userWithRoles->hasPermissionTo('create.post'));
@@ -109,12 +109,12 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
     {
         $role = new RoleMock;
         $role->setPermissions([
-            'create.post'
+            'create.post',
         ]);
 
         $this->userWithRoles->setRoles([
             new RoleMock,
-            $role
+            $role,
         ]);
 
         $this->assertTrue($this->userWithRoles->hasPermissionTo('create.post'));
@@ -123,7 +123,7 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
     public function test_can_check_if_has_permission_with_permission_objects()
     {
         $this->user->setPermissions([
-            new \LaravelDoctrine\ACL\Permissions\Permission('create.post')
+            new \LaravelDoctrine\ACL\Permissions\Permission('create.post'),
         ]);
 
         $this->assertTrue($this->user->hasPermissionTo('create.post'));
@@ -133,11 +133,11 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
     {
         $role = new RoleMock;
         $role->setPermissions([
-            new \LaravelDoctrine\ACL\Permissions\Permission('create.post')
+            new \LaravelDoctrine\ACL\Permissions\Permission('create.post'),
         ]);
 
         $this->userWithRoles->setRoles([
-            $role
+            $role,
         ]);
 
         $this->assertTrue($this->userWithRoles->hasPermissionTo('create.post'));

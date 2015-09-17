@@ -21,7 +21,7 @@ class RegisterMappedEventSubscribers implements DoctrineExtender
         BelongsToOrganisationsSubscriber::class,
         BelongsToOrganisationSubscriber::class,
         HasRolesSubscriber::class,
-        HasPermissionsSubscriber::class
+        HasPermissionsSubscriber::class,
     ];
 
     /**
