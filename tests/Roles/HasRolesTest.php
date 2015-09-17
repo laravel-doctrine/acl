@@ -19,7 +19,7 @@ class HasRolesTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->user = new UserMock2;
+        $this->user  = new UserMock2;
         $this->admin = new RoleMock2('admin');
     }
 

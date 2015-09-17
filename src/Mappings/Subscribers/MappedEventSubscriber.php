@@ -96,7 +96,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
     protected function getInstance(ClassMetadata $metadata)
     {
         $reflection = new ReflectionClass($metadata->getName());
-        $instance = $reflection->newInstanceWithoutConstructor();
+        $instance   = $reflection->newInstanceWithoutConstructor();
 
         return $instance;
     }

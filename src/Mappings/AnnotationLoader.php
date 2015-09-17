@@ -19,7 +19,7 @@ class AnnotationLoader
         if (strpos($class, self::ANNOTATION_NAMESPACE) === 0) {
             $class = str_replace(self::ANNOTATION_NAMESPACE, '', $class);
 
-            $file = __DIR__.'/'.$class.'.php';
+            $file = __DIR__ . '/' . $class . '.php';
             if (file_exists($file)) {
                 require_once $file;
 
