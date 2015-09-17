@@ -35,7 +35,7 @@ class AclServiceProvider extends ServiceProvider
 
         if ($permissionManager->needsDoctrine()) {
             $manager->addPaths([
-                __DIR__.DIRECTORY_SEPARATOR.'Permissions',
+                __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
             ]);
         }
 
@@ -91,7 +91,7 @@ class AclServiceProvider extends ServiceProvider
      */
     protected function getConfigPath()
     {
-        return __DIR__.'/../config/acl.php';
+        return __DIR__ . '/../config/acl.php';
     }
 
     /**

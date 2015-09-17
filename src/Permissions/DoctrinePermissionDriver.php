@@ -27,7 +27,7 @@ class DoctrinePermissionDriver implements PermissionDriver
     public function __construct(ManagerRegistry $registry, Repository $config)
     {
         $this->registry = $registry;
-        $this->config = $config;
+        $this->config   = $config;
     }
 
     /**

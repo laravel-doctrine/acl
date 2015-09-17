@@ -20,7 +20,7 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->user = new UserMock;
+        $this->user          = new UserMock;
         $this->userWithRoles = new UserMockWithRoles;
     }
 
