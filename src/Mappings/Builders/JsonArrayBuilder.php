@@ -22,7 +22,7 @@ class JsonArrayBuilder implements Builder
             new ClassMetadataBuilder($metadata),
             [
                 'fieldName' => $property->getName(),
-                'type'      => Type::JSON_ARRAY
+                'type'      => Type::JSON_ARRAY,
             ]
         );
 

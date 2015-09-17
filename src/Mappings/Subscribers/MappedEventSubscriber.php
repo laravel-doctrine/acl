@@ -35,7 +35,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSubscribedEvents()
     {
@@ -51,7 +51,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
     {
         $metadata = $eventArgs->getClassMetadata();
 
-        if (!$this->reader) {
+        if (! $this->reader) {
             return;
         }
 
@@ -96,7 +96,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
     protected function getInstance(ClassMetadata $metadata)
     {
         $reflection = new ReflectionClass($metadata->getName());
-        $instance   = $reflection->newInstanceWithoutConstructor();
+        $instance = $reflection->newInstanceWithoutConstructor();
 
         return $instance;
     }
@@ -109,7 +109,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
     abstract protected function getBuilder(ConfigAnnotation $annotation);
 
     /**
-     * A MappedSuperClass or Abstract class cannot be instantiated
+     * A MappedSuperClass or Abstract class cannot be instantiated.
      *
      * @param ClassMetadata $metadata
      *
