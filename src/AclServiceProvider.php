@@ -13,12 +13,6 @@ use LaravelDoctrine\ORM\DoctrineManager;
 class AclServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     * @var bool
-     */
-    protected $defer = true;
-
-    /**
      * @param DoctrineManager   $manager
      * @param Gate              $gate
      * @param PermissionManager $permissionManager
@@ -92,18 +86,6 @@ class AclServiceProvider extends ServiceProvider
     protected function getConfigPath()
     {
         return __DIR__ . '/../config/acl.php';
-    }
-
-    /**
-     * @return array
-     */
-    public function provides()
-    {
-        return [
-            'auth',
-            'registry',
-            Gate::class,
-        ];
     }
 
     /**
