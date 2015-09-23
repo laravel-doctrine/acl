@@ -13,12 +13,14 @@ use LaravelDoctrine\ORM\DoctrineManager;
 class AclServiceProvider extends ServiceProvider
 {
     /**
-     * @param DoctrineManager   $manager
-     * @param Gate              $gate
-     * @param PermissionManager $permissionManager
+     * Boot the service provider.
      */
-    public function boot(DoctrineManager $manager, Gate $gate, PermissionManager $permissionManager)
+    public function boot()
     {
+        $manager           = $this->app->make(DoctrineManager::class);
+        $gate              = $this->app->make(Gate::class);
+        $permissionManager = $this->app->make(PermissionManager::class);
+
         if (!$this->isLumen()) {
             $this->publishes([
                 $this->getConfigPath() => config_path('acl.php'),
