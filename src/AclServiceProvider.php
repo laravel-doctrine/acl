@@ -12,6 +12,9 @@ use LaravelDoctrine\ORM\DoctrineManager;
 
 class AclServiceProvider extends ServiceProvider
 {
+    /**
+     * Boot the service provider.
+     */
     public function boot()
     {
         $manager           = $this->app->make(DoctrineManager::class);
