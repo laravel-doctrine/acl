@@ -54,7 +54,7 @@ class AclServiceProvider extends ServiceProvider
      */
     protected function definePermissions(Gate $gate, PermissionManager $manager)
     {
-        foreach ($manager->getAllPermissions() as $permission) {
+        foreach ($manager->getPermissionsWithDotNotation() as $permission) {
             $gate->define($permission, function (HasPermissions $user) use ($permission) {
                 return $user->hasPermissionTo($permission);
             });
