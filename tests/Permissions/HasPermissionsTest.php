@@ -69,6 +69,25 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->userWithRoles->hasPermissionTo('create.post'));
     }
 
+    public function test_doesnt_have_permission_with_permission_but_no_other_permissions()
+    {
+        $this->user->setPermissions([
+            'create.page',
+        ]);
+
+        $this->assertFalse($this->user->hasPermissionTo(['create.post', 'create.comment']));
+    }
+
+    public function test_doesnt_have_permission_with_permission_but_not_all_other_permissions()
+    {
+        $this->user->setPermissions([
+            'create.page',
+            'create.post'
+        ]);
+
+        $this->assertFalse($this->user->hasPermissionTo(['create.post', 'create.page', 'create.comment'], true));
+    }
+
     public function test_user_has_permission_when_no_roles_but_has_the_permission()
     {
         $this->user->setPermissions([
@@ -141,6 +160,25 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertTrue($this->userWithRoles->hasPermissionTo('create.post'));
+    }
+
+    public function test_has_permission_with_permission_but_not_all_other_permissions()
+    {
+        $this->user->setPermissions([
+            'create.page',
+        ]);
+
+        $this->assertTrue($this->user->hasPermissionTo(['create.post', 'create.page', 'create.comment']));
+    }
+
+    public function test_has_permission_and_all_permissions()
+    {
+        $this->user->setPermissions([
+            'create.page',
+            'create.post'
+        ]);
+
+        $this->assertTrue($this->user->hasPermissionTo(['create.post', 'create.page'], true));
     }
 }
 
