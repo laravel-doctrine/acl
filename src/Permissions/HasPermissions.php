@@ -9,31 +9,45 @@ use LaravelDoctrine\ACL\Contracts\Permission as PermissionContract;
 trait HasPermissions
 {
     /**
-     * @param PermissionContract|string $name
-     *
+     * @param  PermissionContract|string|array $name
+     * @param  bool                            $requireAll
      * @return bool
      */
-    public function hasPermissionTo($name)
+    public function hasPermissionTo($name, $requireAll = false)
     {
-        if ($this instanceof HasPermissionsContract) {
-            foreach ($this->getPermissions() as $permission) {
-                if ($this->getPermissionName($permission) === $name) {
+        if (is_array($name)) {
+            foreach ($name as $n) {
+                $hasPermission = $this->hasPermissionTo($n);
+
+                if ($hasPermission && !$requireAll) {
                     return true;
+                } elseif (!$hasPermission && $requireAll) {
+                    return false;
                 }
             }
-        }
 
-        if ($this instanceof HasRolesHasRoles) {
-            foreach ($this->getRoles() as $role) {
-                if ($role instanceof HasPermissionsContract) {
-                    if ($role->hasPermissionTo($name)) {
+            return $requireAll;
+        } else {
+            if ($this instanceof HasPermissionsContract) {
+                foreach ($this->getPermissions() as $permission) {
+                    if ($this->getPermissionName($permission) === $name) {
                         return true;
                     }
                 }
             }
-        }
 
-        return false;
+            if ($this instanceof HasRolesHasRoles) {
+                foreach ($this->getRoles() as $role) {
+                    if ($role instanceof HasPermissionsContract) {
+                        if ($role->hasPermissionTo($name)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 
     /**
