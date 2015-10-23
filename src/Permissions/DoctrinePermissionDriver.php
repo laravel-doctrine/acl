@@ -6,8 +6,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Contracts\Config\Repository;
-use LaravelDoctrine\ACL\Contracts\Permission;
 use Illuminate\Support\Collection;
+use LaravelDoctrine\ACL\Contracts\Permission;
 
 class DoctrinePermissionDriver implements PermissionDriver
 {
