@@ -29,7 +29,7 @@ class AclServiceProvider extends ServiceProvider
 
         $manager->extendAll(RegisterMappedEventSubscribers::class);
 
-        if ($permissionManager->needsDoctrine()) {
+        if ($permissionManager->useDefaultPermissionEntity()) {
             $manager->addPaths([
                 __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
             ]);

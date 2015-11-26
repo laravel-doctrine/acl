@@ -72,7 +72,22 @@ class PermissionManager extends Manager
     /**
      * @return bool
      */
-    public function needsDoctrine()
+    public function useDefaultPermissionEntity()
+    {
+        if (!$this->needsDoctrine()) {
+            return false;
+        }
+
+        $entityFqn = $this->container->make('config')->get('acl.permissions.entity', '');
+        $entityFqn = ltrim($entityFqn, "\\");
+
+        return $entityFqn === Permission::class;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function needsDoctrine()
     {
         return $this->getDefaultDriver() === 'doctrine';
     }
