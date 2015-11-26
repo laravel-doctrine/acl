@@ -8,7 +8,7 @@ use LaravelDoctrine\ACL\Contracts\Permission as PermissionContract;
 /**
  * @ORM\Entity
  */
-class Permission implements PermissionContract
+final class Permission implements PermissionContract
 {
     /**
      * @ORM\Id
