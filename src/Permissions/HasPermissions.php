@@ -59,7 +59,7 @@ trait HasPermissions
     {
         return $permission instanceof PermissionContract ? $permission->getName() : $permission;
     }
-    
+
     /**
      * @param PermissionContract|string $permission
      *
@@ -71,12 +71,12 @@ trait HasPermissions
         if ($permission instanceof PermissionContract) {
             $this->permissions->add($permission);
         }
-        
+
         // Assumes self::$permissions is an array, and will be stored as a json_array column
         if (is_string($permission)) {
             $this->permissions[] = $permission;
         }
-        
+
         return $this;
     }
 }
