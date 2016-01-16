@@ -65,7 +65,7 @@ trait HasPermissions
      *
      * @return string
      */
-    protected function addPermission($permission)
+    public function addPermission($permission)
     {
         // Assumes self::$permissions is an instance of ArrayCollection
         if ($permission instanceof PermissionContract) {
