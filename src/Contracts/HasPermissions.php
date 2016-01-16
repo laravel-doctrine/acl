@@ -17,7 +17,7 @@ interface HasPermissions
      * @return ArrayCollection|Permission[]
      */
     public function getPermissions();
-    
+
     /**
      * @param PermissionContract|string $permission
      *
