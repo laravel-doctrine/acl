@@ -16,7 +16,7 @@ abstract class Manager extends ConfigurationManager
      * @throws DriverNotFound
      * @return mixed
      */
-    protected function createDriver($driver, array $settings = [])
+    protected function createDriver($driver, array $settings = [], $resolve = true)
     {
         $class = $this->getNamespace() . '\\' . studly_case($driver) . $this->getClassSuffix();
 
