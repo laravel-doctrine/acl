@@ -3,6 +3,7 @@
 namespace LaravelDoctrine\ACL;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use LaravelDoctrine\ACL\Contracts\HasPermissions;
@@ -17,9 +18,7 @@ class AclServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $manager           = $this->app->make(DoctrineManager::class);
-        $gate              = $this->app->make(Gate::class);
-        $permissionManager = $this->app->make(PermissionManager::class);
+        $manager = $this->app->make(DoctrineManager::class);
 
         if (!$this->isLumen()) {
             $this->publishes([
@@ -29,13 +28,20 @@ class AclServiceProvider extends ServiceProvider
 
         $manager->extendAll(RegisterMappedEventSubscribers::class);
 
+        $permissionManager = $this->app->make(PermissionManager::class);
+
         if ($permissionManager->useDefaultPermissionEntity()) {
             $manager->addPaths([
                 __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
             ]);
         }
 
-        $this->definePermissions($gate, $permissionManager);
+        $manager->onResolve(function () use ($permissionManager) {
+            $this->definePermissions(
+                $this->app->make(Gate::class),
+                $permissionManager
+            );
+        });
     }
 
     /**
