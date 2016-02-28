@@ -3,7 +3,6 @@
 namespace LaravelDoctrine\ACL;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use LaravelDoctrine\ACL\Contracts\HasPermissions;
@@ -18,28 +17,16 @@ class AclServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $manager = $this->app->make(DoctrineManager::class);
-
         if (!$this->isLumen()) {
             $this->publishes([
                 $this->getConfigPath() => config_path('acl.php'),
             ], 'config');
         }
 
-        $manager->extendAll(RegisterMappedEventSubscribers::class);
-
-        $permissionManager = $this->app->make(PermissionManager::class);
-
-        if ($permissionManager->useDefaultPermissionEntity()) {
-            $manager->addPaths([
-                __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
-            ]);
-        }
-
-        $manager->onResolve(function () use ($permissionManager) {
+        $this->app->make(DoctrineManager::class)->onResolve(function () {
             $this->definePermissions(
                 $this->app->make(Gate::class),
-                $permissionManager
+                $this->app->make(PermissionManager::class)
             );
         });
     }
@@ -52,6 +39,11 @@ class AclServiceProvider extends ServiceProvider
     {
         $this->mergeConfig();
         $this->registerAnnotations();
+
+        $manager = $this->app->make(DoctrineManager::class);
+        $manager->extendAll(RegisterMappedEventSubscribers::class);
+
+        $this->registerPaths($manager);
     }
 
     /**
@@ -102,5 +94,19 @@ class AclServiceProvider extends ServiceProvider
     protected function isLumen()
     {
         return str_contains($this->app->version(), 'Lumen');
+    }
+
+    /**
+     * @param $manager
+     */
+    private function registerPaths($manager)
+    {
+        $permissionManager = $this->app->make(PermissionManager::class);
+
+        if ($permissionManager->useDefaultPermissionEntity()) {
+            $manager->addPaths([
+                __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
+            ]);
+        }
     }
 }
