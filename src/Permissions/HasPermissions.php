@@ -30,7 +30,7 @@ trait HasPermissions
         } else {
             if ($this instanceof HasPermissionsContract) {
                 foreach ($this->getPermissions() as $permission) {
-                    if ($this->getPermissionName($permission) === $name) {
+                    if ($this->getPermissionName($permission) === $this->getPermissionName($name)) {
                         return true;
                     }
                 }
