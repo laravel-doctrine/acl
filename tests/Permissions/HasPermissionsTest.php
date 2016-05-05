@@ -180,6 +180,20 @@ class HasPermissionsTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->user->hasPermissionTo(['create.post', 'create.page'], true));
     }
+
+    public function test_user_has_permission_by_object()
+    {
+        $this->user->setPermissions(['test.test']);
+
+        $this->assertTrue($this->user->hasPermissionTo(new \LaravelDoctrine\ACL\Permissions\Permission('test.test')));
+    }
+
+    public function test_user_has_object_permission_by_object()
+    {
+        $this->user->setPermissions([new \LaravelDoctrine\ACL\Permissions\Permission('test.test')]);
+
+        $this->assertTrue($this->user->hasPermissionTo(new \LaravelDoctrine\ACL\Permissions\Permission('test.test')));
+    }
 }
 
 class UserMock implements HasPermissionsContract
