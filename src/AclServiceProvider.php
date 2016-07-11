@@ -78,6 +78,10 @@ class AclServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             $this->getConfigPath(), 'acl'
         );
+
+        if($this->isLumen()){
+            $this->app->configure('acl');
+        }
     }
 
     /**
