@@ -79,7 +79,7 @@ class AclServiceProvider extends ServiceProvider
             $this->getConfigPath(), 'acl'
         );
 
-        if($this->isLumen()){
+        if ($this->isLumen()) {
             $this->app->configure('acl');
         }
     }
