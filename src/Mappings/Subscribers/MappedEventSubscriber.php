@@ -121,7 +121,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
             return false;
         }
 
-        if ($metadata->getReflectionClass()->isAbstract()) {
+        if (!$metadata->getReflectionClass() || $metadata->getReflectionClass()->isAbstract()) {
             return false;
         }
 
