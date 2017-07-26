@@ -11,6 +11,7 @@ use LaravelDoctrine\ACL\Permissions\ConfigPermissionDriver;
 use LaravelDoctrine\ACL\Permissions\DoctrinePermissionDriver;
 use LaravelDoctrine\ACL\Permissions\Permission;
 use Mockery as m;
+use Illuminate\Contracts\Logging\Log;
 
 class DoctrinePermissionDriverTest extends PHPUnit_Framework_TestCase
 {
@@ -33,13 +34,19 @@ class DoctrinePermissionDriverTest extends PHPUnit_Framework_TestCase
      * @var Mockery\Mock
      */
     protected $em;
+    
+    /**
+     * @var Mockery\Mock
+     */
+    protected $log;
 
     protected function setUp()
     {
         $this->config   = m::mock(Repository::class);
         $this->registry = m::mock(ManagerRegistry::class);
         $this->em       = m::mock(EntityManagerInterface::class);
-        $this->driver   = new DoctrinePermissionDriver($this->registry, $this->config);
+        $this->log      = m::mock(Log::class);
+        $this->driver   = new DoctrinePermissionDriver($this->registry, $this->config, $this->log);
     }
 
     public function test_can_get_all_permissions()

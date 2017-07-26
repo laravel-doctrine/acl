@@ -8,6 +8,8 @@ use Doctrine\ORM\EntityRepository;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Collection;
 use LaravelDoctrine\ACL\Contracts\Permission;
+use Exception;
+use Illuminate\Contracts\Logging\Log;
 
 class DoctrinePermissionDriver implements PermissionDriver
 {
@@ -22,13 +24,20 @@ class DoctrinePermissionDriver implements PermissionDriver
     protected $config;
 
     /**
+     * @var Log
+     */
+    protected $log;
+
+    /**
      * @param ManagerRegistry $registry
      * @param Repository      $config
+     * @param Log             $log
      */
-    public function __construct(ManagerRegistry $registry, Repository $config)
+    public function __construct(ManagerRegistry $registry, Repository $config, Log $log)
     {
         $this->registry = $registry;
         $this->config   = $config;
+        $this->log      = $log;
     }
 
     /**
@@ -37,11 +46,18 @@ class DoctrinePermissionDriver implements PermissionDriver
     public function getAllPermissions()
     {
         if ($this->getRepository()) {
-            $permissions = $this->getRepository()->findAll();
+            try {
+                $permissions = $this->getRepository()->findAll();
 
-            return new Collection(
-                $this->mapToArrayOfNames($permissions)
-            );
+                return new Collection(
+                    $this->mapToArrayOfNames($permissions)
+                );
+            } catch (Exception $e) {
+                // Catch any exception as this method is called very early in the
+                // booting process of laravel, making commands unusable if
+                // its not caught.
+                $this->log->error($e);
+            }
         }
 
         return new Collection;
