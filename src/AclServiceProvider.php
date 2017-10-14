@@ -25,8 +25,8 @@ class AclServiceProvider extends ServiceProvider
 
         $this->app->make(DoctrineManager::class)->onResolve(function () {
             $this->definePermissions(
-                $this->app->make(Gate::class),
-                $this->app->make(PermissionManager::class)
+                app(Gate::class),
+                app(PermissionManager::class)
             );
         });
     }

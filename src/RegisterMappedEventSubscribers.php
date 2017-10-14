@@ -5,7 +5,7 @@ namespace LaravelDoctrine\ACL;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
-use Illuminate\Contracts\Container\Container;
+use Illuminate\Container\Container;
 use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationsSubscriber;
 use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationSubscriber;
 use LaravelDoctrine\ACL\Mappings\Subscribers\HasPermissionsSubscriber;
@@ -30,11 +30,11 @@ class RegisterMappedEventSubscribers implements DoctrineExtender
     protected $container;
 
     /**
-     * @param Container $container
+     * RegisterMappedEventSubscribers constructor.
      */
-    public function __construct(Container $container)
+    public function __construct()
     {
-        $this->container = $container;
+        $this->container = Container::getInstance();
     }
 
     /**
