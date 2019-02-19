@@ -3,6 +3,7 @@
 namespace LaravelDoctrine\ACL\Permissions;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Contracts\Config\Repository;
@@ -37,7 +38,11 @@ class DoctrinePermissionDriver implements PermissionDriver
     public function getAllPermissions()
     {
         if ($this->getRepository()) {
-            $permissions = $this->getRepository()->findAll();
+            try {
+                $permissions = $this->getRepository()->findAll();
+            } catch (TableNotFoundException $e) {
+                $permissions = [];
+            }
 
             return new Collection(
                 $this->mapToArrayOfNames($permissions)
@@ -87,13 +92,10 @@ class DoctrinePermissionDriver implements PermissionDriver
         if ($this->getEntityManager()) {
             $metadata = $this->getEntityManager()->getClassMetadata($this->getEntityName());
 
-            $schemaManager = $this->getEntityManager()->getConnection()->getSchemaManager();
-            if ($schemaManager->tablesExist([$metadata->getTableName()]) == true) {
-                return new EntityRepository(
-                    $this->getEntityManager(),
-                    $metadata
-                );
-            }
+            return new EntityRepository(
+                $this->getEntityManager(),
+                $metadata
+            );
         }
     }
 }
