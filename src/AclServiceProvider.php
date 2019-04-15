@@ -3,6 +3,7 @@
 namespace LaravelDoctrine\ACL;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use LaravelDoctrine\ACL\Contracts\HasPermissions;
@@ -23,10 +24,12 @@ class AclServiceProvider extends ServiceProvider
             ], 'config');
         }
 
-        $this->app->make(DoctrineManager::class)->onResolve(function () {
+        $this->app->get(DoctrineManager::class)->onResolve(function () {
+            $container = Container::getInstance();
+
             $this->definePermissions(
-                $this->app->make(Gate::class),
-                $this->app->make(PermissionManager::class)
+                $container->get(Gate::class),
+                $container->get(PermissionManager::class)
             );
         });
     }

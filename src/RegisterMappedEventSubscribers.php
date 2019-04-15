@@ -5,6 +5,8 @@ namespace LaravelDoctrine\ACL;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
+use Doctrine\ORM\ORMException;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationsSubscriber;
 use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationSubscriber;
@@ -23,7 +25,6 @@ class RegisterMappedEventSubscribers implements DoctrineExtender
         HasRolesSubscriber::class,
         HasPermissionsSubscriber::class,
     ];
-
     /**
      * @var Container
      */
@@ -41,14 +42,18 @@ class RegisterMappedEventSubscribers implements DoctrineExtender
      * @param Configuration $configuration
      * @param Connection    $connection
      * @param EventManager  $eventManager
+     *
+     * @throws ORMException
      */
     public function extend(Configuration $configuration, Connection $connection, EventManager $eventManager)
     {
+        $configRepository = \Illuminate\Container\Container::getInstance()->get(Repository::class);
+
         foreach ($this->subscribers as $subscriber) {
             $eventManager->addEventSubscriber(
                 new $subscriber(
                     $configuration->getMetadataDriverImpl()->getReader(),
-                    $this->container['config']
+                    $configRepository
                 )
             );
         }
