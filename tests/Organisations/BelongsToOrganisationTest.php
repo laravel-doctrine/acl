@@ -1,7 +1,7 @@
 <?php
 
 
-class BelongsToOrganisationTest extends PHPUnit_Framework_TestCase
+class BelongsToOrganisationTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var UserMock3

@@ -6,7 +6,7 @@ use LaravelDoctrine\ACL\Contracts\Role;
 use LaravelDoctrine\ACL\Permissions\HasPermissions;
 use LaravelDoctrine\ACL\Roles\HasRoles;
 
-class HasPermissionsTest extends PHPUnit_Framework_TestCase
+class HasPermissionsTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var UserMock

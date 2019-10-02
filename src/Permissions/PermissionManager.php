@@ -2,6 +2,7 @@
 
 namespace LaravelDoctrine\ACL\Permissions;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use LaravelDoctrine\ACL\Manager;
 
@@ -21,7 +22,7 @@ class PermissionManager extends Manager
             $permissions->toArray()
         );
 
-        return array_flatten($list);
+        return Arr::flatten($list);
     }
 
     /**
