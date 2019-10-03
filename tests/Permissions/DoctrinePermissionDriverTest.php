@@ -13,7 +13,7 @@ use LaravelDoctrine\ACL\Permissions\DoctrinePermissionDriver;
 use LaravelDoctrine\ACL\Permissions\Permission;
 use Mockery as m;
 
-class DoctrinePermissionDriverTest extends PHPUnit_Framework_TestCase
+class DoctrinePermissionDriverTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var Mockery\Mock
@@ -35,7 +35,7 @@ class DoctrinePermissionDriverTest extends PHPUnit_Framework_TestCase
      */
     protected $em;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config   = m::mock(Repository::class);
         $this->registry = m::mock(ManagerRegistry::class);
@@ -43,7 +43,7 @@ class DoctrinePermissionDriverTest extends PHPUnit_Framework_TestCase
         $this->driver   = new DoctrinePermissionDriver($this->registry, $this->config);
     }
 
-    public function test_can_get_all_permissions()
+    public function test_can_get_all_permissions(): void
     {
         $this->config->shouldReceive('get')->with('acl.permissions.entity')->once()->andReturn(Permission::class);
 
@@ -66,7 +66,7 @@ class DoctrinePermissionDriverTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($permissions->contains('mocked'));
     }
 
-    public function test_should_not_fail_when_table_does_not_exist()
+    public function test_should_not_fail_when_table_does_not_exist(): void
     {
         $this->config->shouldReceive('get')->with('acl.permissions.entity')->once()->andReturn(Permission::class);
 

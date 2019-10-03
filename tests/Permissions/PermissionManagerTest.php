@@ -7,7 +7,7 @@ use LaravelDoctrine\ACL\Permissions\PermissionDriver;
 use LaravelDoctrine\ACL\Permissions\PermissionManager;
 use Mockery as m;
 
-class PermissionManagerTest extends PHPUnit_Framework_TestCase
+class PermissionManagerTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var PermissionDriver
@@ -24,7 +24,7 @@ class PermissionManagerTest extends PHPUnit_Framework_TestCase
      */
     protected $container;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->driver = m::mock(PermissionDriver::class);
 
@@ -36,7 +36,7 @@ class PermissionManagerTest extends PHPUnit_Framework_TestCase
         });
     }
 
-    public function test_can_dot_notated_array_of_permissions()
+    public function test_can_dot_notated_array_of_permissions(): void
     {
         $this->driver->shouldReceive('getAllPermissions')->once()->andReturn(new Collection([
             'permission1',
@@ -67,7 +67,7 @@ class PermissionManagerTest extends PHPUnit_Framework_TestCase
         ], $this->manager->getPermissionsWithDotNotation());
     }
 
-    public function test_when_should_use_default_permission_entity()
+    public function test_when_should_use_default_permission_entity(): void
     {
         $config = m::mock(Config::class);
 
@@ -81,7 +81,7 @@ class PermissionManagerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->manager->useDefaultPermissionEntity());
     }
 
-    public function test_when_should_not_use_default_permission_entity_because_driver_is_not_doctrine()
+    public function test_when_should_not_use_default_permission_entity_because_driver_is_not_doctrine(): void
     {
         $config = m::mock(Config::class);
 
@@ -93,7 +93,7 @@ class PermissionManagerTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->manager->useDefaultPermissionEntity());
     }
 
-    public function test_when_should_not_use_default_permission_entity_because_entity_is_different()
+    public function test_when_should_not_use_default_permission_entity_because_entity_is_different(): void
     {
         $config = m::mock(Config::class);
 
@@ -105,7 +105,7 @@ class PermissionManagerTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->manager->useDefaultPermissionEntity());
     }
 
-    public function test_needs_doctrine()
+    public function test_needs_doctrine(): void
     {
         $config = m::mock(Config::class);
 
@@ -116,7 +116,7 @@ class PermissionManagerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->manager->needsDoctrine());
     }
 
-    public function test_does_not_need_doctrine()
+    public function test_does_not_need_doctrine(): void
     {
         $config = m::mock(Config::class);
 
