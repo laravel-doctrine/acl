@@ -5,7 +5,6 @@ namespace LaravelDoctrine\ACL;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
-use Illuminate\Contracts\Container\Container;
 use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationsSubscriber;
 use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationSubscriber;
 use LaravelDoctrine\ACL\Mappings\Subscribers\HasPermissionsSubscriber;
@@ -25,19 +24,6 @@ class RegisterMappedEventSubscribers implements DoctrineExtender
     ];
 
     /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
-     * @param Container $container
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
-
-    /**
      * @param Configuration $configuration
      * @param Connection    $connection
      * @param EventManager  $eventManager
@@ -48,7 +34,7 @@ class RegisterMappedEventSubscribers implements DoctrineExtender
             $eventManager->addEventSubscriber(
                 new $subscriber(
                     $configuration->getMetadataDriverImpl()->getReader(),
-                    $this->container['config']
+                    app('config')
                 )
             );
         }
