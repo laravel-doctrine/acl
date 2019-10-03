@@ -17,25 +17,18 @@ class AclServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $manager           = $this->app->make(DoctrineManager::class);
-        $gate              = $this->app->make(Gate::class);
-        $permissionManager = $this->app->make(PermissionManager::class);
-
         if (!$this->isLumen()) {
             $this->publishes([
                 $this->getConfigPath() => config_path('acl.php'),
             ], 'config');
         }
 
-        $manager->extendAll(RegisterMappedEventSubscribers::class);
-
-        if ($permissionManager->needsDoctrine()) {
-            $manager->addPaths([
-                __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
-            ]);
-        }
-
-        $this->definePermissions($gate, $permissionManager);
+        $this->app->make(DoctrineManager::class)->onResolve(function () {
+            $this->definePermissions(
+                $this->app->make(Gate::class),
+                $this->app->make(PermissionManager::class)
+            );
+        });
     }
 
     /**
@@ -46,6 +39,11 @@ class AclServiceProvider extends ServiceProvider
     {
         $this->mergeConfig();
         $this->registerAnnotations();
+
+        $manager = $this->app->make(DoctrineManager::class);
+        $manager->extendAll(RegisterMappedEventSubscribers::class);
+
+        $this->registerPaths($manager);
     }
 
     /**
@@ -80,6 +78,10 @@ class AclServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             $this->getConfigPath(), 'acl'
         );
+
+        if ($this->isLumen()) {
+            $this->app->configure('acl');
+        }
     }
 
     /**
@@ -96,5 +98,19 @@ class AclServiceProvider extends ServiceProvider
     protected function isLumen()
     {
         return str_contains($this->app->version(), 'Lumen');
+    }
+
+    /**
+     * @param $manager
+     */
+    private function registerPaths($manager)
+    {
+        $permissionManager = $this->app->make(PermissionManager::class);
+
+        if ($permissionManager->useDefaultPermissionEntity()) {
+            $manager->addPaths([
+                __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
+            ]);
+        }
     }
 }

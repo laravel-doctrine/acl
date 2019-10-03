@@ -1,6 +1,6 @@
 # Laravel Doctrine ACL
 
-<img src="https://cloud.githubusercontent.com/assets/7728097/9831657/4c7f7140-5960-11e5-871e-d455c4bb4fa6.jpg"/>
+<img src="https://cloud.githubusercontent.com/assets/7728097/12727113/9e4fbc48-c91b-11e5-9987-e263eee9db12.jpg"/>
 
 [![GitHub release](https://img.shields.io/github/release/laravel-doctrine/acl.svg?style=flat-square)](https://packagist.org/packages/laravel-doctrine/acl)
 [![Travis](https://img.shields.io/travis/laravel-doctrine/acl.svg?style=flat-square)](https://travis-ci.org/laravel-doctrine/acl)
