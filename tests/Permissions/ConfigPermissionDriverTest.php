@@ -5,7 +5,7 @@ use Illuminate\Support\Collection;
 use LaravelDoctrine\ACL\Permissions\ConfigPermissionDriver;
 use Mockery as m;
 
-class ConfigPermissionDriverTest extends PHPUnit_Framework_TestCase
+class ConfigPermissionDriverTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var Mockery\Mock

@@ -13,7 +13,7 @@ use LaravelDoctrine\ACL\Permissions\DoctrinePermissionDriver;
 use LaravelDoctrine\ACL\Permissions\Permission;
 use Mockery as m;
 
-class DoctrinePermissionDriverTest extends PHPUnit_Framework_TestCase
+class DoctrinePermissionDriverTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var Mockery\Mock

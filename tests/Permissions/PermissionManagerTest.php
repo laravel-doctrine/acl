@@ -7,7 +7,7 @@ use LaravelDoctrine\ACL\Permissions\PermissionDriver;
 use LaravelDoctrine\ACL\Permissions\PermissionManager;
 use Mockery as m;
 
-class PermissionManagerTest extends PHPUnit_Framework_TestCase
+class PermissionManagerTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var PermissionDriver
