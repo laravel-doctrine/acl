@@ -17,13 +17,13 @@ class ConfigPermissionDriverTest extends PHPUnit\Framework\TestCase
      */
     protected $driver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = m::mock(Repository::class);
         $this->driver = new ConfigPermissionDriver($this->config);
     }
 
-    public function test_can_get_all_permissions()
+    public function test_can_get_all_permissions(): void
     {
         $this->config->shouldReceive('get')->with('acl.permissions.list', [])->once()->andReturn(['mocked']);
 

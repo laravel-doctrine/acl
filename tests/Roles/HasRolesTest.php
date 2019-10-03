@@ -25,7 +25,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
      */
     protected $extraRole2;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->user       = new UserMock2;
         $this->admin      = new RoleMock2('admin');
@@ -33,17 +33,17 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->extraRole2 = new RoleMock2('extraRole2');
     }
 
-    public function test_doesnt_have_role_when_no_roles_assigned()
+    public function test_doesnt_have_role_when_no_roles_assigned(): void
     {
         $this->assertFalse($this->user->hasRole($this->admin));
     }
 
-    public function test_doesnt_have_role_by_name_when_no_roles_assigned()
+    public function test_doesnt_have_role_by_name_when_no_roles_assigned(): void
     {
         $this->assertFalse($this->user->hasRoleByName('admin'));
     }
 
-    public function test_doesnt_have_role_when_when_other_role_assigned()
+    public function test_doesnt_have_role_when_when_other_role_assigned(): void
     {
         $this->user->setRoles([
             new RoleMock2('user'),
@@ -51,7 +51,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->user->hasRole($this->admin));
     }
 
-    public function test_doesnt_have_any_role_when_role_assigned()
+    public function test_doesnt_have_any_role_when_role_assigned(): void
     {
         $this->user->setRoles([
             $this->admin
@@ -59,7 +59,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->user->hasRole([$this->extraRole1, $this->extraRole2]));
     }
 
-    public function test_doesnt_have_any_role_by_name_when_role_assigned()
+    public function test_doesnt_have_any_role_by_name_when_role_assigned(): void
     {
         $this->user->setRoles([
             $this->admin
@@ -67,7 +67,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->user->hasRoleByName(['extraRole1', 'extraRole2']));
     }
 
-    public function test_doesnt_have_all_roles_when_role_assigned()
+    public function test_doesnt_have_all_roles_when_role_assigned(): void
     {
         $this->user->setRoles([
             $this->admin,
@@ -76,7 +76,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->user->hasRole([$this->admin, $this->extraRole1, $this->extraRole2], true));
     }
 
-    public function test_doesnt_have_all_roles_by_name_when_role_assigned()
+    public function test_doesnt_have_all_roles_by_name_when_role_assigned(): void
     {
         $this->user->setRoles([
             $this->admin,
@@ -85,7 +85,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->user->hasRoleByName(['admin', 'extraRole1', 'extraRole2'], true));
     }
 
-    public function test_doesnt_have_role_by_name_when_when_other_role_assigned()
+    public function test_doesnt_have_role_by_name_when_when_other_role_assigned(): void
     {
         $this->user->setRoles([
             new RoleMock2('user'),
@@ -93,7 +93,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->user->hasRoleByName('admin'));
     }
 
-    public function test_has_role_when_when_role_assigned()
+    public function test_has_role_when_when_role_assigned(): void
     {
         $this->user->setRoles([
             $this->admin,
@@ -101,7 +101,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($this->user->hasRole($this->admin));
     }
 
-    public function test_has_role_by_name_when_when_role_assigned()
+    public function test_has_role_by_name_when_when_role_assigned(): void
     {
         $this->user->setRoles([
             $this->admin,
@@ -109,7 +109,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($this->user->hasRoleByName('admin'));
     }
 
-    public function test_has_any_role_when_role_assigned()
+    public function test_has_any_role_when_role_assigned(): void
     {
         $this->user->setRoles([
             $this->admin,
@@ -119,7 +119,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($this->user->hasRole([$this->admin, $this->extraRole1]));
     }
 
-    public function test_has_all_role_when_role_assigned()
+    public function test_has_all_role_when_role_assigned(): void
     {
         $this->user->setRoles([
             $this->admin,
@@ -129,7 +129,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($this->user->hasRole([$this->admin, $this->extraRole1, $this->extraRole2], true));
     }
 
-    public function test_has_any_role_by_name_when_role_assigned()
+    public function test_has_any_role_by_name_when_role_assigned(): void
     {
         $this->user->setRoles([
             $this->admin,
@@ -139,7 +139,7 @@ class HasRolesTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($this->user->hasRoleByName(['admin', 'extraRole1']));
     }
 
-    public function test_has_all_role_by_name_when_role_assigned()
+    public function test_has_all_role_by_name_when_role_assigned(): void
     {
         $this->user->setRoles([
             $this->admin,
