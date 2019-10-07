@@ -5,6 +5,7 @@ namespace LaravelDoctrine\ACL;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use LaravelDoctrine\ACL\Contracts\HasPermissions;
 use LaravelDoctrine\ACL\Mappings\AnnotationLoader;
 use LaravelDoctrine\ACL\Permissions\PermissionManager;
@@ -97,7 +98,7 @@ class AclServiceProvider extends ServiceProvider
      */
     protected function isLumen()
     {
-        return str_contains($this->app->version(), 'Lumen');
+        return Str::contains($this->app->version(), 'Lumen');
     }
 
     /**
