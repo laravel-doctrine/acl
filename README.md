@@ -23,5 +23,6 @@ Version | Supported Laravel Versions
 ~1.0.14 |  5.3
 ~1.0.15 |  5.4, 5.5, 5.6
 ~1.1.0 | 6.x
+~1.2.0 | 7.x
 
 _See [Composer documentation](https://getcomposer.org/doc/articles/versions.md#tilde-version-range-) about the tilde range (~)._
