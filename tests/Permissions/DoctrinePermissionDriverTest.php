@@ -1,6 +1,6 @@
 <?php
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Mysqli\Driver;
 use Doctrine\DBAL\Driver\Mysqli\MysqliException;
