@@ -3,9 +3,7 @@
 <img src="https://cloud.githubusercontent.com/assets/7728097/12727113/9e4fbc48-c91b-11e5-9987-e263eee9db12.jpg"/>
 
 [![GitHub release](https://img.shields.io/github/release/laravel-doctrine/acl.svg?style=flat-square)](https://packagist.org/packages/laravel-doctrine/acl)
-[![Travis](https://img.shields.io/travis/laravel-doctrine/acl.svg?style=flat-square)](https://travis-ci.org/laravel-doctrine/acl)
-[![StyleCI](https://styleci.io/repos/39161118/shield)](https://styleci.io/repos/39161118)
-[![Scrutinizer](https://img.shields.io/scrutinizer/g/laravel-doctrine/acl.svg?style=flat-square)](https://github.com/laravel-doctrine/acl)
+[![Github actions](https://github.com/laravel-doctrine/acl/workflows/CI/badge.svg?branch=1.x)](https://github.com/laravel-doctrine/acl/actions?query=workflow%3ACI+branch%3A1.x)
 [![Packagist](https://img.shields.io/packagist/dm/laravel-doctrine/acl.svg?style=flat-square)](https://packagist.org/packages/laravel-doctrine/acl)
 [![Packagist](https://img.shields.io/packagist/dt/laravel-doctrine/acl.svg?style=flat-square)](https://packagist.org/packages/laravel-doctrine/acl)
 
@@ -20,10 +18,7 @@
 
 Version | Supported Laravel Versions
 :---------|:----------
-~1.0.14 |  5.3
-~1.0.15 |  5.4, 5.5, 5.6
 ~1.1.0 | 6.x
 ~1.2.0 | 7.x
 ~1.3.0 | 8.x
-
-_See [Composer documentation](https://getcomposer.org/doc/articles/versions.md#tilde-version-range-) about the tilde range (~)._
+^1.4.0 | 6.x, 7.x, 8.x
