@@ -28,7 +28,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
      * @param Reader|null $reader
      * @param Repository  $config
      */
-    public function __construct(Reader $reader = null, Repository $config)
+    public function __construct(?Reader $reader, Repository $config)
     {
         $this->reader = $reader;
         $this->config = $config;
