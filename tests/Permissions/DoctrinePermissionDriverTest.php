@@ -75,11 +75,20 @@ class DoctrinePermissionDriverTest extends PHPUnit\Framework\TestCase
         $this->em->shouldReceive('getUnitOfWork')->once()->andReturn($this->em);
         $this->em->shouldReceive('getEntityPersister')->with(Permission::class)->once()->andReturn($this->em);
 
-        $driver = new Driver();
-        $exception = new MysqliException('Base table or view not found: 1146 Table \'permissions\' doesn\'t exist', 1146, 1146);
-        $tableNotFoundException = DBALException::driverExceptionDuringQuery($driver, $exception, 'SELECT t0.id AS id_1, t0.name AS name_2, t0.modules AS modules_3 FROM permissions t0');
 
-        $this->em->shouldReceive('loadAll')->once()->andThrow($tableNotFoundException);
+
+        if (class_exists(MysqliException::class)) {
+            $driver = new Driver();
+            $exception = new MysqliException('Base table or view not found: 1146 Table \'permissions\' doesn\'t exist', 1146, 1146);
+            $tableNotFoundException = DBALException::driverExceptionDuringQuery($driver, $exception, 'SELECT t0.id AS id_1, t0.name AS name_2, t0.modules AS modules_3 FROM permissions t0');
+
+            $this->em->shouldReceive('loadAll')->once()->andThrow($tableNotFoundException);
+        } else {
+            // DBAL 3 removed MysqliException
+            $this->em->shouldReceive('loadAll')->once()->andThrow(new \Doctrine\DBAL\Exception\TableNotFoundException(
+                new \Doctrine\DBAL\Driver\Mysqli\Exception\ConnectionFailed('Table not found'), null)
+            );
+        }
 
         $meta        = new ClassMetadata(Permission::class);
         $meta->table = [
