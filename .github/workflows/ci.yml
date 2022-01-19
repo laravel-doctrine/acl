@@ -3,11 +3,12 @@ on: [push, pull_request]
 jobs:
   tests:
     runs-on: 'ubuntu-latest'
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - Doctrine ${{ matrix.doctrine }}
     strategy:
       matrix:
         php: ['7.2', '7.3', '7.4', '8.0']
         laravel: ['6', '7', '8']
+        doctrine: ['2.8', '2.9', '2.10', '2.11']
         exclude:
           - php: '7.2'
             laravel: '8'
@@ -34,7 +35,7 @@ jobs:
         run: rm -f composer.lock
 
       - name: Install dependencies for Laravel ${{ matrix.laravel}}
-        run: composer require --no-progress --no-scripts --no-plugins illuminate/auth ^${{ matrix.laravel }} illuminate/config ^${{ matrix.laravel }} illuminate/contracts ^${{ matrix.laravel }} illuminate/support ^${{ matrix.laravel }} -v
+        run: composer require --no-progress --no-scripts --no-plugins illuminate/auth ^${{ matrix.laravel }} illuminate/config ^${{ matrix.laravel }} illuminate/contracts ^${{ matrix.laravel }} illuminate/support ^${{ matrix.laravel }} doctrine/orm ~${{ matrix.doctrine }}.0 -v
 
       - name: Update dependencies
         run: composer update --no-interaction
