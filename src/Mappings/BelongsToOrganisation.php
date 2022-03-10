@@ -2,6 +2,7 @@
 
 namespace LaravelDoctrine\ACL\Mappings;
 
+use Attribute;
 use Doctrine\Common\Annotations\Annotation;
 use Illuminate\Contracts\Config\Repository;
 
@@ -9,6 +10,7 @@ use Illuminate\Contracts\Config\Repository;
  * @Annotation
  * @Target("PROPERTY")
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class BelongsToOrganisation extends RelationAnnotation
 {
     /**
