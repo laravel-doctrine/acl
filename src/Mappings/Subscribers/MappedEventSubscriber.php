@@ -2,6 +2,7 @@
 
 namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
@@ -9,6 +10,8 @@ use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Illuminate\Contracts\Config\Repository;
 use LaravelDoctrine\ACL\Mappings\ConfigAnnotation;
+use LaravelDoctrine\ACL\Mappings\Readers\AttributeAnnotationReader;
+use LaravelDoctrine\ACL\Mappings\Readers\AttributeReader;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -52,7 +55,10 @@ abstract class MappedEventSubscriber implements EventSubscriber
         $metadata = $eventArgs->getClassMetadata();
 
         if (! $this->reader) {
-            return;
+            $this->reader = new AttributeAnnotationReader(
+                new AttributeReader(),
+                new AnnotationReader()
+            );
         }
 
         if ($this->isInstantiable($metadata) && $this->shouldBeMapped($metadata)) {
