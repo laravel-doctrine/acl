@@ -2,9 +2,9 @@
 
 namespace LaravelDoctrine\ACL\Mappings;
 
-use Doctrine\Common\Annotations\Annotation;
+use Doctrine\ORM\Mapping\Annotation;
 
-abstract class RelationAnnotation extends Annotation implements ConfigAnnotation
+abstract class RelationAnnotation implements ConfigAnnotation, Annotation
 {
     /**
      * @var string
