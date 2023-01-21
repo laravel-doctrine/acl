@@ -7,7 +7,6 @@ use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use LaravelDoctrine\ACL\Contracts\HasPermissions;
-use LaravelDoctrine\ACL\Mappings\AnnotationLoader;
 use LaravelDoctrine\ACL\Permissions\PermissionManager;
 use LaravelDoctrine\ORM\DoctrineManager;
 
@@ -39,7 +38,7 @@ class AclServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfig();
-        $this->registerAnnotations();
+        AnnotationRegistry::registerUniqueLoader('class_exists');
 
         $manager = $this->app->make(DoctrineManager::class);
         $manager->extendAll(RegisterMappedEventSubscribers::class);
@@ -58,17 +57,6 @@ class AclServiceProvider extends ServiceProvider
                 return $user->hasPermissionTo($permission);
             });
         }
-    }
-
-    /**
-     * Register annotations.
-     */
-    protected function registerAnnotations()
-    {
-        AnnotationRegistry::registerLoader([
-            new AnnotationLoader,
-            'loadClass',
-        ]);
     }
 
     /**
