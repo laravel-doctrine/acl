@@ -38,7 +38,9 @@ class AclServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfig();
-        AnnotationRegistry::registerUniqueLoader('class_exists');
+        if (method_exists(AnnotationRegistry::class, 'registerUniqueLoader')) {
+            AnnotationRegistry::registerUniqueLoader('class_exists');
+        }
 
         $manager = $this->app->make(DoctrineManager::class);
         $manager->extendAll(RegisterMappedEventSubscribers::class);

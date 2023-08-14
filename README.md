@@ -21,4 +21,4 @@ Version | Supported Laravel Versions
 ~1.1.0 | 6.x
 ~1.2.0 | 7.x
 ~1.3.0 | 8.x
-^1.4.0 | 6.x, 7.x, 8.x, 9.x
+^1.4.0 | 6.x, 7.x, 8.x, 9.x, 10.x
