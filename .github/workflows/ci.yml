@@ -1,21 +1,22 @@
 name: CI
 on:
-  schedule:
-    - cron: '0 0 * * *'
   push:
   pull_request:
+  schedule:
+    - cron: '0 0 * * *'
 jobs:
   tests:
     runs-on: 'ubuntu-latest'
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - Doctrine ${{ matrix.doctrine }}
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
     strategy:
       matrix:
         php: ['8.0', '8.1', '8.2']
-        laravel: ['8', '9']
-        doctrine: ['2.11', '2.12', '2.13', '2.14']
+        laravel: ['8', '9', '10']
         exclude:
           - php: '8.2'
             laravel: '8'
+          - php: '8.0'
+            laravel: '10'
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
@@ -29,7 +30,7 @@ jobs:
         run: rm -f composer.lock
 
       - name: Install dependencies for Laravel ${{ matrix.laravel}}
-        run: composer require --no-progress --no-scripts --no-plugins illuminate/auth ^${{ matrix.laravel }} illuminate/config ^${{ matrix.laravel }} illuminate/contracts ^${{ matrix.laravel }} illuminate/support ^${{ matrix.laravel }} doctrine/orm ~${{ matrix.doctrine }}.0 -v
+        run: composer require --no-progress --no-scripts --no-plugins illuminate/config ^${{ matrix.laravel }} illuminate/contracts ^${{ matrix.laravel }} illuminate/console ^${{ matrix.laravel }} -v
 
       - name: Update dependencies
         run: composer update --no-interaction
