@@ -1,0 +1,61 @@
+name: "Continuous Integration"
+
+on:
+  pull_request:
+    branches:
+      - "*.x"
+      - "main"
+  push:
+    branches:
+      - "*.x"
+      - "main"
+
+jobs:
+  phpunit:
+    name: "PHPUnit"
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "8.2"
+          - "8.3"
+          - "8.4"
+        dependencies:
+          - "highest"
+          - "lowest"
+        optional-dependencies:
+          - true
+          - false
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+        with:
+          fetch-depth: 2
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          coverage: "pcov"
+          ini-values: "zend.assertions=1"
+          extensions: "pdo_mysql"
+
+      - name: "Install dependencies with Composer"
+        uses: "ramsey/composer-install@v1"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--prefer-dist"
+
+      - name: "Show Composer packages"
+        run: "composer show"
+
+      - name: "Run PHPUnit"
+        run: "vendor/bin/phpunit --coverage-clover=coverage.xml"
+
+      - name: "Upload coverage"
+        uses: "codecov/codecov-action@v5"
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

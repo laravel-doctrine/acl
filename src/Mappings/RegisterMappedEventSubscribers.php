@@ -1,6 +1,8 @@
 <?php
 
-namespace LaravelDoctrine\ACL;
+declare(strict_types=1);
+
+namespace LaravelDoctrine\ACL\Mappings;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
@@ -11,31 +13,23 @@ use LaravelDoctrine\ACL\Mappings\Subscribers\HasPermissionsSubscriber;
 use LaravelDoctrine\ACL\Mappings\Subscribers\HasRolesSubscriber;
 use LaravelDoctrine\ORM\DoctrineExtender;
 
+use function app;
+
 class RegisterMappedEventSubscribers implements DoctrineExtender
 {
-    /**
-     * @var array
-     */
-    protected $subscribers = [
+    /** @var class-string[] $subscribers */
+    protected array $subscribers = [
         BelongsToOrganisationsSubscriber::class,
         BelongsToOrganisationSubscriber::class,
         HasRolesSubscriber::class,
         HasPermissionsSubscriber::class,
     ];
 
-    /**
-     * @param Configuration $configuration
-     * @param Connection    $connection
-     * @param EventManager  $eventManager
-     */
-    public function extend(Configuration $configuration, Connection $connection, EventManager $eventManager)
+    public function extend(Configuration $configuration, Connection $connection, EventManager $eventManager): void
     {
         foreach ($this->subscribers as $subscriber) {
             $eventManager->addEventSubscriber(
-                new $subscriber(
-                    $configuration->getMetadataDriverImpl()->getReader(),
-                    app('config')
-                )
+                new $subscriber(app('config')),
             );
         }
     }

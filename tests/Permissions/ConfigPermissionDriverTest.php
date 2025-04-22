@@ -1,29 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
+namespace Tests\Permissions;
+
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Collection;
 use LaravelDoctrine\ACL\Permissions\ConfigPermissionDriver;
 use Mockery as m;
+use Mockery\Mock;
+use Tests\TestCase;
 
-class ConfigPermissionDriverTest extends PHPUnit\Framework\TestCase
+class ConfigPermissionDriverTest extends TestCase
 {
-    /**
-     * @var Mockery\Mock
-     */
-    protected $config;
+    protected Repository|Mock $config;
 
-    /**
-     * @var ConfigPermissionDriver
-     */
-    protected $driver;
+    protected ConfigPermissionDriver|null $driver;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
+        parent::setUp();
+
         $this->config = m::mock(Repository::class);
         $this->driver = new ConfigPermissionDriver($this->config);
     }
 
-    public function test_can_get_all_permissions(): void
+    public function testCanGetAllPermissions(): void
     {
         $this->config->shouldReceive('get')->with('acl.permissions.list', [])->once()->andReturn(['mocked']);
 

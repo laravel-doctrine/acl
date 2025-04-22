@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Permissions;
 
 use Illuminate\Contracts\Config\Repository;
@@ -7,26 +9,14 @@ use Illuminate\Support\Collection;
 
 class ConfigPermissionDriver implements PermissionDriver
 {
-    /**
-     * @var Repository
-     */
-    protected $repository;
-
-    /**
-     * @param Repository $repository
-     */
-    public function __construct(Repository $repository)
+    public function __construct(protected Repository $repository)
     {
-        $this->repository = $repository;
     }
 
-    /**
-     * @return Collection
-     */
-    public function getAllPermissions()
+    public function getAllPermissions(): Collection
     {
         return new Collection(
-            $this->repository->get('acl.permissions.list', [])
+            $this->repository->get('acl.permissions.list', []),
         );
     }
 }

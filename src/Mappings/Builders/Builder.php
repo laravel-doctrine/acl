@@ -1,17 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Mappings\Builders;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use LaravelDoctrine\ACL\Mappings\ConfigAnnotation;
+use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
 use ReflectionProperty;
 
 interface Builder
 {
-    /**
-     * @param ClassMetadata      $metadata
-     * @param ReflectionProperty $property
-     * @param ConfigAnnotation   $annotation
-     */
-    public function build(ClassMetadata $metadata, ReflectionProperty $property, ConfigAnnotation $annotation);
+    public function build(ClassMetadata $metadata, ReflectionProperty $property, ConfigAttribute $attribute): void;
 }

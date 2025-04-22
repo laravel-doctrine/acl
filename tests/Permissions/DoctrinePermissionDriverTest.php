@@ -1,100 +1,102 @@
 <?php
 
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Mysqli\Driver;
-use Doctrine\DBAL\Driver\Mysqli\MysqliException;
+declare(strict_types=1);
+
+namespace Tests\Permissions;
+
+use Doctrine\DBAL\Driver\Mysqli\Exception\ConnectionFailed;
+use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Persisters\Entity\EntityPersister;
+use Doctrine\ORM\UnitOfWork;
+use Doctrine\Persistence\ManagerRegistry;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Collection;
-use LaravelDoctrine\ACL\Permissions\ConfigPermissionDriver;
 use LaravelDoctrine\ACL\Permissions\DoctrinePermissionDriver;
 use LaravelDoctrine\ACL\Permissions\Permission;
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 
-class DoctrinePermissionDriverTest extends PHPUnit\Framework\TestCase
+class DoctrinePermissionDriverTest extends TestCase
 {
-    /**
-     * @var Mockery\Mock
-     */
-    protected $config;
+    protected Repository|m\Mock $config;
 
-    /**
-     * @var ConfigPermissionDriver
-     */
-    protected $driver;
+    protected DoctrinePermissionDriver|m\Mock $driver;
 
-    /**
-     * @var Mockery\Mock
-     */
-    protected $registry;
+    protected ManagerRegistry|m\Mock $registry;
 
-    /**
-     * @var Mockery\Mock
-     */
-    protected $em;
+    protected EntityManagerInterface|m\Mock $em;
+
+    protected UnitOfWork|m\Mock $unitOfWork;
+
+    protected EntityPersister|m\Mock $entityPersister;
 
     protected function setUp(): void
     {
-        $this->config   = m::mock(Repository::class);
-        $this->registry = m::mock(ManagerRegistry::class);
-        $this->em       = m::mock(EntityManagerInterface::class);
-        $this->driver   = new DoctrinePermissionDriver($this->registry, $this->config);
+        $this->config          = m::mock(Repository::class);
+        $this->registry        = m::mock(ManagerRegistry::class);
+        $this->em              = m::mock(EntityManagerInterface::class);
+        $this->unitOfWork      = m::mock(UnitOfWork::class);
+        $this->entityPersister = m::mock(EntityPersister::class);
+        $this->driver          = new DoctrinePermissionDriver($this->registry, $this->config);
     }
 
-    public function test_can_get_all_permissions(): void
+    protected function tearDown(): void
     {
-        $this->config->shouldReceive('get')->with('acl.permissions.entity')->once()->andReturn(Permission::class);
+        m::close();
+    }
 
-        $this->registry->shouldReceive('getManagerForClass')->with(Permission::class)->once()->andReturn($this->em);
+    public function testNoEntityManagerFound(): void
+    {
+        $this->config->shouldReceive('get')->with('acl.permissions.entity')->andReturn(Permission::class);
 
-        $this->em->shouldReceive('getUnitOfWork')->once()->andReturn($this->em);
-        $this->em->shouldReceive('getEntityPersister')->with(Permission::class)->once()->andReturn($this->em);
-        $this->em->shouldReceive('loadAll')->once()->andReturn([
+        $this->registry->shouldReceive('getManagerForClass')->with(Permission::class)->andReturn(null);
+
+        $collection = $this->driver->getAllPermissions();
+        $this->assertInstanceOf(Collection::class, $collection);
+        $this->assertTrue($collection->isEmpty());
+    }
+
+    public function testCanGetAllPermissions(): void
+    {
+        $this->config->shouldReceive('get')->with('acl.permissions.entity')->andReturn(Permission::class);
+
+        $this->registry->shouldReceive('getManagerForClass')->with(Permission::class)->andReturn($this->em);
+
+        $this->em->shouldReceive('getUnitOfWork')->andReturn($this->unitOfWork);
+        $this->unitOfWork->shouldReceive('getEntityPersister')->with(Permission::class)->andReturn($this->entityPersister);
+        $this->entityPersister->shouldReceive('loadAll')->andReturn([
             new Permission('mocked'),
         ]);
 
         $meta        = new ClassMetadata(Permission::class);
-        $meta->table = [
-            'name' => 'permissions',
-        ];
-        $this->em->shouldReceive('getClassMetadata')->once()->andReturn($meta);
+        $meta->table = ['name' => 'permissions'];
+        $this->em->shouldReceive('getClassMetadata')->andReturn($meta);
 
         $permissions = $this->driver->getAllPermissions();
         $this->assertInstanceOf(Collection::class, $permissions);
         $this->assertTrue($permissions->contains('mocked'));
     }
 
-    public function test_should_not_fail_when_table_does_not_exist(): void
+    public function testShouldNotFailWhenTableDoesNotExist(): void
     {
-        $this->config->shouldReceive('get')->with('acl.permissions.entity')->once()->andReturn(Permission::class);
+        $this->config->shouldReceive('get')->with('acl.permissions.entity')->andReturn(Permission::class);
 
-        $this->registry->shouldReceive('getManagerForClass')->with(Permission::class)->once()->andReturn($this->em);
+        $this->registry->shouldReceive('getManagerForClass')->with(Permission::class)->andReturn($this->em);
 
-        $this->em->shouldReceive('getUnitOfWork')->once()->andReturn($this->em);
-        $this->em->shouldReceive('getEntityPersister')->with(Permission::class)->once()->andReturn($this->em);
+        $this->em->shouldReceive('getUnitOfWork')->andReturn($this->unitOfWork);
+        $this->unitOfWork->shouldReceive('getEntityPersister')->with(Permission::class)->andReturn($this->entityPersister);
 
-
-
-        if (class_exists(MysqliException::class)) {
-            $driver = new Driver();
-            $exception = new MysqliException('Base table or view not found: 1146 Table \'permissions\' doesn\'t exist', 1146, 1146);
-            $tableNotFoundException = DBALException::driverExceptionDuringQuery($driver, $exception, 'SELECT t0.id AS id_1, t0.name AS name_2, t0.modules AS modules_3 FROM permissions t0');
-
-            $this->em->shouldReceive('loadAll')->once()->andThrow($tableNotFoundException);
-        } else {
-            // DBAL 3 removed MysqliException
-            $this->em->shouldReceive('loadAll')->once()->andThrow(new \Doctrine\DBAL\Exception\TableNotFoundException(
-                new \Doctrine\DBAL\Driver\Mysqli\Exception\ConnectionFailed('Table not found'), null)
-            );
-        }
+        // DBAL 3 removed MysqliException
+        $this->entityPersister->shouldReceive('loadAll')->andThrow(new TableNotFoundException(
+            new ConnectionFailed('Table not found'),
+            null,
+        ));
 
         $meta        = new ClassMetadata(Permission::class);
-        $meta->table = [
-            'name' => 'permissions',
-        ];
-        $this->em->shouldReceive('getClassMetadata')->once()->andReturn($meta);
+        $meta->table = ['name' => 'permissions'];
+        $this->em->shouldReceive('getClassMetadata')->andReturn($meta);
 
         $permissions = $this->driver->getAllPermissions();
         $this->assertInstanceOf(Collection::class, $permissions);

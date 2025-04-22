@@ -1,27 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Mappings;
 
-use Doctrine\Common\Annotations\Annotation;
+use Attribute;
 use Illuminate\Contracts\Config\Repository;
 
-/**
- * @Annotation
- * @Target("PROPERTY")
- */
-final class HasRoles extends RelationAnnotation
+#[Attribute(Attribute::TARGET_PROPERTY)]
+final class HasRoles extends RelationAttribute
 {
-    /**
-     * @var string
-     */
-    public $inversedBy = 'users';
+    public function __construct(
+        string|null $targetEntity = null,
+        string|null $mappedBy = null,
+        array|null $cascade = null,
+        string $fetch = 'LAZY',
+        bool $orphanRemoval = false,
+        string|null $indexBy = null,
+        public string $inversedBy = 'users',
+    ) {
+        $this->targetEntity  = $targetEntity;
+        $this->mappedBy      = $mappedBy;
+        $this->cascade       = $cascade;
+        $this->fetch         = $fetch;
+        $this->orphanRemoval = $orphanRemoval;
+        $this->indexBy       = $indexBy;
+    }
 
-    /**
-     * @param Repository $config
-     *
-     * @return mixed
-     */
-    public function getTargetEntity(Repository $config)
+    public function getTargetEntity(Repository $config): string|null
     {
         return $this->targetEntity ?: $config->get('acl.roles.entity', 'Role');
     }
