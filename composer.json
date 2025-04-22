@@ -28,10 +28,10 @@
   ],
   "require": {
     "php": "^8.2",
-    "illuminate/auth": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-    "illuminate/config": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-    "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-    "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+    "illuminate/auth": "^11.0|^12.0",
+    "illuminate/config": "^11.0|^12.0",
+    "illuminate/contracts": "^11.0|^12.0",
+    "illuminate/support": "^11.0|^12.0",
     "laravel-doctrine/orm": "^1|^2.0",
     "doctrine/annotations": "^1.10|^2.0"
   },
