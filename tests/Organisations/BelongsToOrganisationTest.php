@@ -1,37 +1,27 @@
 <?php
 
-class BelongsToOrganisationTest extends PHPUnit\Framework\TestCase
+use Tests\TestCase;
+use Workbench\App\Entities\Organisation;
+use Workbench\App\Entities\User;
+use Workbench\App\Entities\UserSingleOrg;
+
+class BelongsToOrganisationTest extends TestCase
 {
-    /**
-     * @var UserMock3
-     */
-    protected $user;
+    protected ?User $user;
+    protected ?UserSingleOrg $userSingle;
 
-    /**
-     * @var UserMock4
-     */
-    protected $userSingle;
+    protected ?Organisation $orgMock1;
+    protected ?Organisation $orgMock2;
+    protected ?Organisation $orgMock3;
 
-    /**
-     * @var OrgMock
-     */
-    protected $orgMock1;
-    /**
-     * @var OrgMock
-     */
-    protected $orgMock2;
-    /**
-     * @var OrgMock
-     */
-    protected $orgMock3;
-
-    protected function setUp() : void
+    public function setUp(): void
     {
-        $this->user          = new UserMock3;
-        $this->userSingle    = new UserMock4;
-        $this->orgMock1      = new OrgMock('org1');
-        $this->orgMock2      = new OrgMock('org2');
-        $this->orgMock3      = new OrgMock('org3');
+        parent::setUp();
+        $this->user          = entity(User::class)->create();
+        $this->userSingle    = entity(UserSingleOrg::class)->create();
+        $this->orgMock1      = entity(Organisation::class)->create(['name' => 'org1']);
+        $this->orgMock2      = entity(Organisation::class)->create(['name' => 'org2']);
+        $this->orgMock3      = entity(Organisation::class)->create(['name' => 'org3']);
     }
 
     public function test_doesnt_have_organisation_when_no_organisations_assigned_single(): void
@@ -52,7 +42,7 @@ class BelongsToOrganisationTest extends PHPUnit\Framework\TestCase
     public function test_doesnt_have_organisation_when_when_other_orgiansation_assigned(): void
     {
         $this->user->setOrganisations([
-            new OrgMock('org4'),
+            entity(Organisation::class)->create(['name' => 'org4'])
         ]);
         $this->assertFalse($this->user->belongsToOrganisation($this->orgMock1));
     }
@@ -145,63 +135,5 @@ class BelongsToOrganisationTest extends PHPUnit\Framework\TestCase
             $this->orgMock3
         ]);
         $this->assertTrue($this->user->belongsToOrganisation(['org1', 'org2', 'org3'], true));
-    }
-}
-
-class UserMock3 implements \LaravelDoctrine\ACL\Contracts\BelongsToOrganisations
-{
-    use \LaravelDoctrine\ACL\Organisations\BelongsToOrganisation;
-
-    protected $organisations = [];
-
-    public function getOrganisations()
-    {
-        return $this->organisations;
-    }
-
-    public function setOrganisations($orgs): void
-    {
-        $this->organisations = $orgs;
-    }
-}
-
-class UserMock4 implements \LaravelDoctrine\ACL\Contracts\BelongsToOrganisation
-{
-    use \LaravelDoctrine\ACL\Organisations\BelongsToOrganisation;
-
-    protected $organisation;
-
-    public function getOrganisation()
-    {
-        return $this->organisation;
-    }
-
-    public function setOrganisation($org)
-    {
-        $this->organisation = $org;
-    }
-}
-
-class OrgMock implements \LaravelDoctrine\ACL\Contracts\Organisation
-{
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @param $name
-     */
-    public function __construct($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 }

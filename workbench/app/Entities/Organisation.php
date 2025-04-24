@@ -1,27 +1,27 @@
 <?php
 
-namespace LaravelDoctrine\ACL\Permissions;
+namespace Workbench\App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
-use LaravelDoctrine\ACL\Contracts\Permission as PermissionContract;
+use LaravelDoctrine\ACL\Contracts\Organisation as OrganisationContract;
 
 #[ORM\Entity]
-class Permission implements PermissionContract
+class Organisation implements OrganisationContract
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected $id;
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string')]
-    protected ?string $name;
+    #[ORM\Column(type: 'string', unique: true)]
+    private string $name;
 
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

@@ -4,21 +4,20 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Collection;
 use LaravelDoctrine\ACL\Permissions\ConfigPermissionDriver;
 use Mockery as m;
+use Tests\TestCase;
 
-class ConfigPermissionDriverTest extends PHPUnit\Framework\TestCase
+class ConfigPermissionDriverTest extends TestCase
 {
     /**
-     * @var Mockery\Mock
+     * @var Repository|Mockery\Mock
      */
     protected $config;
 
-    /**
-     * @var ConfigPermissionDriver
-     */
-    protected $driver;
+    protected ?ConfigPermissionDriver $driver;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
+        parent::setUp();
         $this->config = m::mock(Repository::class);
         $this->driver = new ConfigPermissionDriver($this->config);
     }

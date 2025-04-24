@@ -4,9 +4,15 @@ composer.lock
 .DS_Store
 .php_cs.cache
 
-.phpunit.cache
 
 .idea
+.vscode
+
 laravel-doctrine-orm.iml
 
 .phpunit.result.cache
+.phpunit.cache
+
+coverage-report
+
+workbench/storage/logs/laravel.log

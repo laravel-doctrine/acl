@@ -23,12 +23,7 @@ class RegisterMappedEventSubscribers implements DoctrineExtender
         HasPermissionsSubscriber::class,
     ];
 
-    /**
-     * @param Configuration $configuration
-     * @param Connection    $connection
-     * @param EventManager  $eventManager
-     */
-    public function extend(Configuration $configuration, Connection $connection, EventManager $eventManager)
+    public function extend(Configuration $configuration, Connection $connection, EventManager $eventManager): void
     {
         foreach ($this->subscribers as $subscriber) {
             $eventManager->addEventSubscriber(
