@@ -4,6 +4,8 @@ composer.lock
 .DS_Store
 .php_cs.cache
 
+.phpunit.cache
+
 .idea
 laravel-doctrine-orm.iml
 

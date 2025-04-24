@@ -1,7 +1,7 @@
 # Organisations
 
-A lot of applications have an organisations structure. Teams, Organisations, Offices, ... To add this functionality to your Application, you will have
-to create an entity that implements `LaravelDoctrine\ACL\Contracts\Organisation`. Next change `acl.organisations.entity` to your entity.
+A lot of applications have an organisations structure. Teams, Organisations, Offices, ... To add this functionality to your Application, you will
+have to create an entity that implements `LaravelDoctrine\ACL\Contracts\Organisation`. Next change `acl.organisations.entity` to your entity.
 
 ```php
 <?php
@@ -12,21 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
 use LaravelDoctrine\ACL\Contracts\Organisation;
 use LaravelDoctrine\ACL\Mappings as ACL;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class Team implements Organisation
 {
-    /**
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(type: "integer")]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     protected $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     protected $name;
 
     /**
@@ -49,7 +43,7 @@ class Team implements Organisation
 
 ### User can belong to one organisation
 
-The User class should implement `LaravelDoctrine\ACL\Contracts\BelongsToOrganisation`. You can use the `@ACL\BelongsToOrganisation` annotation to define the relation.
+The User class should implement `LaravelDoctrine\ACL\Contracts\BelongsToOrganisation`. You can use the `#[ACL\BelongsToOrganisation]` attribute to define the relation.
 
 ```php
 <?php
@@ -58,15 +52,10 @@ use Doctrine\ORM\Mapping as ORM;
 use LaravelDoctrine\ACL\Mappings as ACL;
 use LaravelDoctrine\ACL\Contracts\BelongsToOrganisation;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class User implements BelongsToOrganisation
 {
-    /**
-     * @ACL\BelongsToOrganisation
-     * @var Organisation
-     */
+    #[ACL\BelongsToOrganisation]
     protected $organisation;
     
     /**
@@ -81,7 +70,7 @@ class User implements BelongsToOrganisation
 
 ### User can belong to multiple organisations
 
-The User class should implement `LaravelDoctrine\ACL\Contracts\BelongsToOrganisations`. You can use the `@ACL\BelongsToOrganisations` annotation to define the relation.
+The User class should implement `LaravelDoctrine\ACL\Contracts\BelongsToOrganisations`. You can use the `#[ACL\BelongsToOrganisations]` attribute to define the relation.
 
 ```php
 <?php
@@ -90,15 +79,10 @@ use Doctrine\ORM\Mapping as ORM;
 use LaravelDoctrine\ACL\Mappings as ACL;
 use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class User implements BelongsToOrganisations
 {
-    /**
-     * @ACL\BelongsToOrganisations
-     * @var Organisation[]
-     */
+    #[ACL\BelongsToOrganisations]
     protected $organisations;
     
     /**

@@ -49,7 +49,7 @@ class PermissionManager extends Manager
      * Get the default driver name.
      * @return string
      */
-    public function getDefaultDriver()
+    public function getDefaultDriver(): string
     {
         return $this->container->make('config')->get('acl.permissions.driver', 'config');
     }
@@ -57,7 +57,7 @@ class PermissionManager extends Manager
     /**
      * @return string
      */
-    public function getNamespace()
+    public function getNamespace(): string
     {
         return __NAMESPACE__;
     }
@@ -65,7 +65,7 @@ class PermissionManager extends Manager
     /**
      * @return string
      */
-    public function getClassSuffix()
+    public function getClassSuffix(): string
     {
         return 'PermissionDriver';
     }
@@ -73,7 +73,7 @@ class PermissionManager extends Manager
     /**
      * @return bool
      */
-    public function useDefaultPermissionEntity()
+    public function useDefaultPermissionEntity(): bool
     {
         if (!$this->needsDoctrine()) {
             return false;
@@ -88,7 +88,7 @@ class PermissionManager extends Manager
     /**
      * @return bool
      */
-    public function needsDoctrine()
+    public function needsDoctrine(): bool
     {
         return $this->getDefaultDriver() === 'doctrine';
     }

@@ -2,35 +2,27 @@
 
 namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 
-use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Illuminate\Contracts\Config\Repository;
-use LaravelDoctrine\ACL\Mappings\ConfigAnnotation;
+use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
 use ReflectionClass;
 use ReflectionProperty;
 
 abstract class MappedEventSubscriber implements EventSubscriber
 {
     /**
-     * @var Reader|null
-     */
-    protected $reader;
-
-    /**
      * @var Repository
      */
     protected $config;
 
     /**
-     * @param Reader|null $reader
      * @param Repository  $config
      */
-    public function __construct(?Reader $reader, Repository $config)
+    public function __construct(Repository $config)
     {
-        $this->reader = $reader;
         $this->config = $config;
     }
 
@@ -51,16 +43,12 @@ abstract class MappedEventSubscriber implements EventSubscriber
     {
         $metadata = $eventArgs->getClassMetadata();
 
-        if (! $this->reader) {
-            return;
-        }
-
         if ($this->isInstantiable($metadata) && $this->shouldBeMapped($metadata)) {
             foreach ($metadata->getReflectionClass()->getProperties() as $property) {
-                if ($annotation = $this->findMapping($property)) {
-                    $builder = $this->getBuilder($annotation);
+                if ($attribute = $this->findMapping($property)) {
+                    $builder = $this->getBuilder($attribute);
                     $builder = new $builder($this->config);
-                    $builder->build($metadata, $property, $annotation);
+                    $builder->build($metadata, $property, $attribute);
                 }
             }
         }
@@ -76,16 +64,21 @@ abstract class MappedEventSubscriber implements EventSubscriber
     /**
      * @return string
      */
-    abstract public function getAnnotationClass();
+    abstract public function getAttributeClass();
 
     /**
      * @param $property
      *
-     * @return ConfigAnnotation
+     * @return ConfigAttribute|null
      */
     protected function findMapping(ReflectionProperty $property)
     {
-        return $this->reader->getPropertyAnnotation($property, $this->getAnnotationClass());
+        $attributes = $property->getAttributes($this->getAttributeClass());
+        if (count($attributes) > 0) {
+            return $attributes[0]->newInstance();
+        }
+        
+        return null;
     }
 
     /**
@@ -102,11 +95,11 @@ abstract class MappedEventSubscriber implements EventSubscriber
     }
 
     /**
-     * @param ConfigAnnotation $annotation
+     * @param ConfigAttribute $attribute
      *
      * @return string
      */
-    abstract protected function getBuilder(ConfigAnnotation $annotation);
+    abstract protected function getBuilder(ConfigAttribute $attribute);
 
     /**
      * A MappedSuperClass or Abstract class cannot be instantiated.
