@@ -2,9 +2,9 @@
 
 namespace LaravelDoctrine\ACL\Mappings;
 
-use Doctrine\Common\Annotations\Annotation;
+use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
 
-abstract class RelationAnnotation extends Annotation implements ConfigAnnotation
+abstract class RelationAttribute implements ConfigAttribute
 {
     /**
      * @var string
@@ -25,8 +25,6 @@ abstract class RelationAnnotation extends Annotation implements ConfigAnnotation
      * The fetching strategy to use for the association.
      *
      * @var string
-     *
-     * @Enum({"LAZY", "EAGER", "EXTRA_LAZY"})
      */
     public $fetch = 'LAZY';
 

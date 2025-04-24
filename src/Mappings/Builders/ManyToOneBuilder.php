@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping\Builder\AssociationBuilder;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Illuminate\Contracts\Config\Repository;
-use LaravelDoctrine\ACL\Mappings\ConfigAnnotation;
+use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
 use ReflectionProperty;
 
 class ManyToOneBuilder implements Builder
@@ -27,21 +27,21 @@ class ManyToOneBuilder implements Builder
     /**
      * @param ClassMetadata      $metadata
      * @param ReflectionProperty $property
-     * @param ConfigAnnotation   $annotation
+     * @param ConfigAttribute    $attribute
      */
-    public function build(ClassMetadata $metadata, ReflectionProperty $property, ConfigAnnotation $annotation)
+    public function build(ClassMetadata $metadata, ReflectionProperty $property, ConfigAttribute $attribute)
     {
         $builder = new AssociationBuilder(
             new ClassMetadataBuilder($metadata),
             [
-                'fieldName'    => $property->getName(),
-                'targetEntity' => $annotation->getTargetEntity($this->config),
+            'fieldName'    => $property->getName(),
+                'targetEntity' => $attribute->getTargetEntity($this->config),
             ],
             ClassMetadata::MANY_TO_ONE
         );
 
-        if (isset($annotation->inversedBy) && $annotation->inversedBy) {
-            $builder->inversedBy($annotation->inversedBy);
+        if (isset($attribute->inversedBy) && $attribute->inversedBy) {
+            $builder->inversedBy($attribute->inversedBy);
         }
 
         $builder->build();

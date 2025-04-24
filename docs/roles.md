@@ -5,7 +5,7 @@
 To add Roles to your application, you'll have to create a `Role` entity. This entity should implement `LaravelDoctrine\ACL\Contracts\Role`.
 Next you should change the class name the `acl.roles.entity` config to your class, by default this is set to `App\Entities\Role`.
 
-```
+```php
 <?php
 
 namespace App\Entities;
@@ -13,22 +13,15 @@ namespace App\Entities;
 use Doctrine\ORM\Mapping as ORM;
 use LaravelDoctrine\ACL\Contracts\Role as RoleContract;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class Role implements RoleContract
 {
-
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: "integer")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     protected $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     protected $name;
 
     /**
@@ -52,7 +45,7 @@ class Role implements RoleContract
 ### A User has Roles
 
 Inside your `User` entity, you have to define the relation with the role. The `User` entity should implement the `LaravelDoctrine\ACL\Contracts\HasRoles` interface.
-If you are using annotations, you can use the `@ACL\HasRoles` annotations to define the relations (instead of defining the ManyToMany manually). Import `use LaravelDoctrine\ACL\Mappings as ACL;` in top of the class.
+You can use the `#[ACL\HasRoles]` attribute to define the relations (instead of defining the ManyToMany manually). Import `use LaravelDoctrine\ACL\Mappings as ACL;` in top of the class.
 
 ```php
 <?php
@@ -62,24 +55,17 @@ use LaravelDoctrine\ACL\Roles\HasRoles;
 use LaravelDoctrine\ACL\Mappings as ACL;
 use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class User implements HasRolesContract
 {
     use HasRoles;
     
-    /**
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(type: "integer")]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     protected $id;
     
-    /**
-     * @ACL\HasRoles()
-     * @var \Doctrine\Common\Collections\ArrayCollection|\LaravelDoctrine\ACL\Contracts\Role[]
-     */
+    #[ACL\HasRoles]
     protected $roles;
     
     public function getRoles()

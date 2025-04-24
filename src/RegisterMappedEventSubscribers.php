@@ -32,10 +32,7 @@ class RegisterMappedEventSubscribers implements DoctrineExtender
     {
         foreach ($this->subscribers as $subscriber) {
             $eventManager->addEventSubscriber(
-                new $subscriber(
-                    $configuration->getMetadataDriverImpl()->getReader(),
-                    app('config')
-                )
+                new $subscriber(app('config'))
             );
         }
     }

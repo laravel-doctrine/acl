@@ -13,11 +13,12 @@ abstract class Manager extends ConfigurationManager
      *
      * @param string $driver
      * @param array  $settings
+     * @param bool   $resolve
      *
      * @throws DriverNotFound
      * @return mixed
      */
-    protected function createDriver($driver, array $settings = [], $resolve = true)
+    protected function createDriver(string $driver, array $settings = [], bool $resolve = true): mixed
     {
         $class = $this->getNamespace() . '\\' . Str::studly($driver) . $this->getClassSuffix();
 

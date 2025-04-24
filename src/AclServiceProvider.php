@@ -2,7 +2,6 @@
 
 namespace LaravelDoctrine\ACL;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -38,9 +37,6 @@ class AclServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfig();
-        if (method_exists(AnnotationRegistry::class, 'registerUniqueLoader')) {
-            AnnotationRegistry::registerUniqueLoader('class_exists');
-        }
 
         $manager = $this->app->make(DoctrineManager::class);
         $manager->extendAll(RegisterMappedEventSubscribers::class);
