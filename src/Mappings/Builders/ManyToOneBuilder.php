@@ -11,25 +11,11 @@ use ReflectionProperty;
 
 class ManyToOneBuilder implements Builder
 {
-    /**
-     * @var Repository
-     */
-    protected $config;
-
-    /**
-     * @param Repository $config
-     */
-    public function __construct(Repository $config)
+    public function __construct(protected Repository $config)
     {
-        $this->config = $config;
     }
 
-    /**
-     * @param ClassMetadata      $metadata
-     * @param ReflectionProperty $property
-     * @param ConfigAttribute    $attribute
-     */
-    public function build(ClassMetadata $metadata, ReflectionProperty $property, ConfigAttribute $attribute)
+    public function build(ClassMetadata $metadata, ReflectionProperty $property, ConfigAttribute $attribute): void
     {
         $builder = new AssociationBuilder(
             new ClassMetadataBuilder($metadata),

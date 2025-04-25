@@ -24,116 +24,45 @@ class BelongsToOrganisationTest extends TestCase
         $this->orgMock3      = entity(Organisation::class)->create(['name' => 'org3']);
     }
 
-    public function test_doesnt_have_organisation_when_no_organisations_assigned_single(): void
+    public function test_belongs_to_organisation_various_cases(): void
     {
+        // No organisations assigned (single org user)
         $this->assertFalse($this->userSingle->belongsToOrganisation($this->orgMock1));
-    }
 
-    public function test_doesnt_have_organisation_when_no_organisations_assigned(): void
-    {
+        // Assign an organisation to userSingle and check positive/negative cases
+        $this->userSingle->setOrganisation($this->orgMock1);
+        $this->assertTrue($this->userSingle->belongsToOrganisation($this->orgMock1));
+        $this->assertTrue($this->userSingle->belongsToOrganisation('org1'));
+        $this->assertFalse($this->userSingle->belongsToOrganisation($this->orgMock2));
+        $this->assertFalse($this->userSingle->belongsToOrganisation('org2'));
+
+        // No organisations assigned (multi org user)
         $this->assertFalse($this->user->belongsToOrganisation($this->orgMock1));
-    }
-
-    public function test_doesnt_have_role_by_name_when_no_roles_assigned(): void
-    {
         $this->assertFalse($this->user->belongsToOrganisation('org1'));
-    }
 
-    public function test_doesnt_have_organisation_when_when_other_orgiansation_assigned(): void
-    {
+        // Other organisation assigned
         $this->user->setOrganisations([
             entity(Organisation::class)->create(['name' => 'org4'])
         ]);
         $this->assertFalse($this->user->belongsToOrganisation($this->orgMock1));
-    }
 
-    public function test_doesnt_have_any_organisations_when_organisation_assigned(): void
-    {
-        $this->user->setOrganisations([
-            $this->orgMock1
-        ]);
+        // Organisation assigned, check any/all/none by object and name
+        $this->user->setOrganisations([$this->orgMock1]);
         $this->assertFalse($this->user->belongsToOrganisation([$this->orgMock2, $this->orgMock3]));
-    }
-
-    public function test_doesnt_have_any_organisation_by_name_when_organisation_assigned(): void
-    {
-        $this->user->setOrganisations([
-            $this->orgMock1
-        ]);
         $this->assertFalse($this->user->belongsToOrganisation(['org2', 'org3']));
-    }
-
-    public function test_doesnt_have_all_organisations_when_organisations_assigned(): void
-    {
-        $this->user->setOrganisations([
-            $this->orgMock1,
-            $this->orgMock2
-        ]);
-        $this->assertFalse($this->user->belongsToOrganisation([$this->orgMock1, $this->orgMock2, $this->orgMock3], true));
-    }
-
-    public function test_doesnt_have_all_organisations_by_name_when_organisations_assigned(): void
-    {
-        $this->user->setOrganisations([
-            $this->orgMock1,
-            $this->orgMock2
-        ]);
-        $this->assertFalse($this->user->belongsToOrganisation(['org1', 'org2', 'org3'], true));
-    }
-
-    public function test_has_organisation_when_when_organisation_assigned(): void
-    {
-        $this->user->setOrganisations([
-            $this->orgMock1,
-        ]);
         $this->assertTrue($this->user->belongsToOrganisation($this->orgMock1));
-    }
-
-    public function test_has_organisation_by_name_when_when_organisation_assigned(): void
-    {
-        $this->user->setOrganisations([
-            $this->orgMock1,
-        ]);
         $this->assertTrue($this->user->belongsToOrganisation('org1'));
-    }
 
-    public function test_has_any_organisation_when_organisation_assigned(): void
-    {
-        $this->user->setOrganisations([
-            $this->orgMock1,
-            $this->orgMock2,
-            $this->orgMock3
-        ]);
+        // Two organisations assigned
+        $this->user->setOrganisations([$this->orgMock1, $this->orgMock2]);
+        $this->assertFalse($this->user->belongsToOrganisation([$this->orgMock1, $this->orgMock2, $this->orgMock3], true));
+        $this->assertFalse($this->user->belongsToOrganisation(['org1', 'org2', 'org3'], true));
+
+        // Three organisations assigned
+        $this->user->setOrganisations([$this->orgMock1, $this->orgMock2, $this->orgMock3]);
         $this->assertTrue($this->user->belongsToOrganisation([$this->orgMock1, $this->orgMock2]));
-    }
-
-    public function test_has_all_organisations_when_organisations_assigned(): void
-    {
-        $this->user->setOrganisations([
-            $this->orgMock1,
-            $this->orgMock2,
-            $this->orgMock3
-        ]);
         $this->assertTrue($this->user->belongsToOrganisation([$this->orgMock1, $this->orgMock2, $this->orgMock3], true));
-    }
-
-    public function test_has_any_organisation_by_name_when_organisation_assigned(): void
-    {
-        $this->user->setOrganisations([
-            $this->orgMock1,
-            $this->orgMock2,
-            $this->orgMock3
-        ]);
         $this->assertTrue($this->user->belongsToOrganisation(['org1', 'org4']));
-    }
-
-    public function test_has_all_organisations_by_name_when_organisations_assigned(): void
-    {
-        $this->user->setOrganisations([
-            $this->orgMock1,
-            $this->orgMock2,
-            $this->orgMock3
-        ]);
         $this->assertTrue($this->user->belongsToOrganisation(['org1', 'org2', 'org3'], true));
     }
 }

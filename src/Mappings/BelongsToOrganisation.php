@@ -9,19 +9,8 @@ use LaravelDoctrine\ACL\Mappings\RelationAttribute;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class BelongsToOrganisation extends RelationAttribute
 {
-    /**
-     * @var string
-     */
-    public $mappedBy = 'users';
+    public ?string $mappedBy = 'users';
 
-    /**
-     * @param string|null $targetEntity
-     * @param string|null $mappedBy
-     * @param array|null $cascade
-     * @param string $fetch
-     * @param bool $orphanRemoval
-     * @param string|null $indexBy
-     */
     public function __construct(
         ?string $targetEntity = null,
         ?string $mappedBy = 'users',
@@ -38,12 +27,7 @@ final class BelongsToOrganisation extends RelationAttribute
         $this->indexBy = $indexBy;
     }
 
-    /**
-     * @param Repository $config
-     *
-     * @return mixed
-     */
-    public function getTargetEntity(Repository $config)
+    public function getTargetEntity(Repository $config): ?string
     {
         return $this->targetEntity ?: $config->get('acl.organisations.entity', 'Organisation');
     }

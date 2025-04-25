@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Permissions;
+namespace Tests\Integration;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,6 +24,7 @@ class DoctrinePermissionPersistenceTest extends TestCase
         $role = new \Workbench\App\Entities\Role('test-role');
         $organisation = new \Workbench\App\Entities\Organisation('test-org');
         $permission = new Permission('persisted.permission');
+        $permission->setName('persisted.permission'); // Just for test coverage
         $role->getPermissions()->add($permission);
         $user->getRoles()->add($role);
         $user->getOrganisations()->add($organisation);
@@ -46,6 +47,12 @@ class DoctrinePermissionPersistenceTest extends TestCase
         $permissions = $reloaded->getPermissions();
         $this->assertInstanceOf(Collection::class, $permissions);
         $this->assertTrue($permissions->exists(fn($key, $perm) => $perm->getName() === 'persisted.permission'));
+
+        /** @var Permission $reloadedPermission */
+        $reloadedPermission = $permissions->filter(fn($perm) => $perm->getName() === 'persisted.permission')->first();
+        $this->assertNotNull($reloadedPermission);
+        $this->assertInstanceOf(Permission::class, $reloadedPermission);
+        $this->assertIsNumeric($reloadedPermission->getId());
 
         // Roles
         $roles = $reloaded->getRoles();

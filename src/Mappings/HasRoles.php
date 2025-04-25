@@ -40,12 +40,7 @@ final class HasRoles extends RelationAttribute
         $this->inversedBy = $inversedBy;
     }
 
-    /**
-     * @param Repository $config
-     *
-     * @return mixed
-     */
-    public function getTargetEntity(Repository $config)
+    public function getTargetEntity(Repository $config): ?string
     {
         return $this->targetEntity ?: $config->get('acl.roles.entity', 'Role');
     }

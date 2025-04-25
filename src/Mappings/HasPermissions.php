@@ -8,17 +8,12 @@ use Illuminate\Contracts\Config\Repository;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class HasPermissions extends RelationAttribute
 {
-    /**
-     * @param string|null $targetEntity
-     * @param string|null $mappedBy
-     * @param array|null $cascade
-     * @param string $fetch
-     * @param bool $orphanRemoval
-     * @param string|null $indexBy
-     */
+    public ?string $inversedBy = null;
+
     public function __construct(
         ?string $targetEntity = null,
         ?string $mappedBy = null,
+        ?string $inversedBy = null,
         ?array $cascade = null,
         string $fetch = 'LAZY',
         bool $orphanRemoval = false,
@@ -30,18 +25,14 @@ final class HasPermissions extends RelationAttribute
         $this->fetch = $fetch;
         $this->orphanRemoval = $orphanRemoval;
         $this->indexBy = $indexBy;
+        $this->inversedBy = $inversedBy;
     }
 
-    /**
-     * @param Repository $config
-     *
-     * @return mixed
-     */
-    public function getTargetEntity(Repository $config)
+    public function getTargetEntity(Repository $config): ?string
     {
         // Config driver has no target entity
         if ($config->get('acl.permissions.driver', 'config') === 'config') {
-            return false;
+            return null;
         }
 
         return $this->targetEntity ?: $config->get('acl.permissions.entity', 'Permission');

@@ -5,36 +5,24 @@ namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use LaravelDoctrine\ACL\Contracts\BelongsToOrganisation as BelongsToOrganisationContract;
 use LaravelDoctrine\ACL\Mappings\BelongsToOrganisation;
+use LaravelDoctrine\ACL\Mappings\Builders\Builder;
 use LaravelDoctrine\ACL\Mappings\Builders\ManyToOneBuilder;
 use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
 
 class BelongsToOrganisationSubscriber extends MappedEventSubscriber
 {
-    /**
-     * @return string
-     */
-    public function getAttributeClass()
+    public function getAttributeClass(): string
     {
         return BelongsToOrganisation::class;
     }
 
-    /**
-     * @param $metadata
-     *
-     * @return bool
-     */
-    protected function shouldBeMapped(ClassMetadata $metadata)
+    protected function shouldBeMapped(ClassMetadata $metadata): bool
     {
         return $this->getInstance($metadata) instanceof BelongsToOrganisationContract;
     }
 
-    /**
-     * @param ConfigAttribute $attribute
-     *
-     * @return string
-     */
-    protected function getBuilder(ConfigAttribute $attribute)
+    protected function getBuilder(ConfigAttribute $attribute): Builder
     {
-        return ManyToOneBuilder::class;
+        return new ManyToOneBuilder($this->config);
     }
 }

@@ -8,10 +8,5 @@ use ReflectionProperty;
 
 interface Builder
 {
-    /**
-     * @param ClassMetadata      $metadata
-     * @param ReflectionProperty $property
-     * @param ConfigAttribute   $attribute
-     */
-    public function build(ClassMetadata $metadata, ReflectionProperty $property, ConfigAttribute $attribute);
+    public function build(ClassMetadata $metadata, ReflectionProperty $property, ConfigAttribute $attribute): void;
 }

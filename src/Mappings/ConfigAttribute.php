@@ -6,9 +6,5 @@ use Illuminate\Contracts\Config\Repository;
 
 interface ConfigAttribute
 {
-    /**
-     * @param \Illuminate\Contracts\Config\Repository $config
-     * @return mixed
-     */
-    public function getTargetEntity(\Illuminate\Contracts\Config\Repository $config);
+    public function getTargetEntity(Repository $config): ?string;
 }

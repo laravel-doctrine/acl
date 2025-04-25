@@ -2,6 +2,7 @@
 
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Collection;
+use LaravelDoctrine\ACL\Permissions\DoctrinePermissionDriver;
 use LaravelDoctrine\ACL\Permissions\Permission;
 use LaravelDoctrine\ACL\Permissions\PermissionDriver;
 use LaravelDoctrine\ACL\Permissions\PermissionManager;

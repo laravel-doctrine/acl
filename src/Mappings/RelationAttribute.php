@@ -6,35 +6,15 @@ use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
 
 abstract class RelationAttribute implements ConfigAttribute
 {
-    /**
-     * @var string
-     */
-    public $targetEntity;
+    public ?string $targetEntity;
+    public ?string $mappedBy;
 
-    /**
-     * @var string
-     */
-    public $mappedBy;
+    /** @var string[] */
+    public ?array $cascade;
 
-    /**
-     * @var array<string>
-     */
-    public $cascade;
+    public string $fetch = 'LAZY';
 
-    /**
-     * The fetching strategy to use for the association.
-     *
-     * @var string
-     */
-    public $fetch = 'LAZY';
+    public bool $orphanRemoval = false;
 
-    /**
-     * @var bool
-     */
-    public $orphanRemoval = false;
-
-    /**
-     * @var string
-     */
-    public $indexBy;
+    public ?string $indexBy;
 }
