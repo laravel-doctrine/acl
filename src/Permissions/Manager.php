@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelDoctrine\ACL;
+namespace LaravelDoctrine\ACL\Permissions;
 
 use Illuminate\Support\Str;
 use LaravelDoctrine\ORM\Configuration\Manager as ConfigurationManager;

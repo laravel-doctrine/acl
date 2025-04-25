@@ -33,6 +33,7 @@ class User implements HasPermissionContract
 You can get a list of all permissions with the `LaravelDoctrine\ACL\Permissions\PermissionManager`
 
 ```php
+$manager = app(PermissionManager::class);
 $manager->getAllPermissions();
 ```
 
@@ -94,3 +95,24 @@ All permissions are automatically defined inside Laravel's Gate helper.
  @can('create.posts');
  $user->can('create.posts');
  ```
+
+
+#### Using Permissions Middleware with Gate
+
+You can use Laravel's built-in `can` middleware to protect routes based on permissions defined by Gate (and thus by this package):
+
+```php
+// Require a specific permission for this route
+Route::post('/posts', function () {
+    // Only users with the 'create.posts' permission can access this route
+})->middleware('can:create.posts');
+
+// Or using the route's can() method (Laravel 9+)
+Route::post('/posts', function () {
+    // Only users with the 'create.posts' permission can access this route
+})->can('create.posts');
+```
+
+If the user does not have the required permission, Laravel will return a 403 response automatically.
+
+You can also check multiple permissions by creating custom middleware or using Gate logic in controllers.
