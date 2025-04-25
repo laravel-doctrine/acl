@@ -50,8 +50,8 @@ class UserSingleOrg implements AuthenticatableContract, AuthorizableContract, Ca
     #[MappingsHasRoles()]
     public Collection $roles;
 
-    #[MappingsHasPermissions()]
-    public Collection $permissions;
+    #[ORM\Column(type: 'json')]
+    public array $permissions = [];
 
     #[BelongsToOrganisation()]
     public ?Organisation $organisation = null;
@@ -60,7 +60,6 @@ class UserSingleOrg implements AuthenticatableContract, AuthorizableContract, Ca
     public function __construct()
     {
         $this->roles = new ArrayCollection();
-        $this->permissions = new ArrayCollection();
     }
 
     public function getRoles(): Collection
@@ -73,14 +72,14 @@ class UserSingleOrg implements AuthenticatableContract, AuthorizableContract, Ca
         $this->roles = is_array($roles) ? new ArrayCollection($roles) : $roles;
     }
 
-    public function getPermissions(): Collection
+    public function getPermissions(): array
     {
         return $this->permissions;
     }
 
-    public function setPermissions($permissions): void
+    public function setPermissions(array $permissions): void
     {
-        $this->permissions = is_array($permissions) ? new ArrayCollection($permissions) : $permissions;
+        $this->permissions = $permissions;
     }
 
     public function getOrganisation(): ?Organisation
