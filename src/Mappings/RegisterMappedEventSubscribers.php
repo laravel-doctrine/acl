@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelDoctrine\ACL;
+namespace LaravelDoctrine\ACL\Mappings;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;

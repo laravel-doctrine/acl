@@ -62,6 +62,17 @@ class DoctrinePermissionDriverTest extends PHPUnit\Framework\TestCase
         m::close();
     }
 
+    public function test_no_entity_manager_found(): void
+    {
+        $this->config->shouldReceive('get')->with('acl.permissions.entity')->andReturn(Permission::class);
+
+        $this->registry->shouldReceive('getManagerForClass')->with(Permission::class)->andReturn(null);
+
+        $collection = $this->driver->getAllPermissions();
+        $this->assertInstanceOf(Collection::class, $collection);
+        $this->assertTrue($collection->isEmpty());
+    }
+
     public function test_can_get_all_permissions(): void
     {
         $this->config->shouldReceive('get')->with('acl.permissions.entity')->andReturn(Permission::class);
