@@ -4,7 +4,6 @@ namespace LaravelDoctrine\ACL\Permissions;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use LaravelDoctrine\ACL\Manager;
 
 /**
  * @method Collection getAllPermissions()
