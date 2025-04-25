@@ -27,6 +27,7 @@
     }
   ],
   "scripts": {
+    "test": "vendor/bin/phpunit",
     "test-coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html ./coverage-report"
   },
   "require": {
@@ -42,7 +43,6 @@
     "phpunit/phpunit": "^11.5",
     "laravel/framework": "^11.0|^12.0",
     "orchestra/testbench": "^10.2",
-    "laravel-doctrine/orm": "^3.1",
     "laravel-doctrine/migrations": "^3.4"
   },
   "autoload": {
