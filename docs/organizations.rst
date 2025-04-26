@@ -1,107 +1,127 @@
-# Organisations
+=============
+Organizations
+=============
 
-A lot of applications have an organisations structure. Teams, Organisations, Offices, ... To add this functionality to your Application, you will
-have to create an entity that implements `LaravelDoctrine\ACL\Contracts\Organisation`. Next change `acl.organisations.entity` to your entity.
+A lot of applications have an organisations structure. Teams,
+Organisations, Offices, … To add this functionality to your Application,
+you will have to create an entity that implements
+``LaravelDoctrine\ACL\Contracts\Organisation``. Next change
+``acl.organisations.entity`` to your entity.
 
-```php
-<?php
+.. code:: php
 
-namespace App;
+   <?php
 
-use Doctrine\ORM\Mapping as ORM;
-use LaravelDoctrine\ACL\Contracts\Organisation;
-use LaravelDoctrine\ACL\Mappings as ACL;
+   namespace App;
 
-#[ORM\Entity]
-class Team implements Organisation
-{
-    #[ORM\Column(type: "integer")]
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
-    protected $id;
+   use Doctrine\ORM\Mapping as ORM;
+   use LaravelDoctrine\ACL\Contracts\Organisation;
+   use LaravelDoctrine\ACL\Mappings as ACL;
 
-    #[ORM\Column(type: "string")]
-    protected $name;
+   #[ORM\Entity]
+   class Team implements Organisation
+   {
+       #[ORM\Column(type: "integer")]
+       #[ORM\Id]
+       #[ORM\GeneratedValue(strategy: "AUTO")]
+       protected $id;
 
-    public function getName()
-    {
-        return $this->name;
-    }
-}
-```
+       #[ORM\Column(type: "string")]
+       protected $name;
 
-### User can belong to one organisation
+       public function getName()
+       {
+           return $this->name;
+       }
+   }
 
-The User class should implement `LaravelDoctrine\ACL\Contracts\BelongsToOrganisation`. You can use the `#[ACL\BelongsToOrganisation]` attribute to define the relation.
+User can belong to one organisation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-```php
-<?php
+The User class should implement
+``LaravelDoctrine\ACL\Contracts\BelongsToOrganisation``. You can use the
+``#[ACL\BelongsToOrganisation]`` attribute to define the relation.
 
-use Doctrine\ORM\Mapping as ORM;
-use LaravelDoctrine\ACL\Mappings as ACL;
-use LaravelDoctrine\ACL\Contracts\BelongsToOrganisation;
+.. code:: php
 
-#[ORM\Entity]
-class User implements BelongsToOrganisation
-{
-    #[ACL\BelongsToOrganisation]
-    protected $organisation;
-    
-    /**
-     * @return Organisation
-     */
-    public function getOrganisation()
-    {
-        return $this->organisation;
-    }
-}
-```
+   <?php
 
-### User can belong to multiple organisations
+   use Doctrine\ORM\Mapping as ORM;
+   use LaravelDoctrine\ACL\Mappings as ACL;
+   use LaravelDoctrine\ACL\Contracts\BelongsToOrganisation;
 
-The User class should implement `LaravelDoctrine\ACL\Contracts\BelongsToOrganisations`. You can use the `#[ACL\BelongsToOrganisations]` attribute to define the relation.
+   #[ORM\Entity]
+   class User implements BelongsToOrganisation
+   {
+       #[ACL\BelongsToOrganisation]
+       protected $organisation;
 
-```php
-<?php
+       /**
+        * @return Organisation
+        */
+       public function getOrganisation()
+       {
+           return $this->organisation;
+       }
+   }
 
-use Doctrine\ORM\Mapping as ORM;
-use LaravelDoctrine\ACL\Mappings as ACL;
-use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations;
+User can belong to multiple organisations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#[ORM\Entity]
-class User implements BelongsToOrganisations
-{
-    #[ACL\BelongsToOrganisations]
-    protected $organisations;
-    
-    /**
-     * @return Organisation[]
-     */
-    public function getOrganisations()
-    {
-        return $this->organisations;
-    }
-}
-```
+The User class should implement
+``LaravelDoctrine\ACL\Contracts\BelongsToOrganisations``. You can use
+the ``#[ACL\BelongsToOrganisations]`` attribute to define the relation.
 
-### Checking if a User has a certain Organisation
+.. code:: php
 
-The `LaravelDoctrine\ACL\Organisations\BelongsToOrganisation` trait provides methods to check if the User has a certain Organisation.
+   <?php
 
-```php
-$user->belongsToOrganisation($org);
-```
+   use Doctrine\ORM\Mapping as ORM;
+   use LaravelDoctrine\ACL\Mappings as ACL;
+   use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations;
+
+   #[ORM\Entity]
+   class User implements BelongsToOrganisations
+   {
+       #[ACL\BelongsToOrganisations]
+       protected $organisations;
+
+       /**
+        * @return Organisation[]
+        */
+       public function getOrganisations()
+       {
+           return $this->organisations;
+       }
+   }
+
+Checking if a User has a certain Organisation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``LaravelDoctrine\ACL\Organisations\BelongsToOrganisation`` trait
+provides methods to check if the User has a certain Organisation.
+
+.. code:: php
+
+   $user->belongsToOrganisation($org);
 
 An array of Organisations or Organisation names can also be checked for.
 
-```php
-$user->belongsToOrganisation([$org1,$org2,$org3]);
-$user->belongsToOrganisation(['Company 1','Company 2','Company 3']);
-```
-    
-Specifying `true` for the second argument will check that **all** roles are present.
+.. code:: php
 
-```php
-$user->belongsToOrganisation([$org1,$org2,$org3], true); //User must belong to all three organisations to return true
-$user->belongsToOrganisation(['Company 1','Company 2','Company 3'], true);
-```
+   $user->belongsToOrganisation([$org1,$org2,$org3]);
+   $user->belongsToOrganisation(['Company 1','Company 2','Company 3']);
+
+Specifying ``true`` for the second argument will check that **all**
+roles are present.
+
+.. code:: php
+
+   $user->belongsToOrganisation([$org1,$org2,$org3], true); //User must belong to all three organisations to return true
+   $user->belongsToOrganisation(['Company 1','Company 2','Company 3'], true);
+
+
+.. role:: raw-html(raw)
+    :format: html
+
+.. include:: footer.rst

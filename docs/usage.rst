@@ -1,6 +1,7 @@
-#########
-# Usage #
-#########
+=====
+Usage
+=====
+
 
 Powerful RBAC with Roles & Permissions
 ======================================
