@@ -1,53 +1,44 @@
-# Laravel Doctrine ACL
+<p align="center">
+    <img src="https://placehold.co/10x10/337ab7/337ab7.png" width="100%" height="15px">
+    <img width="450px" src="https://github.com/laravel-doctrine/acl/blob/2.0.x/docs/banner.png"/>
+</p>
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/sowl/laravel-doctrine-acl.svg?style=flat-square)](https://packagist.org/packages/sowl/laravel-doctrine-acl)
-[![Build Status](https://github.com/ScholarshipOwl/laravel-doctrine-acl/actions/workflows/php.yml/badge.svg)](https://github.com/ScholarshipOwl/laravel-doctrine-acl/actions)
-[![Total Downloads](https://img.shields.io/packagist/dt/sowl/laravel-doctrine-acl.svg?style=flat-square)](https://packagist.org/packages/sowl/laravel-doctrine-acl)
-[![License](https://img.shields.io/packagist/l/sowl/laravel-doctrine-acl.svg?style=flat-square)](LICENSE.md)
+Laravel Doctrine ACL
+====================
 
 Laravel Doctrine ACL is a package that provides RBAC (Role-Based Access Control) functionality for Laravel applications using Doctrine. It allows you to manage roles, permissions, and organisations, and seamlessly integrates with Laravel's Authorization system.
 
-Fork of the [laravel-doctrine/acl](https://github.com/laravel-doctrine/acl) package (no longer active).
+[![Build Status](https://github.com/ScholarshipOwl/laravel-doctrine-acl/actions/workflows/php.yml/badge.svg)](https://github.com/ScholarshipOwl/laravel-doctrine-acl/actions)
+[![Code Coverage](https://codecov.io/gh/laravel-doctrine/acl/graph/badge.svg?token=3CpQzDXOWX)](https://codecov.io/gh/laravel-doctrine/acl)
+[![PHPStan](https://img.shields.io/badge/PHPStan-level%201-brightgreen.svg)](https://img.shields.io/badge/PHPStan-level%201-brightgreen.svg)
+[![Documentation](https://readthedocs.org/projects/laravel-doctrine-acl-official/badge/?version=latest)](https://laravel-doctrine-acl-official.readthedocs.io/en/latest/)
+[![Packagist Downloads](https://img.shields.io/packagist/dd/laravel-doctrine/acl)](https://packagist.org/packages/laravel-doctrine/acl)
 
-## Features
+Installation
+------------
 
-- User can have Permissions
-- User can have Roles
-- User and Roles can have Permissions
-- User can belong to Organisation(s)
-- Seamless integration with Laravel's Authorization system
-- PHP 8.2+ with Attributes support (annotations removed)
-
-## Installation
+Via composer:
 
 ```bash
-composer require sowl/laravel-doctrine-acl
+composer require laravel-doctrine/acl
 ```
 
-## Versions
+The ServiceProvider and Facades are autodiscovered.
 
-Version | Supported Laravel Versions
-:-------|:------
- ^1.5   | 11.x
- ^2.0   | 12.x
+Publish the configuration:
 
-## Quick Start
+```bash
+php artisan vendor:publish --tag="config" --provider="LaravelDoctrine\ACL\AclServiceProvider"
+```
 
-1. Publish the configuration:
-   ```bash
-   php artisan vendor:publish --tag="config" --provider="LaravelDoctrine\\ACL\\AclServiceProvider"
-   ```
-2. Configure your entities and relationships using PHP 8 attributes (see examples in the docs).
-3. Use the built-in traits and contracts to add ACL features to your User, Role, Permission, and Organisation entities.
+Documentation
+-------------
 
-## Documentation
+Full documentation at https://laravel-doctrine-acl.readthedocs.io/en/latest/index.html
+or in the docs directory.
 
-Full documentation is available in the [`docs/`](./docs) folder.
+Versions
+--------
 
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details and a code of conduct.
-
-## License
-
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+* Version 2 supports DBAL ^4.0, ORM ^3.0, and PHP 8.2.
+* Version 1 supports Laravel 6 - 11, DBAL ^2.0, ORM ^2.0, and PHP ^5.5 - ^8.0.
