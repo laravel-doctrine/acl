@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL;
 
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use LaravelDoctrine\ACL\Contracts\HasPermissions;
+use LaravelDoctrine\ACL\Mappings\RegisterMappedEventSubscribers;
 use LaravelDoctrine\ACL\Permissions\PermissionManager;
 use LaravelDoctrine\ORM\DoctrineManager;
-use LaravelDoctrine\ACL\Mappings\RegisterMappedEventSubscribers;
+
+use const DIRECTORY_SEPARATOR;
 
 class AclServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfig();
 
@@ -24,31 +27,33 @@ class AclServiceProvider extends ServiceProvider
         $this->registerDoctrineMappings();
     }
 
-    protected function registerDoctrineMappings()
+    protected function registerDoctrineMappings(): void
     {
         $manager = $this->app->make(DoctrineManager::class);
         $manager->extendAll(RegisterMappedEventSubscribers::class);
     }
 
-    protected function registerPaths()
+    protected function registerPaths(): void
     {
-        $manager = $this->app->make(DoctrineManager::class);
+        $manager           = $this->app->make(DoctrineManager::class);
         $permissionManager = $this->app->make(PermissionManager::class);
 
-        if ($permissionManager->useDefaultPermissionEntity()) {
-            $manager->addPaths([
-                __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
-            ]);
+        if (! $permissionManager->useDefaultPermissionEntity()) {
+            return;
         }
+
+        $manager->addPaths([
+            __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
+        ]);
     }
 
-    protected function registerGatePermissions()
+    protected function registerGatePermissions(): void
     {
-        $this->app->afterResolving(Gate::class, function (Gate $gate) {
+        $this->app->afterResolving(Gate::class, function (Gate $gate): void {
             $manager = $this->app->make(PermissionManager::class);
 
             foreach ($manager->getPermissionsWithDotNotation() as $permission) {
-                $gate->define($permission, function (HasPermissions $user) use ($permission) {
+                $gate->define($permission, static function (HasPermissions $user) use ($permission) {
                     return $user->hasPermissionTo($permission);
                 });
             }
@@ -58,17 +63,15 @@ class AclServiceProvider extends ServiceProvider
     /**
      * Merge config.
      */
-    protected function mergeConfig()
+    protected function mergeConfig(): void
     {
         $this->mergeConfigFrom(
-            $this->getConfigPath(), 'acl'
+            $this->getConfigPath(),
+            'acl',
         );
     }
 
-    /**
-     * @return string
-     */
-    protected function getConfigPath()
+    protected function getConfigPath(): string
     {
         return __DIR__ . '/../config/acl.php';
     }

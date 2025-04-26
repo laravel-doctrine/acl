@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Workbench\App\Entities;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -17,7 +17,6 @@ use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
 use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
 use LaravelDoctrine\ACL\Contracts\BelongsToOrganisation as BelongsToOrganisationContract;
 use LaravelDoctrine\ACL\Mappings\BelongsToOrganisation;
-use LaravelDoctrine\ACL\Mappings\HasPermissions as MappingsHasPermissions;
 use LaravelDoctrine\ACL\Mappings\HasRoles as MappingsHasRoles;
 use LaravelDoctrine\ACL\Organisations\BelongsToOrganisation as TraitBelongsToOrganisation;
 use LaravelDoctrine\ACL\Roles\HasRoles;

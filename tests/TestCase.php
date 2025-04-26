@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests;
 
 use Doctrine\ORM\EntityManager;
 use Orchestra\Testbench\Concerns\WithWorkbench;
-use Mockery as m;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -12,6 +14,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     public function setUp(): void
     {
         parent::setUp();
+
         $this->artisan('doctrine:schema:create');
     }
 

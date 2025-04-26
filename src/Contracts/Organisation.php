@@ -1,11 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Contracts;
 
 interface Organisation
 {
-    /**
-     * @return string
-     */
-    public function getName();
+    public function getName(): string;
 }

@@ -1,30 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
+namespace Tests\Permissions;
+
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Collection;
-use LaravelDoctrine\ACL\Permissions\DoctrinePermissionDriver;
 use LaravelDoctrine\ACL\Permissions\Permission;
 use LaravelDoctrine\ACL\Permissions\PermissionDriver;
 use LaravelDoctrine\ACL\Permissions\PermissionManager;
 use LaravelDoctrine\ORM\Exceptions\DriverNotFound;
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 
-class PermissionManagerTest extends PHPUnit\Framework\TestCase
+class PermissionManagerTest extends TestCase
 {
-    /**
-     * @var PermissionDriver|m\Mock
-     */
-    protected $driver;
+    protected PermissionDriver|m\Mock $driver;
 
-    /**
-     * @var PermissionManager|m\Mock
-     */
-    protected $manager;
+    protected PermissionManager|m\Mock $manager;
 
-    /**
-     * @var Container|m\Mock
-     */
-    protected $container;
+    protected Container|m\Mock $container;
 
     protected function setUp(): void
     {
@@ -43,54 +39,52 @@ class PermissionManagerTest extends PHPUnit\Framework\TestCase
         m::close();
     }
 
-    public function test_can_dot_notated_array_of_permissions(): void
+    public function testCanDotNotatedArrayOfPermissions(): void
     {
         $this->driver->shouldReceive('getAllPermissions')->once()->andReturn(new Collection([
-            'permission1',
             'permissionKey2' => [
                 'permissionValue1',
-                'permissionValue2'
+                'permissionValue2',
             ],
             'permissionKey3' => [
                 'permissionKey4' => [
                     'permissionValue3',
-                    'permissionValue4'
-                ]
-            ]
+                    'permissionValue4',
+                ],
+            ],
         ]));
 
-        $config = m::mock(\Illuminate\Contracts\Config\Repository::class);
+        $config = m::mock(Repository::class);
 
         $this->container->shouldReceive('make')->with('config')->andReturn($config);
 
         $config->shouldReceive('get')->with('acl.permissions.driver', 'config')->andReturn('config');
 
         $this->assertEquals([
-            'permission1',
             'permissionKey2.permissionValue1',
             'permissionKey2.permissionValue2',
             'permissionKey3.permissionKey4.permissionValue3',
-            'permissionKey3.permissionKey4.permissionValue4'
+            'permissionKey3.permissionKey4.permissionValue4',
         ], $this->manager->getPermissionsWithDotNotation());
     }
 
-    public function test_when_should_use_default_permission_entity(): void
+    public function testWhenShouldUseDefaultPermissionEntity(): void
     {
-        $config = m::mock(\Illuminate\Contracts\Config\Repository::class);
+        $config = m::mock(Repository::class);
 
         $this->container->shouldReceive('make')->with('config')->andReturn($config);
 
         $config->shouldReceive('get')->with('acl.permissions.driver', 'config')->andReturn('doctrine');
 
         // Tests for leading slashes in case someone is providing a manually written FQN
-        $config->shouldReceive('get')->with('acl.permissions.entity', null)->andReturn("\\" . Permission::class);
+        $config->shouldReceive('get')->with('acl.permissions.entity', null)->andReturn('\\' . Permission::class);
 
         $this->assertTrue($this->manager->useDefaultPermissionEntity());
     }
 
-    public function test_when_should_not_use_default_permission_entity_because_driver_is_not_doctrine(): void
+    public function testWhenShouldNotUseDefaultPermissionEntityBecauseDriverIsNotDoctrine(): void
     {
-        $config = m::mock(\Illuminate\Contracts\Config\Repository::class);
+        $config = m::mock(Repository::class);
 
         $this->container->shouldReceive('make')->with('config')->andReturn($config);
 
@@ -100,9 +94,9 @@ class PermissionManagerTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->manager->useDefaultPermissionEntity());
     }
 
-    public function test_when_should_not_use_default_permission_entity_because_entity_is_different(): void
+    public function testWhenShouldNotUseDefaultPermissionEntityBecauseEntityIsDifferent(): void
     {
-        $config = m::mock(\Illuminate\Contracts\Config\Repository::class);
+        $config = m::mock(Repository::class);
 
         $this->container->shouldReceive('make')->with('config')->andReturn($config);
 
@@ -112,9 +106,9 @@ class PermissionManagerTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->manager->useDefaultPermissionEntity());
     }
 
-    public function test_needs_doctrine(): void
+    public function testNeedsDoctrine(): void
     {
-        $config = m::mock(\Illuminate\Contracts\Config\Repository::class);
+        $config = m::mock(Repository::class);
 
         $this->container->shouldReceive('make')->with('config')->andReturn($config);
 
@@ -123,9 +117,9 @@ class PermissionManagerTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($this->manager->needsDoctrine());
     }
 
-    public function test_does_not_need_doctrine(): void
+    public function testDoesNotNeedDoctrine(): void
     {
-        $config = m::mock(\Illuminate\Contracts\Config\Repository::class);
+        $config = m::mock(Repository::class);
 
         $this->container->shouldReceive('make')->with('config')->andReturn($config);
 
@@ -134,7 +128,7 @@ class PermissionManagerTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->manager->needsDoctrine());
     }
 
-    public function test_throws_driver_not_found_exception(): void
+    public function testThrowsDriverNotFoundException(): void
     {
         $this->expectException(DriverNotFound::class);
         $manager = new PermissionManager($this->container);

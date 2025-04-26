@@ -26,10 +26,6 @@
       "email": "pavelz@scholarshipowl.com"
     }
   ],
-  "scripts": {
-    "test": "vendor/bin/phpunit",
-    "test-coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html ./coverage-report"
-  },
   "require": {
     "php": "^8.2",
     "illuminate/auth": "^11.0|^12.0",
@@ -43,7 +39,11 @@
     "phpunit/phpunit": "^11.5",
     "laravel/framework": "^11.0|^12.0",
     "orchestra/testbench": "^10.2",
-    "laravel-doctrine/migrations": "^3.4"
+    "laravel-doctrine/migrations": "^3.4",
+    "doctrine/coding-standard": "^12.0",
+    "php-parallel-lint/php-parallel-lint": "^1.4",
+    "phpstan/phpstan": "^2.1",
+    "phpstan/phpstan-deprecation-rules": "^2.0"
   },
   "autoload": {
     "psr-4": {
@@ -63,6 +63,35 @@
       "providers": [
         "LaravelDoctrine\\ACL\\AclServiceProvider"
       ]
+    }
+  },
+  "scripts": {
+    "test": [
+      "vendor/bin/parallel-lint src tests",
+      "vendor/bin/phpcs",
+      "vendor/bin/phpunit",
+      "vendor/bin/phpstan analyze src --level 1"
+    ],
+    "coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html=coverage",
+    "post-autoload-dump": [
+      "@clear",
+      "@prepare"
+    ],
+    "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+    "prepare": "@php vendor/bin/testbench package:discover --ansi",
+    "build": "@php vendor/bin/testbench workbench:build --ansi",
+    "serve": [
+        "Composer\\Config::disableProcessTimeout",
+        "@build",
+        "@php vendor/bin/testbench serve --ansi"
+    ],
+    "lint": [
+        "@php vendor/bin/phpstan analyse --verbose --ansi"
+    ]
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   }
 }

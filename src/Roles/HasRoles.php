@@ -1,73 +1,70 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Roles;
 
+use Doctrine\Common\Collections\Collection;
 use LaravelDoctrine\ACL\Contracts\Role;
+
+use function is_array;
 
 trait HasRoles
 {
-    /**
-     * @param  Role|array $role
-     * @param  bool       $requireAll
-     * @return bool
-     */
-    public function hasRole($role, $requireAll = false)
+    public function hasRole(Role|array $role, bool $requireAll = false): bool
     {
         if (is_array($role)) {
             foreach ($role as $r) {
                 $hasRole = $this->hasRole($r);
 
-                if ($hasRole && !$requireAll) {
+                if ($hasRole && ! $requireAll) {
                     return true;
-                } elseif (!$hasRole && $requireAll) {
+                }
+
+                if (! $hasRole && $requireAll) {
                     return false;
                 }
             }
 
             return $requireAll;
-        } else {
-            foreach ($this->getRoles() as $ownedRole) {
-                if ($ownedRole === $role) {
-                    return true;
-                }
+        }
+
+        foreach ($this->getRoles() as $ownedRole) {
+            if ($ownedRole === $role) {
+                return true;
             }
         }
 
         return false;
     }
 
-    /**
-     * @param  string|array $name
-     * @param  bool         $requireAll
-     * @return bool
-     */
-    public function hasRoleByName($name, $requireAll = false)
+    public function hasRoleByName(string|array $name, bool $requireAll = false): bool
     {
         if (is_array($name)) {
             foreach ($name as $n) {
                 $hasRole = $this->hasRoleByName($n);
 
-                if ($hasRole && !$requireAll) {
+                if ($hasRole && ! $requireAll) {
                     return true;
-                } elseif (!$hasRole && $requireAll) {
+                }
+
+                if (! $hasRole && $requireAll) {
                     return false;
                 }
             }
 
             return $requireAll;
-        } else {
-            foreach ($this->getRoles() as $ownedRole) {
-                if ($ownedRole->getName() === $name) {
-                    return true;
-                }
+        }
+
+        foreach ($this->getRoles() as $ownedRole) {
+            if ($ownedRole->getName() === $name) {
+                return true;
             }
         }
 
         return false;
     }
 
-    /**
-     * @return ArrayCollection|Role[]
-     */
-    abstract public function getRoles();
+    /** @return Collection|Role[] */
+    abstract public function getRoles(): Collection|array;
 }

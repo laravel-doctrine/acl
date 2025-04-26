@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Contracts;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 interface BelongsToOrganisations
 {
-    /**
-     * @return ArrayCollection|Organisation[]
-     */
-    public function getOrganisations();
+    /** @return Collection|Organisation[] */
+    public function getOrganisations(): Collection|array;
 }

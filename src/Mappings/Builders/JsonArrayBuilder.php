@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Mappings\Builders;
 
 use Doctrine\DBAL\Types\Types;
@@ -23,7 +25,7 @@ class JsonArrayBuilder implements Builder
             [
                 'fieldName' => $property->getName(),
                 'type'      => Types::JSON,
-            ]
+            ],
         );
 
         $builder->build();

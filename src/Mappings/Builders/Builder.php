@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Mappings\Builders;
 
 use Doctrine\ORM\Mapping\ClassMetadata;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Integration;
 
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -7,9 +9,11 @@ use LaravelDoctrine\ACL\Permissions\PermissionManager;
 use Tests\TestCase;
 use Workbench\App\Entities\User;
 
+use function entity;
+
 class AclServiceProviderTest extends TestCase
 {
-    public function test_permissions_are_defined_on_gate()
+    public function testPermissionsAreDefinedOnGate(): void
     {
         // Arrange: Mock PermissionManager to return test permissions
         $manager = $this->createMock(PermissionManager::class);
@@ -31,7 +35,7 @@ class AclServiceProviderTest extends TestCase
         $this->assertFalse($gate->allows('baz.quxdkdkd'));
     }
 
-    public function test_no_permissions_defined_when_manager_returns_empty()
+    public function testNoPermissionsDefinedWhenManagerReturnsEmpty(): void
     {
         // $manager = $this->createMock(PermissionManager::class);
         // $manager->method('getPermissionsWithDotNotation')->willReturn([]);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Mappings;
 
 use Doctrine\Common\EventManager;
@@ -11,12 +13,12 @@ use LaravelDoctrine\ACL\Mappings\Subscribers\HasPermissionsSubscriber;
 use LaravelDoctrine\ACL\Mappings\Subscribers\HasRolesSubscriber;
 use LaravelDoctrine\ORM\DoctrineExtender;
 
+use function app;
+
 class RegisterMappedEventSubscribers implements DoctrineExtender
 {
-    /**
-     * @var array
-     */
-    protected $subscribers = [
+    /** @var class-string[] $subscribers */
+    protected array $subscribers = [
         BelongsToOrganisationsSubscriber::class,
         BelongsToOrganisationSubscriber::class,
         HasRolesSubscriber::class,
@@ -27,7 +29,7 @@ class RegisterMappedEventSubscribers implements DoctrineExtender
     {
         foreach ($this->subscribers as $subscriber) {
             $eventManager->addEventSubscriber(
-                new $subscriber(app('config'))
+                new $subscriber(app('config')),
             );
         }
     }

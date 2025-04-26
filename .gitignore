@@ -1,18 +1,21 @@
+/coverage
 /vendor
 composer.phar
 composer.lock
 .DS_Store
-.php_cs.cache
+.phpcs-cache
+.phpunit.cache
+.phpunit.result.cache
 
 
 .idea
 .vscode
 
+/tests/Stubs/storage/framework/views/*
+!/tests/Stubs/storage/framework/views/.gitkeep
+/tests/Stubs/storage/doctrine.generated.php
 laravel-doctrine-orm.iml
-
-.phpunit.result.cache
-.phpunit.cache
-
-coverage-report
-
-workbench/storage/logs/laravel.log
+/workbench/bootstrap/cache/*
+!/workbench/bootstrap/cache/.gitkeep
+/workbench/storage/logs/*
+/workbench/vendor

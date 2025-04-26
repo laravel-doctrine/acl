@@ -6,17 +6,25 @@ namespace Tests\Integration;
 
 use Doctrine\ORM\EntityManager;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Foundation\Application;
 use Tests\TestCase;
 use Workbench\App\Entities\UserJsonPermissions;
 
+use function entity;
+
 class ConfigPermissionDriverTest extends TestCase
 {
-    protected function getEnvironmentSetUp($app): void
+    /**
+     * @param Application $app
+     *
+     * @phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+     */
+    protected function defineEnvironment($app): void
     {
         $app['config']->set('acl.permissions.driver', 'config');
     }
 
-    public function test_permissions_are_loaded_from_config(): void
+    public function testPermissionsAreLoadedFromConfig(): void
     {
         $em = $this->app->make(EntityManager::class);
 

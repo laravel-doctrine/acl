@@ -1,20 +1,20 @@
 <?php
 
-namespace LaravelDoctrine\ACL\Mappings;
+declare(strict_types=1);
 
-use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
+namespace LaravelDoctrine\ACL\Mappings;
 
 abstract class RelationAttribute implements ConfigAttribute
 {
-    public ?string $targetEntity;
-    public ?string $mappedBy;
+    public string|null $targetEntity;
+    public string|null $mappedBy;
 
     /** @var string[] */
-    public ?array $cascade;
+    public array|null $cascade;
 
     public string $fetch = 'LAZY';
 
     public bool $orphanRemoval = false;
 
-    public ?string $indexBy;
+    public string|null $indexBy;
 }

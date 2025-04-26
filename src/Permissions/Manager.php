@@ -1,22 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Permissions;
 
 use Illuminate\Support\Str;
 use LaravelDoctrine\ORM\Configuration\Manager as ConfigurationManager;
 use LaravelDoctrine\ORM\Exceptions\DriverNotFound;
 
+use function class_exists;
+use function sprintf;
+
 abstract class Manager extends ConfigurationManager
 {
     /**
      * Create a new driver instance.
      *
-     * @param string $driver
-     * @param array  $settings
-     * @param bool   $resolve
+     * @param array<string, mixed> $settings
      *
      * @throws DriverNotFound
-     * @return mixed
      */
     protected function createDriver(string $driver, array $settings = [], bool $resolve = true): mixed
     {
@@ -27,10 +29,12 @@ abstract class Manager extends ConfigurationManager
         // drivers using their own customized driver creator Closure to create it.
         if (isset($this->customCreators[$driver])) {
             return $this->callCustomCreator($driver);
-        } elseif (class_exists($class)) {
+        }
+
+        if (class_exists($class)) {
             return $this->container->make($class);
         }
 
-        throw new DriverNotFound("Driver [$driver] not supported.");
+        throw new DriverNotFound(sprintf('Driver [%s] not supported.', $driver));
     }
 }

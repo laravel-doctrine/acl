@@ -1,14 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests;
 
+use Illuminate\Foundation\Application;
 use Workbench\App\Entities\User;
 
-class LaravelSetupTest extends \Tests\TestCase
+use function entity;
+
+class LaravelSetupTest extends TestCase
 {
-    public function testLaravelAppBoots()
+    public function testLaravelAppBoots(): void
     {
         $this->assertNotNull($this->app);
-        $this->assertInstanceOf(\Illuminate\Foundation\Application::class, $this->app);
+        $this->assertInstanceOf(Application::class, $this->app);
         $this->assertEquals('testing', $this->app->environment());
 
         $user = entity(User::class)->create();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 
 use Doctrine\Common\EventSubscriber;
@@ -10,11 +12,9 @@ use Illuminate\Contracts\Config\Repository;
 use LaravelDoctrine\ACL\Mappings\Builders\Builder;
 use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
 use ReflectionClass;
-use ReflectionProperty;
 
 abstract class MappedEventSubscriber implements EventSubscriber
 {
-
     /** @return class-string<ConfigAttribute> */
     abstract public function getAttributeClass(): string;
 
@@ -26,7 +26,8 @@ abstract class MappedEventSubscriber implements EventSubscriber
     {
     }
 
-    public function getSubscribedEvents()
+    /** @return array<int, string> */
+    public function getSubscribedEvents(): array
     {
         return [
             Events::loadClassMetadata,
@@ -37,13 +38,15 @@ abstract class MappedEventSubscriber implements EventSubscriber
     {
         $metadata = $eventArgs->getClassMetadata();
 
-        if ($this->isInstantiable($metadata) && $this->shouldBeMapped($metadata)) {
-            foreach ($metadata->getReflectionClass()->getProperties() as $property) {
-                foreach ($property->getAttributes($this->getAttributeClass()) as $refAttr) {
-                    $attribute = $refAttr->newInstance();
-                    $builder = $this->getBuilder($attribute);
-                    $builder->build($metadata, $property, $attribute);
-                }
+        if (! $this->isInstantiable($metadata) || ! $this->shouldBeMapped($metadata)) {
+            return;
+        }
+
+        foreach ($metadata->getReflectionClass()->getProperties() as $property) {
+            foreach ($property->getAttributes($this->getAttributeClass()) as $refAttr) {
+                $attribute = $refAttr->newInstance();
+                $builder   = $this->getBuilder($attribute);
+                $builder->build($metadata, $property, $attribute);
             }
         }
     }
@@ -51,9 +54,8 @@ abstract class MappedEventSubscriber implements EventSubscriber
     protected function getInstance(ClassMetadata $metadata): object
     {
         $reflection = new ReflectionClass($metadata->getName());
-        $instance   = $reflection->newInstanceWithoutConstructor();
 
-        return $instance;
+        return $reflection->newInstanceWithoutConstructor();
     }
 
     protected function isInstantiable(ClassMetadata $metadata): bool
@@ -62,10 +64,6 @@ abstract class MappedEventSubscriber implements EventSubscriber
             return false;
         }
 
-        if (!$metadata->getReflectionClass() || $metadata->getReflectionClass()->isAbstract()) {
-            return false;
-        }
-
-        return true;
+        return $metadata->getReflectionClass() && ! $metadata->getReflectionClass()->isAbstract();
     }
 }

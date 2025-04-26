@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Mappings\Builders;
 
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
@@ -20,10 +22,10 @@ class ManyToManyBuilder implements Builder
         $builder = new ManyToManyAssociationBuilder(
             new ClassMetadataBuilder($metadata),
             [
-            'fieldName'    => $property->getName(),
+                'fieldName'    => $property->getName(),
                 'targetEntity' => $attribute->getTargetEntity($this->config),
             ],
-            ClassMetadata::MANY_TO_MANY
+            ClassMetadata::MANY_TO_MANY,
         );
 
         if (isset($attribute->inversedBy) && $attribute->inversedBy) {
