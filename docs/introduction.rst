@@ -6,8 +6,8 @@ Laravel Doctrine ACL brings robust, flexible Access Control List (ACL) support t
 Laravel using Doctrine ORM. It enables you to manage permissions, roles, and organisations
 in a way that integrates seamlessly with Laravel’s native authorization system.
 
-* Users can belong to organisations.
 * Users and roles can have permissions.
+* Users can belong to organisations.
 * Flexible permission storage (config or database).
 
 

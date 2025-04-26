@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 =====
+=======
+>>>>>>> 65c6a48 (docs retest)
 Roles
 =====
 
 Role Entity
+<<<<<<< HEAD
 ===========
 
 To add Roles to your application, you’ll have to create a ``Role``
@@ -38,10 +42,43 @@ set to ``App\Entities\Role``.
    }
 
 
+=======
+-----------
+
+To add Roles to your application, you'll have to create a ``Role`` entity. This entity should implement ``LaravelDoctrine\ACL\Contracts\Role``.
+Next, change the class name in the ``acl.roles.entity`` config to your class (by default this is set to ``App\Entities\Role``).
+
+.. code-block:: php
+
+    <?php
+    
+    namespace App\Entities;
+    
+    use Doctrine\ORM\Mapping as ORM;
+    use LaravelDoctrine\ACL\Contracts\Role as RoleContract;
+    
+    #[ORM\Entity]
+    class Role implements RoleContract
+    {
+        #[ORM\Id]
+        #[ORM\Column(type: "integer")]
+        #[ORM\GeneratedValue(strategy: "AUTO")]
+        protected $id;
+    
+        #[ORM\Column(type: "string")]
+        protected $name;
+    
+        public function getName()
+        {
+            return $this->name;
+        }
+    }
+>>>>>>> 65c6a48 (docs retest)
 
 A User has Roles
 ----------------
 
+<<<<<<< HEAD
 Inside your ``User`` entity, you have to define the relation with the
 role. The ``User`` entity should implement the
 ``LaravelDoctrine\ACL\Contracts\HasRoles`` interface. You can use the
@@ -76,10 +113,43 @@ defining the ManyToMany manually). Import
            return $this->roles;
        }
    }
+=======
+Inside your ``User`` entity, you have to define the relation with the role. The ``User`` entity should implement the ``LaravelDoctrine\ACL\Contracts\HasRoles`` interface.
+You can use the ``#[ACL\HasRoles]`` attribute to define the relations (instead of defining the ManyToMany manually). Import ``use LaravelDoctrine\ACL\Mappings as ACL;`` at the top of the class.
+
+.. code-block:: php
+
+    <?php
+    
+    use Doctrine\ORM\Mapping as ORM;
+    use LaravelDoctrine\ACL\Roles\HasRoles;
+    use LaravelDoctrine\ACL\Mappings as ACL;
+    use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
+    
+    #[ORM\Entity]
+    class User implements HasRolesContract
+    {
+        use HasRoles;
+        
+        #[ORM\Column(type: "integer")]
+        #[ORM\Id]
+        #[ORM\GeneratedValue(strategy: "AUTO")]
+        protected $id;
+        
+        #[ACL\HasRoles]
+        protected $roles;
+        
+        public function getRoles()
+        {
+            return $this->roles;
+        }
+    }
+>>>>>>> 65c6a48 (docs retest)
 
 How Permissions Are Checked with Roles
 --------------------------------------
 
+<<<<<<< HEAD
 When you assign roles to a user, permission checks are performed on both
 the user and their roles. This means:
 
@@ -149,3 +219,28 @@ roles are present.
    :format: html
 
 .. include:: footer.rst
+=======
+When you assign roles to a user, permission checks are performed on both the user and their roles. This means:
+
+- If a user does **not** have a permission directly, but one of their roles has that permission, the user is considered to have that permission.
+- If you call ``$user->hasPermissionTo('edit.posts')``, the system will:
+  1. Check the user's direct permissions.
+  2. If not found, check all permissions assigned to each of the user's roles.
+- This logic is implemented in the ``HasPermissions`` trait (see source), which first checks the user's permissions, then iterates over all roles (if any) and checks their permissions recursively.
+
+**Pseudocode:**
+
+.. code-block:: php
+
+    function hasPermissionTo($permission) {
+        if (this->hasPermissionDirectly($permission)) {
+            return true;
+        }
+        foreach (this->roles as $role) {
+            if ($role->hasPermissionTo($permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+>>>>>>> 65c6a48 (docs retest)

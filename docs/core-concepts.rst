@@ -45,14 +45,6 @@ Read more about `organisations <organisations.html>`_.
 * Set ``acl.organisations.entity`` in your config.
 * Users can belong to one or multiple organisations (implement ``BelongsToOrganisation`` or ``BelongsToOrganisations``).
 
-
-Advanced Configuration
-======================
-
-* Override default entities in the config (``acl.roles.entity``, ``acl.permissions.entity``, etc.).
-* Choose permission storage driver (``acl.permissions.driver``: ``config`` or ``doctrine``).
-* Use custom permission logic by implementing the relevant contracts.
-
 .. role:: raw-html(raw)
    :format: html
 
