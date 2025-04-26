@@ -3,10 +3,10 @@ Introduction
 ============
 
 Laravel Doctrine ACL brings robust, flexible Access Control List (ACL) support to
-Laravel using Doctrine ORM. It enables you to manage permissions, roles, and organizations
+Laravel using Doctrine ORM. It enables you to manage permissions, roles, and organisations
 in a way that integrates seamlessly with Laravel’s native authorization system.
 
-* Users can belong to organizations.
+* Users can belong to organisations.
 * Users and roles can have permissions.
 * Flexible permission storage (config or database).
 
@@ -25,7 +25,7 @@ RBAC is the core and most important feature of this package.
 
 This enables you to implement classic RBAC, where permissions are grouped into roles and
 roles are assigned to users, as well as more advanced scenarios such as direct user permissions
-and organizational structures.
+and organisational structures.
 
 
 

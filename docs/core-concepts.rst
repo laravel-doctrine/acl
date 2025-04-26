@@ -8,7 +8,7 @@ Permissions
 
 A permission is a singular ability to perform an action.
 
-Read more at `permissions.md <permissions.html>`_.
+Read more at `permissions <permissions.html>`_.
 
 * Both users and roles can have permissions.
 * Implement ``LaravelDoctrine\ACL\Contracts\HasPermissions`` and use the ``HasPermissions`` trait.

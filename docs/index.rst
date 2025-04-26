@@ -6,7 +6,8 @@ Laravel Doctrine ACL
    :align: center
    :scale: 25 %
 
-This is the documentation for `laravel-doctrine/orm <https://github.com/laravel-doctrine/acl>`_
+
+This is the documentation for `laravel-doctrine/acl <https://github.com/laravel-doctrine/acl>`_
 
 An security library for Laravel and Doctrine ORM.
 Version 2 of this library supports Laravel 12,
@@ -25,7 +26,7 @@ For older versions use 1.x
   core-concepts
   permissions
   roles
-  organizations
+  organisations
 
 
 .. role:: raw-html(raw)

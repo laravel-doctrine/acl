@@ -1,5 +1,5 @@
 =============
-Organizations
+Organisations
 =============
 
 A lot of applications have an organisations structure. Teams,
