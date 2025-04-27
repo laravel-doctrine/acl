@@ -7,22 +7,22 @@ namespace Workbench\App\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use LaravelDoctrine\ORM\Auth\Authenticatable;
-use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Auth\Passwords\CanResetPassword;
-use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
-use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations as BelongsToOrganisationsContract;
-use LaravelDoctrine\ACL\Mappings\BelongsToOrganisations;
-use LaravelDoctrine\ACL\Mappings\HasPermissions as MappingsHasPermissions;
-use LaravelDoctrine\ACL\Mappings\HasRoles as MappingsHasRoles;
+use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
+use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
+use LaravelDoctrine\ACL\Mappings as ACL;
 use LaravelDoctrine\ACL\Organisations\BelongsToOrganisation;
-use LaravelDoctrine\ACL\Roles\HasRoles;
 use LaravelDoctrine\ACL\Permissions\HasPermissions;
+use LaravelDoctrine\ACL\Roles\HasRoles;
+use LaravelDoctrine\ORM\Auth\Authenticatable;
 use LaravelDoctrine\ORM\Notifications\Notifiable;
+
+use function is_array;
 
 #[ORM\Entity]
 #[ORM\Table()]
@@ -47,49 +47,64 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     #[ORM\Column(name: 'email')]
     public string $email;
 
-    #[MappingsHasRoles()]
+    /** @var Collection<int, Role> */
+    #[ACL\HasRoles()]
     public Collection $roles;
 
-    #[MappingsHasPermissions()]
+    /** @var Collection<int, string> */
+    #[ACL\HasPermissions()]
     public Collection $permissions;
 
-    #[BelongsToOrganisations()]
+    /** @var Collection<int, Organisation> */
+    #[ACL\BelongsToOrganisations()]
     public Collection $organisations;
 
     public function __construct()
     {
-        $this->roles = new ArrayCollection();
-        $this->permissions = new ArrayCollection();
+        $this->roles         = new ArrayCollection();
+        $this->permissions   = new ArrayCollection();
         $this->organisations = new ArrayCollection();
     }
 
+    /** @return Collection<int, Role> */
     public function getRoles(): Collection
     {
         return $this->roles;
     }
 
-    public function setRoles($roles): void
+    /** @param Collection<int, Role>|Role[] $roles */
+    public function setRoles(Collection|array $roles): self
     {
         $this->roles = is_array($roles) ? new ArrayCollection($roles) : $roles;
+
+        return $this;
     }
 
+    /** @return Collection<int, string> */
     public function getPermissions(): Collection
     {
         return $this->permissions;
     }
 
-    public function setPermissions($permissions): void
+    /** @param Collection<int, string>|string[] $permissions */
+    public function setPermissions(Collection|array $permissions): self
     {
         $this->permissions = is_array($permissions) ? new ArrayCollection($permissions) : $permissions;
+
+        return $this;
     }
 
+    /** @return Collection<int, Organisation> */
     public function getOrganisations(): Collection
     {
         return $this->organisations;
     }
 
-    public function setOrganisations($organisations): void
+    /** @param Collection<int, Organisation>|Organisation[] $organisations */
+    public function setOrganisations(Collection|array $organisations): self
     {
         $this->organisations = is_array($organisations) ? new ArrayCollection($organisations) : $organisations;
+
+        return $this;
     }
 }

@@ -6,9 +6,10 @@ namespace LaravelDoctrine\ACL\Mappings\Builders;
 
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\Builder\ManyToManyAssociationBuilder;
-use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadata as OrmClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Illuminate\Contracts\Config\Repository;
-use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
+use LaravelDoctrine\ACL\Mappings\MappingAttribute;
 use ReflectionProperty;
 
 class ManyToManyBuilder implements Builder
@@ -17,7 +18,7 @@ class ManyToManyBuilder implements Builder
     {
     }
 
-    public function build(ClassMetadata $metadata, ReflectionProperty $property, ConfigAttribute $attribute): void
+    public function build(ClassMetadata $metadata, ReflectionProperty $property, MappingAttribute $attribute): void
     {
         $builder = new ManyToManyAssociationBuilder(
             new ClassMetadataBuilder($metadata),
@@ -25,7 +26,7 @@ class ManyToManyBuilder implements Builder
                 'fieldName'    => $property->getName(),
                 'targetEntity' => $attribute->getTargetEntity($this->config),
             ],
-            ClassMetadata::MANY_TO_MANY,
+            OrmClassMetadata::MANY_TO_MANY,
         );
 
         if (isset($attribute->inversedBy) && $attribute->inversedBy) {

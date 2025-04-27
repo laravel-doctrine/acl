@@ -12,6 +12,7 @@
     <!-- Directories to be checked -->
     <file>src</file>
     <file>tests</file>
+    <file>workbench/app</file>
 
     <!-- Include full Doctrine Coding Standard -->
     <rule ref="Doctrine"/>

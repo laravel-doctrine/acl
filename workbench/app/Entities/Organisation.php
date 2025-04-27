@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Workbench\App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +13,7 @@ class Organisation implements OrganisationContract
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    private int|null $id = null;
 
     #[ORM\Column(type: 'string', unique: true)]
     private string $name;
@@ -21,7 +23,7 @@ class Organisation implements OrganisationContract
         $this->name = $name;
     }
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
@@ -34,6 +36,7 @@ class Organisation implements OrganisationContract
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 }

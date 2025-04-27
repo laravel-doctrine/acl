@@ -8,6 +8,6 @@ use Doctrine\Common\Collections\Collection;
 
 interface HasRoles
 {
-    /** @return Collection|Role[] */
+    /** @return Collection<int, Role>|Role[] */
     public function getRoles(): Collection|array;
 }

@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+use Doctrine\ORM\EntityRepository;
+
 return [
 
     /*
@@ -29,16 +33,14 @@ return [
             'dev'           => env('APP_DEBUG', false),
             'meta'          => env('DOCTRINE_METADATA', 'attributes'),
             'connection'    => env('DB_CONNECTION', 'sqlite'),
-            'paths'         => [
-                app_path('Entities')
-            ],
+            'paths'         => [app_path('Entities')],
 
-            'repository'    => Doctrine\ORM\EntityRepository::class,
+            'repository'    => EntityRepository::class,
 
             'proxies'       => [
                 'namespace'     => 'DoctrineProxies',
                 'path'          => storage_path('proxies'),
-                'auto_generate' => env('DOCTRINE_PROXY_AUTOGENERATE', false)
+                'auto_generate' => env('DOCTRINE_PROXY_AUTOGENERATE', false),
             ],
 
             /*
@@ -52,7 +54,7 @@ return [
             */
             'events'        => [
                 'listeners'   => [],
-                'subscribers' => []
+                'subscribers' => [],
             ],
 
             'filters'       => [],
@@ -79,18 +81,14 @@ return [
             | https://symfony.com/doc/current/doctrine/dbal.html#registering-custom-mapping-types-in-the-schematool
             |--------------------------------------------------------------------------
             */
-            'mapping_types' => [
-                //'enum' => 'string'
-            ],
+            'mapping_types' => [],
 
             /**
              * References:
              * https://www.doctrine-project.org/projects/doctrine-dbal/en/current/reference/architecture.html#middlewares
              */
-            'middlewares' => [
-                // Doctrine\DBAL\Logging\Middleware::class
-            ]
-        ]
+            'middlewares' => [],
+        ],
     ],
     /*
     |--------------------------------------------------------------------------
@@ -103,17 +101,7 @@ return [
     | laravel-doctrine/extensions in your composer.json
     |
     */
-    'extensions'                 => [
-        //LaravelDoctrine\Extensions\Timestamps\TimestampableExtension::class,
-        //LaravelDoctrine\Extensions\SoftDeletes\SoftDeleteableExtension::class,
-        //LaravelDoctrine\Extensions\Sluggable\SluggableExtension::class,
-        //LaravelDoctrine\Extensions\Sortable\SortableExtension::class,
-        //LaravelDoctrine\Extensions\Tree\TreeExtension::class,
-        //LaravelDoctrine\Extensions\Loggable\LoggableExtension::class,
-        //LaravelDoctrine\Extensions\Blameable\BlameableExtension::class,
-        //LaravelDoctrine\Extensions\IpTraceable\IpTraceableExtension::class,
-        //LaravelDoctrine\Extensions\Translatable\TranslatableExtension::class
-    ],
+    'extensions' => [],
     /*
     |--------------------------------------------------------------------------
     | Doctrine custom types
@@ -122,8 +110,7 @@ return [
     | Create a custom or override a Doctrine Type
     |--------------------------------------------------------------------------
     */
-    'custom_types'               => [
-    ],
+    'custom_types'               => [],
     /*
     |--------------------------------------------------------------------------
     | DQL custom datetime functions
@@ -147,9 +134,7 @@ return [
     | Register custom hydrators
     |--------------------------------------------------------------------------
     */
-    'custom_hydration_modes'     => [
-        // e.g. 'hydrationModeName' => MyHydrator::class,
-    ],
+    'custom_hydration_modes'     => [],
     /*
     |--------------------------------------------------------------------------
     | Cache
@@ -188,9 +173,7 @@ return [
     | laravel-doctrine/extensions in your composer.json
     |
     */
-    'gedmo'                      => [
-        'all_mappings' => false
-    ],
+    'gedmo'                      => ['all_mappings' => false],
     /*
      |--------------------------------------------------------------------------
      | Validation
@@ -209,7 +192,5 @@ return [
      |  Doctrine notifications channel
      |
      */
-    'notifications'              => [
-        'channel' => 'database'
-    ]
+    'notifications'              => ['channel' => 'database'],
 ];

@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Workbench\Database\Factories;
 
 use Faker\Generator;
 use LaravelDoctrine\ORM\Testing\Factory;
 use Workbench\App\Entities\UserJsonPermissions;
 
+/** phpcs:disable SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable */
 /** @var Factory $factory */
+
 $factory->define(UserJsonPermissions::class, static function (Generator $faker, array $attributes = []) {
     return [
         'name' => $attributes['name'] ?? $faker->name(),

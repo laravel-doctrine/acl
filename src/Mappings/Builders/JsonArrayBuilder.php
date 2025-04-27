@@ -7,9 +7,9 @@ namespace LaravelDoctrine\ACL\Mappings\Builders;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\Builder\FieldBuilder;
-use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Illuminate\Contracts\Config\Repository;
-use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
+use LaravelDoctrine\ACL\Mappings\MappingAttribute;
 use ReflectionProperty;
 
 class JsonArrayBuilder implements Builder
@@ -18,7 +18,7 @@ class JsonArrayBuilder implements Builder
     {
     }
 
-    public function build(ClassMetadata $metadata, ReflectionProperty $property, ConfigAttribute $attribute): void
+    public function build(ClassMetadata $metadata, ReflectionProperty $property, MappingAttribute $attribute): void
     {
         $builder = new FieldBuilder(
             new ClassMetadataBuilder($metadata),

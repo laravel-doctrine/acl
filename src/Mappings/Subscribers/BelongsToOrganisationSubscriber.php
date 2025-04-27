@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 
-use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use LaravelDoctrine\ACL\Contracts\BelongsToOrganisation as BelongsToOrganisationContract;
 use LaravelDoctrine\ACL\Mappings\BelongsToOrganisation;
 use LaravelDoctrine\ACL\Mappings\Builders\Builder;
 use LaravelDoctrine\ACL\Mappings\Builders\ManyToOneBuilder;
-use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
+use LaravelDoctrine\ACL\Mappings\MappingAttribute;
 
 class BelongsToOrganisationSubscriber extends MappedEventSubscriber
 {
@@ -23,7 +23,7 @@ class BelongsToOrganisationSubscriber extends MappedEventSubscriber
         return $this->getInstance($metadata) instanceof BelongsToOrganisationContract;
     }
 
-    protected function getBuilder(ConfigAttribute $attribute): Builder
+    protected function getBuilder(MappingAttribute $attribute): Builder
     {
         return new ManyToOneBuilder($this->config);
     }

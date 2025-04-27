@@ -1,5 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+use LaravelDoctrine\ACL\Permissions\Permission;
+use Workbench\App\Entities\Organisation;
+use Workbench\App\Entities\Role;
+
 return [
 
     /*
@@ -13,7 +19,7 @@ return [
     */
     'permissions'   => [
         'driver' => 'doctrine',
-        'entity' => LaravelDoctrine\ACL\Permissions\Permission::class,
+        'entity' => Permission::class,
         'list'   => [
             'role.attach',
             'role.detach',
@@ -26,7 +32,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'roles'         => [
-        'entity' => Workbench\App\Entities\Role::class,
+        'entity' => Role::class,
     ],
 
     /*
@@ -35,6 +41,6 @@ return [
     |--------------------------------------------------------------------------
     */
     'organisations' => [
-        'entity' => Workbench\App\Entities\Organisation::class,
+        'entity' => Organisation::class,
     ],
 ];

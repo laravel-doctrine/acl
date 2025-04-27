@@ -7,20 +7,20 @@ namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Illuminate\Contracts\Config\Repository;
 use LaravelDoctrine\ACL\Mappings\Builders\Builder;
-use LaravelDoctrine\ACL\Mappings\ConfigAttribute;
+use LaravelDoctrine\ACL\Mappings\MappingAttribute;
 use ReflectionClass;
 
 abstract class MappedEventSubscriber implements EventSubscriber
 {
-    /** @return class-string<ConfigAttribute> */
+    /** @return class-string<MappingAttribute> */
     abstract public function getAttributeClass(): string;
 
     abstract protected function shouldBeMapped(ClassMetadata $metadata): bool;
 
-    abstract protected function getBuilder(ConfigAttribute $attribute): Builder;
+    abstract protected function getBuilder(MappingAttribute $attribute): Builder;
 
     public function __construct(protected Repository $config)
     {

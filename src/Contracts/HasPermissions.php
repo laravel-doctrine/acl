@@ -10,6 +10,6 @@ interface HasPermissions
 {
     public function hasPermissionTo(string $permission): bool;
 
-    /** @return Collection|Permission[] */
+    /** @return Collection<int, Permission>|Permission[]|Collection<string>|string[] */
     public function getPermissions(): Collection|array;
 }

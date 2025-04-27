@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaravelDoctrine\ACL\Mappings;
 
-abstract class RelationAttribute implements ConfigAttribute
+abstract class RelationAttribute implements MappingAttribute
 {
     public string|null $targetEntity;
     public string|null $mappedBy;

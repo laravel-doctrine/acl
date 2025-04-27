@@ -8,6 +8,6 @@ use Doctrine\Common\Collections\Collection;
 
 interface BelongsToOrganisations
 {
-    /** @return Collection|Organisation[] */
+    /** @return Collection<int, Organisation>|Organisation[] */
     public function getOrganisations(): Collection|array;
 }
