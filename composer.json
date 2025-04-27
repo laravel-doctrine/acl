@@ -1,7 +1,7 @@
 {
     "name": "laravel-doctrine/acl",
     "type": "library",
-    "description": "Doctrine ACL for Doctrine 2 and Laravel",
+    "description": "ACL for Laravel and Doctrine",
     "license": "MIT",
     "keywords": [
         "doctrine",
