@@ -16,7 +16,7 @@ you will have to create an entity that implements
 
    use Doctrine\ORM\Mapping as ORM;
    use LaravelDoctrine\ACL\Contracts\Organisation;
-   use LaravelDoctrine\ACL\Mappings as ACL;
+   use LaravelDoctrine\ACL\Attribute as ACL;
 
    #[ORM\Entity]
    class Team implements Organisation
@@ -47,7 +47,7 @@ The User class should implement
    <?php
 
    use Doctrine\ORM\Mapping as ORM;
-   use LaravelDoctrine\ACL\Mappings as ACL;
+   use LaravelDoctrine\ACL\Attribute as ACL;
    use LaravelDoctrine\ACL\Contracts\BelongsToOrganisation;
 
    #[ORM\Entity]
@@ -77,7 +77,7 @@ the ``#[ACL\BelongsToOrganisations]`` attribute to define the relation.
    <?php
 
    use Doctrine\ORM\Mapping as ORM;
-   use LaravelDoctrine\ACL\Mappings as ACL;
+   use LaravelDoctrine\ACL\Attribute as ACL;
    use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations;
 
    #[ORM\Entity]

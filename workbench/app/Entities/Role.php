@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
 use LaravelDoctrine\ACL\Contracts\Role as RoleContract;
-use LaravelDoctrine\ACL\Mappings as ACL;
 use LaravelDoctrine\ACL\Permissions\HasPermissions;
 
 use function is_array;
@@ -29,7 +28,7 @@ class Role implements RoleContract, HasPermissionsContract
     protected string $name;
 
     /** @var Collection<int, string> */
-    #[ACL\HasPermissions()]
+    #[\LaravelDoctrine\ACL\Attribute\HasPermissions()]
     public Collection $permissions;
 
     public function __construct(string $name)

@@ -11,7 +11,6 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
-use LaravelDoctrine\ACL\Mappings as ACL;
 use LaravelDoctrine\ACL\Permissions\HasPermissions;
 use LaravelDoctrine\ORM\Auth\Authenticatable;
 use LaravelDoctrine\ORM\Notifications\Notifiable;
@@ -38,7 +37,7 @@ class UserJsonPermissions implements AuthenticatableContract, AuthorizableContra
     public string $email;
 
     /** @var array<string> */
-    #[ACL\HasPermissions(inversedBy: 'users')]
+    #[\LaravelDoctrine\ACL\Attribute\HasPermissions(inversedBy: 'users')]
     public array $permissions = [];
 
     /** @return array<string> */

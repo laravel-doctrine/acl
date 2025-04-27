@@ -8,13 +8,13 @@ use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\Builder\ManyToManyAssociationBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata as OrmClassMetadata;
 use Doctrine\Persistence\Mapping\ClassMetadata;
-use Illuminate\Contracts\Config\Repository;
-use LaravelDoctrine\ACL\Mappings\MappingAttribute;
+use Illuminate\Contracts\Config\Repository as Config;
+use LaravelDoctrine\ACL\Attribute\MappingAttribute;
 use ReflectionProperty;
 
 class ManyToManyBuilder implements Builder
 {
-    public function __construct(protected Repository $config)
+    public function __construct(protected Config $config)
     {
     }
 

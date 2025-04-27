@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 
 use Doctrine\Persistence\Mapping\ClassMetadata;
+use LaravelDoctrine\ACL\Attribute\HasPermissions;
+use LaravelDoctrine\ACL\Attribute\MappingAttribute;
 use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
 use LaravelDoctrine\ACL\Mappings\Builders\Builder;
 use LaravelDoctrine\ACL\Mappings\Builders\JsonArrayBuilder;
 use LaravelDoctrine\ACL\Mappings\Builders\ManyToManyBuilder;
-use LaravelDoctrine\ACL\Mappings\HasPermissions;
-use LaravelDoctrine\ACL\Mappings\MappingAttribute;
 
 class HasPermissionsSubscriber extends MappedEventSubscriber
 {

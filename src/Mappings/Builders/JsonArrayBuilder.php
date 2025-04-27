@@ -8,13 +8,13 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\Builder\FieldBuilder;
 use Doctrine\Persistence\Mapping\ClassMetadata;
-use Illuminate\Contracts\Config\Repository;
-use LaravelDoctrine\ACL\Mappings\MappingAttribute;
+use Illuminate\Contracts\Config\Repository as Config;
+use LaravelDoctrine\ACL\Attribute\MappingAttribute;
 use ReflectionProperty;
 
 class JsonArrayBuilder implements Builder
 {
-    public function __construct(protected Repository $config)
+    public function __construct(protected Config $config)
     {
     }
 

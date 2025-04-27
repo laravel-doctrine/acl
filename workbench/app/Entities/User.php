@@ -12,10 +12,10 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use LaravelDoctrine\ACL\Attribute\BelongsToOrganisations;
 use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations as BelongsToOrganisationsContract;
 use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
 use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
-use LaravelDoctrine\ACL\Mappings as ACL;
 use LaravelDoctrine\ACL\Organisations\BelongsToOrganisation;
 use LaravelDoctrine\ACL\Permissions\HasPermissions;
 use LaravelDoctrine\ACL\Roles\HasRoles;
@@ -48,15 +48,15 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     public string $email;
 
     /** @var Collection<int, Role> */
-    #[ACL\HasRoles()]
+    #[\LaravelDoctrine\ACL\Attribute\HasRoles()]
     public Collection $roles;
 
     /** @var Collection<int, string> */
-    #[ACL\HasPermissions()]
+    #[\LaravelDoctrine\ACL\Attribute\HasPermissions()]
     public Collection $permissions;
 
     /** @var Collection<int, Organisation> */
-    #[ACL\BelongsToOrganisations()]
+    #[BelongsToOrganisations()]
     public Collection $organisations;
 
     public function __construct()

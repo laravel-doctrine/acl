@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 
 use Doctrine\Persistence\Mapping\ClassMetadata;
+use LaravelDoctrine\ACL\Attribute\BelongsToOrganisations;
+use LaravelDoctrine\ACL\Attribute\MappingAttribute;
 use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations as BelongsToOrganisationsContract;
-use LaravelDoctrine\ACL\Mappings\BelongsToOrganisations;
 use LaravelDoctrine\ACL\Mappings\Builders\Builder;
 use LaravelDoctrine\ACL\Mappings\Builders\ManyToManyBuilder;
-use LaravelDoctrine\ACL\Mappings\MappingAttribute;
 
 class BelongsToOrganisationsSubscriber extends MappedEventSubscriber
 {

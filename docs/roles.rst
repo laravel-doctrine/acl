@@ -47,7 +47,7 @@ role. The ``User`` entity should implement the
 ``LaravelDoctrine\ACL\Contracts\HasRoles`` interface. You can use the
 ``#[ACL\HasRoles]`` attribute to define the relations (instead of
 defining the ManyToMany manually). Import
-``use LaravelDoctrine\ACL\Mappings as ACL;`` in top of the class.
+``use LaravelDoctrine\ACL\Attribute as ACL;`` in top of the class.
 
 .. code:: php
 
@@ -55,7 +55,7 @@ defining the ManyToMany manually). Import
 
    use Doctrine\ORM\Mapping as ORM;
    use LaravelDoctrine\ACL\Roles\HasRoles;
-   use LaravelDoctrine\ACL\Mappings as ACL;
+   use LaravelDoctrine\ACL\Attribute as ACL;
    use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
 
    #[ORM\Entity]

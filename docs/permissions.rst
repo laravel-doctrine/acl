@@ -14,7 +14,7 @@ define the permissions relation.
    <?php
 
    use Doctrine\ORM\Mapping as ORM;
-   use LaravelDoctrine\ACL\Mappings as ACL;
+   use LaravelDoctrine\ACL\Attribute as ACL;
    use LaravelDoctrine\ACL\Permissions\HasPermissions;
    use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionContract;
 

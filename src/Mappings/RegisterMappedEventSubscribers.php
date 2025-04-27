@@ -7,17 +7,19 @@ namespace LaravelDoctrine\ACL\Mappings;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
+use Illuminate\Contracts\Config\Repository as Config;
 use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationsSubscriber;
 use LaravelDoctrine\ACL\Mappings\Subscribers\BelongsToOrganisationSubscriber;
 use LaravelDoctrine\ACL\Mappings\Subscribers\HasPermissionsSubscriber;
 use LaravelDoctrine\ACL\Mappings\Subscribers\HasRolesSubscriber;
+use LaravelDoctrine\ACL\Mappings\Subscribers\MappedEventSubscriber;
 use LaravelDoctrine\ORM\DoctrineExtender;
 
 use function app;
 
 class RegisterMappedEventSubscribers implements DoctrineExtender
 {
-    /** @var class-string[] $subscribers */
+    /** @var array<class-string<MappedEventSubscriber>> $subscribers */
     protected array $subscribers = [
         BelongsToOrganisationsSubscriber::class,
         BelongsToOrganisationSubscriber::class,
@@ -27,10 +29,9 @@ class RegisterMappedEventSubscribers implements DoctrineExtender
 
     public function extend(Configuration $configuration, Connection $connection, EventManager $eventManager): void
     {
+        $config = app(Config::class);
         foreach ($this->subscribers as $subscriber) {
-            $eventManager->addEventSubscriber(
-                new $subscriber(app('config')),
-            );
+            $eventManager->addEventSubscriber(new $subscriber($config));
         }
     }
 }

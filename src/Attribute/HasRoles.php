@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LaravelDoctrine\ACL\Mappings;
+namespace LaravelDoctrine\ACL\Attribute;
 
 use Attribute;
-use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Config\Repository as Config;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class HasRoles extends RelationAttribute
@@ -27,7 +27,7 @@ final class HasRoles extends RelationAttribute
         $this->indexBy       = $indexBy;
     }
 
-    public function getTargetEntity(Repository $config): string|null
+    public function getTargetEntity(Config $config): string|null
     {
         return $this->targetEntity ?: $config->get('acl.roles.entity', 'Role');
     }

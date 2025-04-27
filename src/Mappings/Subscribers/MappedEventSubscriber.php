@@ -8,9 +8,9 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Mapping\ClassMetadata;
-use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Config\Repository as Config;
+use LaravelDoctrine\ACL\Attribute\MappingAttribute;
 use LaravelDoctrine\ACL\Mappings\Builders\Builder;
-use LaravelDoctrine\ACL\Mappings\MappingAttribute;
 use ReflectionClass;
 
 abstract class MappedEventSubscriber implements EventSubscriber
@@ -22,7 +22,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
 
     abstract protected function getBuilder(MappingAttribute $attribute): Builder;
 
-    public function __construct(protected Repository $config)
+    public function __construct(protected Config $config)
     {
     }
 

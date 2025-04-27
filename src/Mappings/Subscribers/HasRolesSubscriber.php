@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 
 use Doctrine\Persistence\Mapping\ClassMetadata;
+use LaravelDoctrine\ACL\Attribute\HasRoles;
+use LaravelDoctrine\ACL\Attribute\MappingAttribute;
 use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
 use LaravelDoctrine\ACL\Mappings\Builders\Builder;
 use LaravelDoctrine\ACL\Mappings\Builders\ManyToManyBuilder;
-use LaravelDoctrine\ACL\Mappings\HasRoles;
-use LaravelDoctrine\ACL\Mappings\MappingAttribute;
 
 class HasRolesSubscriber extends MappedEventSubscriber
 {

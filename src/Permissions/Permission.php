@@ -13,17 +13,17 @@ class Permission implements PermissionContract
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected int $id;
+    protected int|null $id = null;
 
     #[ORM\Column(type: 'string')]
-    protected string|null $name;
+    protected string|null $name = null;
 
     public function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    public function getId(): int
+    public function getId(): int|null
     {
         return $this->id;
     }
