@@ -2,21 +2,17 @@
 
 declare(strict_types=1);
 
-/**
- * Time: 10:29 AM
- */
-
 namespace LaravelDoctrine\ACL\Organisations;
 
 use LaravelDoctrine\ACL\Contracts\BelongsToOrganisation as BelongsToOrganisationContract;
-use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations as BelongsToOrganisationsContract;
-use LaravelDoctrine\ACL\Contracts\Organisation as OrganisationContract;
+use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations;
+use LaravelDoctrine\ACL\Contracts\Organisation;
 
 use function is_array;
 
 trait BelongsToOrganisation
 {
-    public function belongsToOrganisation(OrganisationContract|string|array $org, bool $requireAll = false): bool
+    public function belongsToOrganisation(Organisation|string|array $org, bool $requireAll = false): bool
     {
         if (is_array($org)) {
             foreach ($org as $o) {
@@ -40,7 +36,7 @@ trait BelongsToOrganisation
             }
         }
 
-        if ($this instanceof BelongsToOrganisationsContract) {
+        if ($this instanceof BelongsToOrganisations) {
             foreach ($this->getOrganisations() as $o) {
                 if ($this->getOrganisationName($org) === $o->getName()) {
                     return true;
@@ -51,8 +47,8 @@ trait BelongsToOrganisation
         return false;
     }
 
-    protected function getOrganisationName(OrganisationContract|string $org): string
+    protected function getOrganisationName(Organisation|string $org): string
     {
-        return $org instanceof OrganisationContract ? $org->getName() : $org;
+        return $org instanceof Organisation ? $org->getName() : $org;
     }
 }

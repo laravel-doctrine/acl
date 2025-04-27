@@ -80,13 +80,13 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
         return $this;
     }
 
-    /** @return Collection<int, string> */
+    /** @return Collection<int, Permission> */
     public function getPermissions(): Collection
     {
         return $this->permissions;
     }
 
-    /** @param Collection<int, string>|string[] $permissions */
+    /** @param Collection<int, Permission>|Permission[] $permissions */
     public function setPermissions(Collection|array $permissions): self
     {
         $this->permissions = is_array($permissions) ? new ArrayCollection($permissions) : $permissions;

@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Tests\Integration;
 
 use Illuminate\Contracts\Auth\Access\Gate;
-use LaravelDoctrine\ACL\Permissions\PermissionManager;
+use LaravelDoctrine\ACL\AclServiceProvider;
+use LaravelDoctrine\ACL\PermissionManager;
+use LaravelDoctrine\ORM\DoctrineManager;
+use Mockery;
+use ReflectionClass;
 use Tests\TestCase;
 use Workbench\App\Entities\User;
 
@@ -44,5 +48,27 @@ class AclServiceProviderTest extends TestCase
         $gate = $this->app->make(Gate::class);
 
         $this->assertFalse($gate->has('any.permission'));
+    }
+
+    public function testRegisterPathsSkipsWhenNotUsingDefaultPermissionEntity(): void
+    {
+        // Arrange: Mock PermissionManager
+        $manager = Mockery::mock(PermissionManager::class);
+        $manager->shouldReceive('useDefaultPermissionEntity')->once()->andReturn(false);
+
+        // We expect that DoctrineManager::addPaths should NOT be called
+        $doctrineManager = Mockery::mock(DoctrineManager::class);
+        $doctrineManager->shouldNotReceive('addPaths');
+
+        $this->app->instance(PermissionManager::class, $manager);
+        $this->app->instance(DoctrineManager::class, $doctrineManager);
+
+        // Act: Call registerPaths via reflection
+        $provider   = $this->app->getProvider(AclServiceProvider::class);
+        $reflection = new ReflectionClass($provider);
+        $method     = $reflection->getMethod('registerPaths');
+        $method->setAccessible(true);
+
+        $this->assertNull($method->invoke($provider));
     }
 }

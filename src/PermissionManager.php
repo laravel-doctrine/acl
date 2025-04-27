@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LaravelDoctrine\ACL\Permissions;
+namespace LaravelDoctrine\ACL;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use LaravelDoctrine\ACL\Permissions\Permission;
+use LaravelDoctrine\ORM\Configuration\Manager;
 
 use function is_array;
 use function is_numeric;
@@ -55,12 +57,12 @@ class PermissionManager extends Manager
 
     public function getNamespace(): string
     {
-        return __NAMESPACE__;
+        return __NAMESPACE__ . '\\Configurations';
     }
 
     public function getClassSuffix(): string
     {
-        return 'PermissionDriver';
+        return 'PermissionsProvider';
     }
 
     public function useDefaultPermissionEntity(): bool

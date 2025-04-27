@@ -71,7 +71,7 @@ Use the `PermissionManager` to retrieve all permissions:
 
 .. code-block:: php
 
-   $manager = app(LaravelDoctrine\ACL\Permissions\PermissionManager::class);
+   $manager = app(LaravelDoctrine\ACL\PermissionManager::class);
    $manager->getAllPermissions();
 
 

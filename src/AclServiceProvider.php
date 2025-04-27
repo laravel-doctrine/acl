@@ -8,16 +8,12 @@ use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use LaravelDoctrine\ACL\Contracts\HasPermissions;
 use LaravelDoctrine\ACL\Mappings\RegisterMappedEventSubscribers;
-use LaravelDoctrine\ACL\Permissions\PermissionManager;
 use LaravelDoctrine\ORM\DoctrineManager;
 
 use const DIRECTORY_SEPARATOR;
 
 class AclServiceProvider extends ServiceProvider
 {
-    /**
-     * Register the service provider.
-     */
     public function register(): void
     {
         $this->mergeConfig();
@@ -35,13 +31,13 @@ class AclServiceProvider extends ServiceProvider
 
     protected function registerPaths(): void
     {
-        $manager           = $this->app->make(DoctrineManager::class);
         $permissionManager = $this->app->make(PermissionManager::class);
 
         if (! $permissionManager->useDefaultPermissionEntity()) {
             return;
         }
 
+        $manager = $this->app->make(DoctrineManager::class);
         $manager->addPaths([
             __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
         ]);
@@ -60,9 +56,6 @@ class AclServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Merge config.
-     */
     protected function mergeConfig(): void
     {
         $this->mergeConfigFrom(

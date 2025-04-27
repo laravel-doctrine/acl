@@ -36,7 +36,7 @@ Getting all permissions
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 You can get a list of all permissions with the
-``LaravelDoctrine\ACL\Permissions\PermissionManager``
+``LaravelDoctrine\ACL\PermissionManager``
 
 .. code:: php
 

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace LaravelDoctrine\ACL\Permissions;
 
 use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
-use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesHasRoles;
-use LaravelDoctrine\ACL\Contracts\Permission as PermissionContract;
+use LaravelDoctrine\ACL\Contracts\HasRoles;
+use LaravelDoctrine\ACL\Contracts\Permission;
 
 use function is_array;
 
 trait HasPermissions
 {
-    public function hasPermissionTo(PermissionContract|string|array $name, bool $requireAll = false): bool
+    public function hasPermissionTo(Permission|string|array $name, bool $requireAll = false): bool
     {
         if (is_array($name)) {
             foreach ($name as $n) {
@@ -38,7 +38,7 @@ trait HasPermissions
             }
         }
 
-        if ($this instanceof HasRolesHasRoles) {
+        if ($this instanceof HasRoles) {
             foreach ($this->getRoles() as $role) {
                 if (! ($role instanceof HasPermissionsContract)) {
                     continue;
@@ -53,8 +53,8 @@ trait HasPermissions
         return false;
     }
 
-    protected function getPermissionName(PermissionContract|string $permission): string
+    protected function getPermissionName(Permission|string $permission): string
     {
-        return $permission instanceof PermissionContract ? $permission->getName() : $permission;
+        return $permission instanceof Permission ? $permission->getName() : $permission;
     }
 }
