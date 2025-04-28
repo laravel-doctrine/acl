@@ -10,10 +10,17 @@ use LaravelDoctrine\ACL\Contracts\HasPermissions;
 use LaravelDoctrine\ACL\Mappings\RegisterMappedEventSubscribers;
 use LaravelDoctrine\ORM\DoctrineManager;
 
+use function config_path;
+
 use const DIRECTORY_SEPARATOR;
 
 class AclServiceProvider extends ServiceProvider
 {
+    public function boot(): void
+    {
+        $this->publishConfig();
+    }
+
     public function register(): void
     {
         $this->mergeConfig();
@@ -54,6 +61,13 @@ class AclServiceProvider extends ServiceProvider
                 });
             }
         });
+    }
+
+    protected function publishConfig(): void
+    {
+        $this->publishes([
+            $this->getConfigPath() => config_path('acl.php'),
+        ], 'config');
     }
 
     protected function mergeConfig(): void

@@ -11,9 +11,9 @@ class Config implements PermissionDriver
     protected Collection $collection;
 
     /** @var array<string> */
-    public function __construct(protected array $permissions)
+    public function __construct(array $permissions)
     {
-        $this->collection = new Collection($this->permissions);
+        $this->collection = new Collection($permissions);
     }
 
     public function getAllPermissions(): Collection
