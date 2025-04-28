@@ -7,17 +7,18 @@ namespace Workbench\App\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
+use LaravelDoctrine\ACL\Attribute as ACL;
 use LaravelDoctrine\ACL\Contracts\Role as RoleContract;
-use LaravelDoctrine\ACL\Permissions\HasPermissions;
+use LaravelDoctrine\ACL\Permissions\Permission;
+use LaravelDoctrine\ACL\Permissions\WithPermissions;
 
 use function is_array;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'roles')]
-class Role implements RoleContract, HasPermissionsContract
+class Role implements RoleContract
 {
-    use HasPermissions;
+    use WithPermissions;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,7 +29,7 @@ class Role implements RoleContract, HasPermissionsContract
     protected string $name;
 
     /** @var Collection<int, string> */
-    #[\LaravelDoctrine\ACL\Attribute\HasPermissions()]
+    #[ACL\HasPermissions]
     public Collection $permissions;
 
     public function __construct(string $name)

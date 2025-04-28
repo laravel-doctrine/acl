@@ -12,13 +12,13 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
-use LaravelDoctrine\ACL\Attribute\BelongsToOrganisation;
-use LaravelDoctrine\ACL\Contracts\BelongsToOrganisation as BelongsToOrganisationContract;
-use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
-use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
+use LaravelDoctrine\ACL\Attribute as ACL;
+use LaravelDoctrine\ACL\Contracts\BelongsToOrganisation;
+use LaravelDoctrine\ACL\Contracts\HasPermissions;
+use LaravelDoctrine\ACL\Contracts\HasRoles;
 use LaravelDoctrine\ACL\Organisations\BelongsToOrganisation as TraitBelongsToOrganisation;
-use LaravelDoctrine\ACL\Permissions\HasPermissions;
-use LaravelDoctrine\ACL\Roles\HasRoles;
+use LaravelDoctrine\ACL\Permissions\WithPermissions;
+use LaravelDoctrine\ACL\Roles\WithRoles;
 use LaravelDoctrine\ORM\Auth\Authenticatable;
 use LaravelDoctrine\ORM\Notifications\Notifiable;
 
@@ -26,14 +26,14 @@ use function is_array;
 
 #[ORM\Entity]
 #[ORM\Table()]
-class UserSingleOrg implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, HasRolesContract, HasPermissionsContract, BelongsToOrganisationContract
+class UserSingleOrg implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, HasRoles, HasPermissions, BelongsToOrganisation
 {
     use Authenticatable;
     use Authorizable;
     use CanResetPassword;
     use Notifiable;
-    use HasRoles;
-    use HasPermissions;
+    use WithRoles;
+    use WithPermissions;
     use TraitBelongsToOrganisation;
 
     #[ORM\Id]
@@ -48,14 +48,14 @@ class UserSingleOrg implements AuthenticatableContract, AuthorizableContract, Ca
     public string $email;
 
     /** @var Collection<int, Role> */
-    #[\LaravelDoctrine\ACL\Attribute\HasRoles()]
+    #[ACL\HasRoles()]
     public Collection $roles;
 
     /** @var array<string> */
     #[ORM\Column(type: 'json')]
     public array $permissions = [];
 
-    #[BelongsToOrganisation()]
+    #[ACL\BelongsToOrganisation()]
     public Organisation|null $organisation = null;
 
     public function __construct()

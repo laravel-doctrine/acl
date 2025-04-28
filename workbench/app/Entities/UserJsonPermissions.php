@@ -10,20 +10,21 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
-use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
-use LaravelDoctrine\ACL\Permissions\HasPermissions;
+use LaravelDoctrine\ACL\Attribute as ACL;
+use LaravelDoctrine\ACL\Contracts\HasPermissions;
+use LaravelDoctrine\ACL\Permissions\WithPermissions;
 use LaravelDoctrine\ORM\Auth\Authenticatable;
 use LaravelDoctrine\ORM\Notifications\Notifiable;
 
 #[ORM\Entity]
 #[ORM\Table()]
-class UserJsonPermissions implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, HasPermissionsContract
+class UserJsonPermissions implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, HasPermissions
 {
     use Authenticatable;
     use Authorizable;
     use CanResetPassword;
     use Notifiable;
-    use HasPermissions;
+    use WithPermissions;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -37,7 +38,7 @@ class UserJsonPermissions implements AuthenticatableContract, AuthorizableContra
     public string $email;
 
     /** @var array<string> */
-    #[\LaravelDoctrine\ACL\Attribute\HasPermissions(inversedBy: 'users')]
+    #[ACL\HasPermissions(inversedBy: 'users')]
     public array $permissions = [];
 
     /** @return array<string> */

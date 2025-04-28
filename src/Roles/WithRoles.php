@@ -9,7 +9,7 @@ use LaravelDoctrine\ACL\Contracts\Role;
 
 use function is_array;
 
-trait HasRoles
+trait WithRoles
 {
     public function hasRole(Role|array $role, bool $requireAll = false): bool
     {

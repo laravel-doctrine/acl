@@ -5,7 +5,7 @@ Permissions
 Both User and Role can have permissions. To add this behaviour we can
 simply add the ``LaravelDoctrine\ACL\Contracts\HasPermissions``
 interface to them. We can also add the
-``LaravelDoctrine\ACL\Permissions\HasPermissions`` trait to have some
+``LaravelDoctrine\ACL\Permissions\WithPermissions`` trait to have some
 nice helpers. We can use the ``#[ACL\HasPermissions]`` attribute to
 define the permissions relation.
 
@@ -15,13 +15,13 @@ define the permissions relation.
 
    use Doctrine\ORM\Mapping as ORM;
    use LaravelDoctrine\ACL\Attribute as ACL;
-   use LaravelDoctrine\ACL\Permissions\HasPermissions;
+   use LaravelDoctrine\ACL\Permissions\WithPermissions;
    use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionContract;
 
    #[ORM\Entity]
    class User implements HasPermissionContract
    {
-       use HasPermissions;
+       use WithPermissions;
 
        #[ACL\HasPermissions]
        protected $permissions;
@@ -80,7 +80,7 @@ Checking if a User or Role has permission
 On the User or Role entity
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When adding the ``LaravelDoctrine\ACL\Permissions\HasPermissions`` trait
+When adding the ``LaravelDoctrine\ACL\Permissions\WithPermissions`` trait
 you will get a ``hasPermissionTo`` method. First the ``User`` entity
 will check if it has the right permission itself. If not it will search
 in its roles. If none of them has permission, it will return false.

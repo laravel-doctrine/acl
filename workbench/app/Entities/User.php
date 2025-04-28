@@ -12,13 +12,13 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
-use LaravelDoctrine\ACL\Attribute\BelongsToOrganisations;
-use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations as BelongsToOrganisationsContract;
-use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionsContract;
-use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
+use LaravelDoctrine\ACL\Attribute as ACL;
+use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations;
+use LaravelDoctrine\ACL\Contracts\HasPermissions;
+use LaravelDoctrine\ACL\Contracts\HasRoles;
 use LaravelDoctrine\ACL\Organisations\BelongsToOrganisation;
-use LaravelDoctrine\ACL\Permissions\HasPermissions;
-use LaravelDoctrine\ACL\Roles\HasRoles;
+use LaravelDoctrine\ACL\Permissions\WithPermissions;
+use LaravelDoctrine\ACL\Roles\WithRoles;
 use LaravelDoctrine\ORM\Auth\Authenticatable;
 use LaravelDoctrine\ORM\Notifications\Notifiable;
 
@@ -26,14 +26,14 @@ use function is_array;
 
 #[ORM\Entity]
 #[ORM\Table()]
-class User implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, HasRolesContract, HasPermissionsContract, BelongsToOrganisationsContract
+class User implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, HasRoles, HasPermissions, BelongsToOrganisations
 {
     use Authenticatable;
     use Authorizable;
     use CanResetPassword;
     use Notifiable;
-    use HasRoles;
-    use HasPermissions;
+    use WithRoles;
+    use WithPermissions;
     use BelongsToOrganisation;
 
     #[ORM\Id]
@@ -48,15 +48,15 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     public string $email;
 
     /** @var Collection<int, Role> */
-    #[\LaravelDoctrine\ACL\Attribute\HasRoles()]
+    #[ACL\HasRoles]
     public Collection $roles;
 
     /** @var Collection<int, string> */
-    #[\LaravelDoctrine\ACL\Attribute\HasPermissions()]
+    #[ACL\HasPermissions]
     public Collection $permissions;
 
     /** @var Collection<int, Organisation> */
-    #[BelongsToOrganisations()]
+    #[ACL\BelongsToOrganisations]
     public Collection $organisations;
 
     public function __construct()

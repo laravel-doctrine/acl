@@ -11,7 +11,7 @@ A permission is a singular ability to perform an action.
 Read more at `permissions <permissions.html>`_.
 
 * Both users and roles can have permissions.
-* Implement ``LaravelDoctrine\ACL\Contracts\HasPermissions`` and use the ``HasPermissions`` trait.
+* Implement ``LaravelDoctrine\ACL\Contracts\HasPermissions`` and use the ``WithPermissions`` trait.
 * Permissions can be managed via config or Doctrine database tables (see below).
 
 

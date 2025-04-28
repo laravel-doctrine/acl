@@ -93,7 +93,7 @@ the user and their roles. This means:
    2. If not found, check all permissions assigned to each of the user’s
       roles.
 
--  This logic is implemented in the ``HasPermissions`` trait (see
+-  This logic is implemented in the ``WithPermissions`` trait (see
    source), which first checks the user’s permissions, then iterates
    over all roles (if any) and checks their permissions recursively.
 

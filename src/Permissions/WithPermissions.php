@@ -10,7 +10,7 @@ use LaravelDoctrine\ACL\Contracts\Permission;
 
 use function is_array;
 
-trait HasPermissions
+trait WithPermissions
 {
     public function hasPermissionTo(Permission|string|array $name, bool $requireAll = false): bool
     {
