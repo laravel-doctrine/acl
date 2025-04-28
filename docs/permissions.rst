@@ -32,6 +32,16 @@ define the permissions relation.
        }
    }
 
+You can use the Permission stub as a starting point for your own entity.
+
+.. code-block:: bash
+
+    php artisan vendor:publish --tag="acl-entity-permission"
+
+This command will publish the [`Permission`](../stubs/Permission.php) stub for the Permission entity to the `app/Entities` directory.
+
+> **Note**: Pay attention that we published a stub for Permission so you should update `acl.permission.entity` in the config file.
+
 Getting all permissions
 ~~~~~~~~~~~~~~~~~~~~~~~
 

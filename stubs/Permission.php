@@ -1,8 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
-namespace LaravelDoctrine\ACL\Permissions;
+namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use LaravelDoctrine\ACL\Contracts\Permission as PermissionContract;
@@ -16,12 +14,7 @@ class Permission implements PermissionContract
     protected int|null $id = null;
 
     #[ORM\Column(type: 'string')]
-    protected string $name;
-
-    public function __construct(string $name)
-    {
-        $this->name = $name;
-    }
+    protected string|null $name;
 
     public function getId(): int|null
     {
@@ -40,3 +33,5 @@ class Permission implements PermissionContract
         return $this;
     }
 }
+
+

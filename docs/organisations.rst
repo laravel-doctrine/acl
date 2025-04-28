@@ -35,6 +35,16 @@ you will have to create an entity that implements
        }
    }
 
+You can use the Organisation stub as a starting point for your own entity.
+
+.. code-block:: bash
+
+    php artisan vendor:publish --tag="acl-entity-organisation"
+
+This command will publish the [`Organisation`](../stubs/Organisation.php) stub for the Organisation entity to the `app/Entities` directory.
+
+> **Note**: Pay attention that we published a stub for Organisation so you should update `acl.organisation.entity` in the config file.
+
 User can belong to one organisation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

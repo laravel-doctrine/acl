@@ -55,6 +55,25 @@ Organisations
 - **entity**: The fully qualified class name of your Organisation entity. By default, this is `App\Entities\Organisation`. You may customize this to point to your own Organisation entity class implementing `LaravelDoctrine\ACL\Contracts\Organisation`.
 
 
+Entities
+========
+
+You can use the stubs as a starting point for your own entities.
+
+You may publish the stubs for the entities by running the following command:
+
+.. code-block:: bash
+
+    php artisan vendor:publish --tag="acl-entities"
+
+This command will publish the stubs for the entities to the `app/Entities` directory.
+
+  * [`app/Entities/Permission.php`](../stubs/Permission.php) - The stub for the Permission entity.
+  * [`app/Entities/Role.php`](../stubs/Role.php) - The stub for the Role entity.
+  * [`app/Entities/Organisation.php`](../stubs/Organisation.php) - The stub for the Organisation entity.
+
+> **Note**: Pay attention that we published a stub for Permission so you should update `acl.permission.entity` in the config file.
+
 .. role:: raw-html(raw)
    :format: html
 

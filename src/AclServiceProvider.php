@@ -10,6 +10,7 @@ use LaravelDoctrine\ACL\Contracts\HasPermissions;
 use LaravelDoctrine\ACL\Mappings\RegisterMappedEventSubscribers;
 use LaravelDoctrine\ORM\DoctrineManager;
 
+use function app_path;
 use function config_path;
 
 use const DIRECTORY_SEPARATOR;
@@ -19,6 +20,7 @@ class AclServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishConfig();
+        $this->publishEntities();
     }
 
     public function register(): void
@@ -81,5 +83,26 @@ class AclServiceProvider extends ServiceProvider
     protected function getConfigPath(): string
     {
         return __DIR__ . '/../config/acl.php';
+    }
+
+    /**
+     * Publish default entity stubs separately with specific tags/groups.
+     */
+    protected function publishEntities(): void
+    {
+        // Permission entity
+        $this->publishes([
+            __DIR__ . '/../stubs/Permission.php' => app_path('Entities/Permission.php'),
+        ], ['acl-entities', 'acl-entity-permission']);
+
+        // Role entity
+        $this->publishes([
+            __DIR__ . '/../stubs/Role.php' => app_path('Entities/Role.php'),
+        ], ['acl-entities', 'acl-entity-role']);
+
+        // Organisation entity
+        $this->publishes([
+            __DIR__ . '/../stubs/Organisation.php' => app_path('Entities/Organisation.php'),
+        ], ['acl-entities', 'acl-entity-organisation']);
     }
 }

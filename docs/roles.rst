@@ -37,7 +37,15 @@ set to ``App\Entities\Role``.
        }
    }
 
+You can use the Role stub as a starting point for your own entity.
 
+.. code-block:: bash
+
+    php artisan vendor:publish --tag="acl-entity-role"
+
+This command will publish the [`Role`](../stubs/Role.php) stub for the Role entity to the `app/Entities` directory.
+
+> **Note**: Pay attention that we published a stub for Role so you should update `acl.role.entity` in the config file.
 
 A User has Roles
 ----------------
