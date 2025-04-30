@@ -21,7 +21,9 @@ For older versions use 1.x
   :caption: Table of Contents
 
   introduction
-  installation
+  install
+  configurations
+
   usage
   core-concepts
   permissions

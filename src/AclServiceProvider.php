@@ -1,107 +1,108 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use LaravelDoctrine\ACL\Contracts\HasPermissions;
-use LaravelDoctrine\ACL\Permissions\PermissionManager;
+use LaravelDoctrine\ACL\Mappings\RegisterMappedEventSubscribers;
 use LaravelDoctrine\ORM\DoctrineManager;
+
+use function app_path;
+use function config_path;
+
+use const DIRECTORY_SEPARATOR;
 
 class AclServiceProvider extends ServiceProvider
 {
-    /**
-     * Boot the service provider.
-     */
-    public function boot()
+    public function boot(): void
     {
-        if (!$this->isLumen()) {
-            $this->publishes([
-                $this->getConfigPath() => config_path('acl.php'),
-            ], 'config');
-        }
-
-        $this->app->make(DoctrineManager::class)->onResolve(function () {
-            $this->definePermissions(
-                app(Gate::class),
-                app(PermissionManager::class)
-            );
-        });
+        $this->publishConfig();
+        $this->publishEntities();
     }
 
-    /**
-     * Register the service provider.
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfig();
-        if (method_exists(AnnotationRegistry::class, 'registerUniqueLoader')) {
-            AnnotationRegistry::registerUniqueLoader('class_exists');
+
+        $this->registerPaths();
+        $this->registerGatePermissions();
+        $this->registerDoctrineMappings();
+    }
+
+    protected function registerDoctrineMappings(): void
+    {
+        $manager = $this->app->make(DoctrineManager::class);
+        $manager->extendAll(RegisterMappedEventSubscribers::class);
+    }
+
+    protected function registerPaths(): void
+    {
+        $permissionManager = $this->app->make(PermissionManager::class);
+
+        if (! $permissionManager->useDefaultPermissionEntity()) {
+            return;
         }
 
         $manager = $this->app->make(DoctrineManager::class);
-        $manager->extendAll(RegisterMappedEventSubscribers::class);
-
-        $this->registerPaths($manager);
+        $manager->addPaths([
+            __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
+        ]);
     }
 
-    /**
-     * @param Gate              $gate
-     * @param PermissionManager $manager
-     */
-    protected function definePermissions(Gate $gate, PermissionManager $manager)
+    protected function registerGatePermissions(): void
     {
-        foreach ($manager->getPermissionsWithDotNotation() as $permission) {
-            $gate->define($permission, function (HasPermissions $user) use ($permission) {
-                return $user->hasPermissionTo($permission);
-            });
-        }
+        $this->app->afterResolving(Gate::class, function (Gate $gate): void {
+            $manager = $this->app->make(PermissionManager::class);
+
+            foreach ($manager->getPermissionsWithDotNotation() as $permission) {
+                $gate->define($permission, static function (HasPermissions $user) use ($permission) {
+                    return $user->hasPermissionTo($permission);
+                });
+            }
+        });
     }
 
-    /**
-     * Merge config.
-     */
-    protected function mergeConfig()
+    protected function publishConfig(): void
+    {
+        $this->publishes([
+            $this->getConfigPath() => config_path('acl.php'),
+        ], 'config');
+    }
+
+    protected function mergeConfig(): void
     {
         $this->mergeConfigFrom(
-            $this->getConfigPath(), 'acl'
+            $this->getConfigPath(),
+            'acl',
         );
-
-        if ($this->isLumen()) {
-            $this->app->configure('acl');
-        }
     }
 
-    /**
-     * @return string
-     */
-    protected function getConfigPath()
+    protected function getConfigPath(): string
     {
         return __DIR__ . '/../config/acl.php';
     }
 
     /**
-     * @return bool
+     * Publish default entity stubs separately with specific tags/groups.
      */
-    protected function isLumen()
+    protected function publishEntities(): void
     {
-        return Str::contains($this->app->version(), 'Lumen');
-    }
+        // Permission entity
+        $this->publishes([
+            __DIR__ . '/../stubs/Permission.php' => app_path('Entities/Permission.php'),
+        ], ['acl-entities', 'acl-entity-permission']);
 
-    /**
-     * @param $manager
-     */
-    private function registerPaths($manager)
-    {
-        $permissionManager = $this->app->make(PermissionManager::class);
+        // Role entity
+        $this->publishes([
+            __DIR__ . '/../stubs/Role.php' => app_path('Entities/Role.php'),
+        ], ['acl-entities', 'acl-entity-role']);
 
-        if ($permissionManager->useDefaultPermissionEntity()) {
-            $manager->addPaths([
-                __DIR__ . DIRECTORY_SEPARATOR . 'Permissions',
-            ]);
-        }
+        // Organisation entity
+        $this->publishes([
+            __DIR__ . '/../stubs/Organisation.php' => app_path('Entities/Organisation.php'),
+        ], ['acl-entities', 'acl-entity-organisation']);
     }
 }

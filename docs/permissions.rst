@@ -5,7 +5,7 @@ Permissions
 Both User and Role can have permissions. To add this behaviour we can
 simply add the ``LaravelDoctrine\ACL\Contracts\HasPermissions``
 interface to them. We can also add the
-``LaravelDoctrine\ACL\Permissions\HasPermissions`` trait to have some
+``LaravelDoctrine\ACL\Permissions\WithPermissions`` trait to have some
 nice helpers. We can use the ``#[ACL\HasPermissions]`` attribute to
 define the permissions relation.
 
@@ -14,14 +14,14 @@ define the permissions relation.
    <?php
 
    use Doctrine\ORM\Mapping as ORM;
-   use LaravelDoctrine\ACL\Mappings as ACL;
-   use LaravelDoctrine\ACL\Permissions\HasPermissions;
+   use LaravelDoctrine\ACL\Attribute as ACL;
+   use LaravelDoctrine\ACL\Permissions\WithPermissions;
    use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionContract;
 
    #[ORM\Entity]
    class User implements HasPermissionContract
    {
-       use HasPermissions;
+       use WithPermissions;
 
        #[ACL\HasPermissions]
        protected $permissions;
@@ -32,11 +32,21 @@ define the permissions relation.
        }
    }
 
+You can use the Permission stub as a starting point for your own entity.
+
+.. code-block:: bash
+
+    php artisan vendor:publish --tag="acl-entity-permission"
+
+This command will publish the [`Permission`](../stubs/Permission.php) stub for the Permission entity to the `app/Entities` directory.
+
+> **Note**: Pay attention that we published a stub for Permission so you should update `acl.permission.entity` in the config file.
+
 Getting all permissions
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 You can get a list of all permissions with the
-``LaravelDoctrine\ACL\Permissions\PermissionManager``
+``LaravelDoctrine\ACL\PermissionManager``
 
 .. code:: php
 
@@ -80,7 +90,7 @@ Checking if a User or Role has permission
 On the User or Role entity
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When adding the ``LaravelDoctrine\ACL\Permissions\HasPermissions`` trait
+When adding the ``LaravelDoctrine\ACL\Permissions\WithPermissions`` trait
 you will get a ``hasPermissionTo`` method. First the ``User`` entity
 will check if it has the right permission itself. If not it will search
 in its roles. If none of them has permission, it will return false.

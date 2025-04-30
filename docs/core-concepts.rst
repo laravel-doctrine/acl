@@ -11,7 +11,7 @@ A permission is a singular ability to perform an action.
 Read more at `permissions <permissions.html>`_.
 
 * Both users and roles can have permissions.
-* Implement ``LaravelDoctrine\ACL\Contracts\HasPermissions`` and use the ``HasPermissions`` trait.
+* Implement ``LaravelDoctrine\ACL\Contracts\HasPermissions`` and use the ``WithPermissions`` trait.
 * Permissions can be managed via config or Doctrine database tables (see below).
 
 
@@ -44,14 +44,6 @@ Read more about `organisations <organisations.html>`_.
 * Implement ``LaravelDoctrine\ACL\Contracts\Organisation`` in your organisation entity (e.g., ``Team``).
 * Set ``acl.organisations.entity`` in your config.
 * Users can belong to one or multiple organisations (implement ``BelongsToOrganisation`` or ``BelongsToOrganisations``).
-
-
-Advanced Configuration
-======================
-
-* Override default entities in the config (``acl.roles.entity``, ``acl.permissions.entity``, etc.).
-* Choose permission storage driver (``acl.permissions.driver``: ``config`` or ``doctrine``).
-* Use custom permission logic by implementing the relevant contracts.
 
 .. role:: raw-html(raw)
    :format: html

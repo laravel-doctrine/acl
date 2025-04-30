@@ -37,7 +37,15 @@ set to ``App\Entities\Role``.
        }
    }
 
+You can use the Role stub as a starting point for your own entity.
 
+.. code-block:: bash
+
+    php artisan vendor:publish --tag="acl-entity-role"
+
+This command will publish the [`Role`](../stubs/Role.php) stub for the Role entity to the `app/Entities` directory.
+
+> **Note**: Pay attention that we published a stub for Role so you should update `acl.role.entity` in the config file.
 
 A User has Roles
 ----------------
@@ -47,7 +55,7 @@ role. The ``User`` entity should implement the
 ``LaravelDoctrine\ACL\Contracts\HasRoles`` interface. You can use the
 ``#[ACL\HasRoles]`` attribute to define the relations (instead of
 defining the ManyToMany manually). Import
-``use LaravelDoctrine\ACL\Mappings as ACL;`` in top of the class.
+``use LaravelDoctrine\ACL\Attribute as ACL;`` in top of the class.
 
 .. code:: php
 
@@ -55,7 +63,7 @@ defining the ManyToMany manually). Import
 
    use Doctrine\ORM\Mapping as ORM;
    use LaravelDoctrine\ACL\Roles\HasRoles;
-   use LaravelDoctrine\ACL\Mappings as ACL;
+   use LaravelDoctrine\ACL\Attribute as ACL;
    use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
 
    #[ORM\Entity]
@@ -93,7 +101,7 @@ the user and their roles. This means:
    2. If not found, check all permissions assigned to each of the user’s
       roles.
 
--  This logic is implemented in the ``HasPermissions`` trait (see
+-  This logic is implemented in the ``WithPermissions`` trait (see
    source), which first checks the user’s permissions, then iterates
    over all roles (if any) and checks their permissions recursively.
 

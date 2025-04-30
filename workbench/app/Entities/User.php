@@ -1,0 +1,110 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Workbench\App\Entities;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use LaravelDoctrine\ACL\Attribute as ACL;
+use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations;
+use LaravelDoctrine\ACL\Contracts\HasPermissions;
+use LaravelDoctrine\ACL\Contracts\HasRoles;
+use LaravelDoctrine\ACL\Organisations\BelongsToOrganisation;
+use LaravelDoctrine\ACL\Permissions\WithPermissions;
+use LaravelDoctrine\ACL\Roles\WithRoles;
+use LaravelDoctrine\ORM\Auth\Authenticatable;
+use LaravelDoctrine\ORM\Notifications\Notifiable;
+
+use function is_array;
+
+#[ORM\Entity]
+#[ORM\Table()]
+class User implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, HasRoles, HasPermissions, BelongsToOrganisations
+{
+    use Authenticatable;
+    use Authorizable;
+    use CanResetPassword;
+    use Notifiable;
+    use WithRoles;
+    use WithPermissions;
+    use BelongsToOrganisation;
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    protected int|null $id = null;
+
+    #[ORM\Column(name: 'name')]
+    public string $name;
+
+    #[ORM\Column(name: 'email')]
+    public string $email;
+
+    /** @var Collection<int, Role> */
+    #[ACL\HasRoles]
+    public Collection $roles;
+
+    /** @var Collection<int, string> */
+    #[ACL\HasPermissions]
+    public Collection $permissions;
+
+    /** @var Collection<int, Organisation> */
+    #[ACL\BelongsToOrganisations]
+    public Collection $organisations;
+
+    public function __construct()
+    {
+        $this->roles         = new ArrayCollection();
+        $this->permissions   = new ArrayCollection();
+        $this->organisations = new ArrayCollection();
+    }
+
+    /** @return Collection<int, Role> */
+    public function getRoles(): Collection
+    {
+        return $this->roles;
+    }
+
+    /** @param Collection<int, Role>|Role[] $roles */
+    public function setRoles(Collection|array $roles): self
+    {
+        $this->roles = is_array($roles) ? new ArrayCollection($roles) : $roles;
+
+        return $this;
+    }
+
+    /** @return Collection<int, Permission> */
+    public function getPermissions(): Collection
+    {
+        return $this->permissions;
+    }
+
+    /** @param Collection<int, Permission>|Permission[] $permissions */
+    public function setPermissions(Collection|array $permissions): self
+    {
+        $this->permissions = is_array($permissions) ? new ArrayCollection($permissions) : $permissions;
+
+        return $this;
+    }
+
+    /** @return Collection<int, Organisation> */
+    public function getOrganisations(): Collection
+    {
+        return $this->organisations;
+    }
+
+    /** @param Collection<int, Organisation>|Organisation[] $organisations */
+    public function setOrganisations(Collection|array $organisations): self
+    {
+        $this->organisations = is_array($organisations) ? new ArrayCollection($organisations) : $organisations;
+
+        return $this;
+    }
+}

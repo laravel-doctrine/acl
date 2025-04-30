@@ -16,7 +16,7 @@ you will have to create an entity that implements
 
    use Doctrine\ORM\Mapping as ORM;
    use LaravelDoctrine\ACL\Contracts\Organisation;
-   use LaravelDoctrine\ACL\Mappings as ACL;
+   use LaravelDoctrine\ACL\Attribute as ACL;
 
    #[ORM\Entity]
    class Team implements Organisation
@@ -35,6 +35,16 @@ you will have to create an entity that implements
        }
    }
 
+You can use the Organisation stub as a starting point for your own entity.
+
+.. code-block:: bash
+
+    php artisan vendor:publish --tag="acl-entity-organisation"
+
+This command will publish the [`Organisation`](../stubs/Organisation.php) stub for the Organisation entity to the `app/Entities` directory.
+
+> **Note**: Pay attention that we published a stub for Organisation so you should update `acl.organisation.entity` in the config file.
+
 User can belong to one organisation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -47,7 +57,7 @@ The User class should implement
    <?php
 
    use Doctrine\ORM\Mapping as ORM;
-   use LaravelDoctrine\ACL\Mappings as ACL;
+   use LaravelDoctrine\ACL\Attribute as ACL;
    use LaravelDoctrine\ACL\Contracts\BelongsToOrganisation;
 
    #[ORM\Entity]
@@ -77,7 +87,7 @@ the ``#[ACL\BelongsToOrganisations]`` attribute to define the relation.
    <?php
 
    use Doctrine\ORM\Mapping as ORM;
-   use LaravelDoctrine\ACL\Mappings as ACL;
+   use LaravelDoctrine\ACL\Attribute as ACL;
    use LaravelDoctrine\ACL\Contracts\BelongsToOrganisations;
 
    #[ORM\Entity]

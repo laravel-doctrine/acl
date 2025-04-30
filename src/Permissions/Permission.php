@@ -1,56 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Permissions;
 
 use Doctrine\ORM\Mapping as ORM;
 use LaravelDoctrine\ACL\Contracts\Permission as PermissionContract;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class Permission implements PermissionContract
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected int|null $id = null;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected $name;
+    #[ORM\Column(type: 'string')]
+    protected string $name;
 
-    /**
-     * @param $name
-     */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): int|null
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param mixed $name
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 }

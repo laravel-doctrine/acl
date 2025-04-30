@@ -1,130 +1,69 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelDoctrine\ACL\Mappings\Subscribers;
 
-use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Illuminate\Contracts\Config\Repository;
-use LaravelDoctrine\ACL\Mappings\ConfigAnnotation;
+use Doctrine\Persistence\Mapping\ClassMetadata;
+use Illuminate\Contracts\Config\Repository as Config;
+use LaravelDoctrine\ACL\Attribute\MappingAttribute;
+use LaravelDoctrine\ACL\Mappings\Builders\Builder;
 use ReflectionClass;
-use ReflectionProperty;
 
 abstract class MappedEventSubscriber implements EventSubscriber
 {
-    /**
-     * @var Reader|null
-     */
-    protected $reader;
+    /** @return class-string<MappingAttribute> */
+    abstract public function getAttributeClass(): string;
 
-    /**
-     * @var Repository
-     */
-    protected $config;
+    abstract protected function shouldBeMapped(ClassMetadata $metadata): bool;
 
-    /**
-     * @param Reader|null $reader
-     * @param Repository  $config
-     */
-    public function __construct(?Reader $reader, Repository $config)
+    abstract protected function getBuilder(MappingAttribute $attribute): Builder;
+
+    public function __construct(protected Config $config)
     {
-        $this->reader = $reader;
-        $this->config = $config;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSubscribedEvents()
+    /** @return array<int, string> */
+    public function getSubscribedEvents(): array
     {
         return [
             Events::loadClassMetadata,
         ];
     }
 
-    /**
-     * @param LoadClassMetadataEventArgs $eventArgs
-     */
-    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
         $metadata = $eventArgs->getClassMetadata();
 
-        if (! $this->reader) {
+        if (! $this->isInstantiable($metadata) || ! $this->shouldBeMapped($metadata)) {
             return;
         }
 
-        if ($this->isInstantiable($metadata) && $this->shouldBeMapped($metadata)) {
-            foreach ($metadata->getReflectionClass()->getProperties() as $property) {
-                if ($annotation = $this->findMapping($property)) {
-                    $builder = $this->getBuilder($annotation);
-                    $builder = new $builder($this->config);
-                    $builder->build($metadata, $property, $annotation);
-                }
+        foreach ($metadata->getReflectionClass()->getProperties() as $property) {
+            foreach ($property->getAttributes($this->getAttributeClass()) as $refAttr) {
+                $attribute = $refAttr->newInstance();
+                $builder   = $this->getBuilder($attribute);
+                $builder->build($metadata, $property, $attribute);
             }
         }
     }
 
-    /**
-     * @param ClassMetadata $metadata
-     *
-     * @return bool
-     */
-    abstract protected function shouldBeMapped(ClassMetadata $metadata);
-
-    /**
-     * @return string
-     */
-    abstract public function getAnnotationClass();
-
-    /**
-     * @param $property
-     *
-     * @return ConfigAnnotation
-     */
-    protected function findMapping(ReflectionProperty $property)
-    {
-        return $this->reader->getPropertyAnnotation($property, $this->getAnnotationClass());
-    }
-
-    /**
-     * @param ClassMetadata $metadata
-     *
-     * @return object
-     */
-    protected function getInstance(ClassMetadata $metadata)
+    protected function getInstance(ClassMetadata $metadata): object
     {
         $reflection = new ReflectionClass($metadata->getName());
-        $instance   = $reflection->newInstanceWithoutConstructor();
 
-        return $instance;
+        return $reflection->newInstanceWithoutConstructor();
     }
 
-    /**
-     * @param ConfigAnnotation $annotation
-     *
-     * @return string
-     */
-    abstract protected function getBuilder(ConfigAnnotation $annotation);
-
-    /**
-     * A MappedSuperClass or Abstract class cannot be instantiated.
-     *
-     * @param ClassMetadata $metadata
-     *
-     * @return bool
-     */
-    protected function isInstantiable(ClassMetadata $metadata)
+    protected function isInstantiable(ClassMetadata $metadata): bool
     {
         if ($metadata->isMappedSuperclass) {
             return false;
         }
 
-        if (!$metadata->getReflectionClass() || $metadata->getReflectionClass()->isAbstract()) {
-            return false;
-        }
-
-        return true;
+        return $metadata->getReflectionClass() && ! $metadata->getReflectionClass()->isAbstract();
     }
 }
