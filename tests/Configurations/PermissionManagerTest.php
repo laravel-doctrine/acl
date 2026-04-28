@@ -153,7 +153,6 @@ class PermissionManagerTest extends TestCase
         // Call protected method via reflection
         $reflection = new ReflectionClass($provider);
         $method     = $reflection->getMethod('getPermissionClass');
-        $method->setAccessible(true);
         $method->invoke($provider);
     }
 
@@ -171,7 +170,6 @@ class PermissionManagerTest extends TestCase
         // Call protected method via reflection
         $reflection = new ReflectionClass($provider);
         $method     = $reflection->getMethod('getEntityManager');
-        $method->setAccessible(true);
         $method->invoke($provider);
     }
 }
