@@ -40,5 +40,6 @@ or in the docs directory.
 Versions
 --------
 
-* Version 2 supports Laravel 11-13, ORM ^3.0, DBAL ^4.0, and PHP 8.3.
+* Version 2.1.* supports Laravel 11-13, ORM ^3.0, DBAL ^4.0, and PHP 8.3 to 8.5
+* Version 2.0.* supports Laravel 11-13, ORM ^3.0, DBAL ^4.0, and PHP 8.2.
 * Version 1 supports Laravel 6 - 11, DBAL ^2.0, ORM ^2.0, and PHP ^5.5 - ^8.0.
